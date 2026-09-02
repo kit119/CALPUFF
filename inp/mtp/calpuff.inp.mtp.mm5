@@ -1,0 +1,220 @@
+
+
+
+---------------- Run title (3 lines) ------------------------------------------
+CALMET.DAT    input    ! METDAT =CALMET.DAT   !
+CALPUFF.LST   output   ! PUFLST =CALPUFF.LST  !
+CONC.DAT      output   ! CONDAT =CALPUFF.CON     !
+         T = lower case      ! LCFILES = T !
+                                     Default: 1       ! NMETDAT =   1   !
+                                     Default: 0       ! NPTDAT =  0  !
+                                     Default: 0       ! NARDAT =  0  !
+                                     Default: 0       ! NVOLDAT =  0  !
+!END!
+    in the met. file     (METRUN)   Default: 0       ! METRUN =   1  !
+     Starting date:   Year (IBYR) -- No default       ! IBYR =  1999  !
+     (used only if   Month (IBMO) -- No default       ! IBMO =  0  !
+      METRUN = 0)      Day (IBDY) -- No default       ! IBDY =  0  !
+                      Hour (IBHR) -- No default       ! IBHR =  0  !
+     Base time zone        (XBTZ) -- No default       ! XBTZ = -7.0  !
+     Length of run (hours) (IRLG) -- No default       ! IRLG =  0  !
+                                     Default: 5       ! NSPEC =  1   !
+     to be emitted  (NSE)            Default: 3       ! NSE =  1   !
+     SETUP phase (ITEST)             Default: 2       ! ITEST =  2   !
+        Control flag (MRESTART)      Default: 0       ! MRESTART =  0   !
+        output cycle (NRESPD)        Default: 0       ! NRESPD =  0   !
+                                     Default: 1       ! METFM =  1   !
+                                     Default: 60.0    ! AVET = 60. !
+                                     Default: 60.0    ! PGTIME = 60. !
+!END!
+     near field (MGAUSS)                   Default: 1     ! MGAUSS =  1   !
+     (MCTADJ)                              Default: 3     ! MCTADJ =  3   !
+     flag (MCTSG)                          Default: 0     ! MCTSG =  0   !
+     elongated slugs? (MSLUG)              Default: 0     ! MSLUG =  0   !
+     (MTRANS)                              Default: 1     ! MTRANS =  1   !
+     Stack tip downwash? (MTIP)            Default: 1     ! MTIP =  1  !
+     downwash? (MBDW)                      Default: 1     ! MBDW =   1  !
+     stack top? (MSHEAR)                   Default: 0     ! MSHEAR =  0  !
+     Puff splitting allowed? (MSPLIT)      Default: 0     ! MSPLIT =  0  !
+     Chemical mechanism flag (MCHEM)       Default: 1     ! MCHEM =  0   !
+     (Used only if MCHEM = 1, or 3)        Default: 0     ! MAQCHEM =  0   !
+     Wet removal modeled ? (MWET)          Default: 1     ! MWET =  0   !
+     Dry deposition modeled ? (MDRY)       Default: 1     ! MDRY =  0   !
+     coefficients (MDISP)                  Default: 3     ! MDISP =  3   !
+     (Used only if MDISP = 1 or 5)         Default: 3     ! MTURBVW =  3  !
+     missing (MDISP2)                      Default: 3     ! MDISP2 =  3  !
+     PG sigma-y,z adj. for roughness?      Default: 0     ! MROUGH =  0  !
+     Partial plume penetration of          Default: 1     ! MPARTL =  1  !
+     Strength of temperature inversion     Default: 0     ! MTINV =  0  !
+                                           Default: 0     ! MPDF =  0  !
+                                           Default: 0     ! MSGTIBL = 0  !
+                                           Default: 0     ! MBCON = 0  !
+                                           Default: 0     ! MFOG =  0   !
+     values? (MREG)                        Default: 1     ! MREG =  0   !
+!END!
+! CSPEC =          SO2 !         !END!
+!          SO2  =         1,               1,           0,                 0   !
+!END!
+     (PMAP)                     Default: UTM    ! PMAP = UTM  !
+     (FEAST)                    Default=0.0     ! FEAST  = 0.000  !
+     (FNORTH)                   Default=0.0     ! FNORTH = 0.000  !
+     (IUTMZN)                   No Default      ! IUTMZN =  47   !
+     (UTMHEM)                   Default: N      ! UTMHEM = N  !
+     (RLAT0)                    No Default      ! RLAT0 =  0N  !
+     (RLON0)                    No Default      ! RLON0 =  0E  !
+     (XLAT1)                    No Default      ! XLAT1 =  0N  !
+     (XLAT2)                    No Default      ! XLAT2 =  0N  !
+     (DATUM)                    Default: WGS-84    ! DATUM = WGS-84  !
+            No. X grid cells (NX)      No default     ! NX =  100   !
+            No. Y grid cells (NY)      No default     ! NY =  100   !
+         No. vertical layers (NZ)      No default     ! NZ =  11   !
+           Grid spacing (DGRIDKM)      No default     ! DGRIDKM = 0.25 !
+   ! ZFACE = 0.,20.,40.,80.,140.,240.,420.,700.,1100.,1700.,2500.,3600. !
+            X coordinate (XORIGKM)     No default     ! XORIGKM = 722. !
+            Y coordinate (YORIGKM)     No default     ! YORIGKM = 1395. !
+        X index of LL corner (IBCOMP)      No default     ! IBCOMP =  1   !
+        Y index of LL corner (JBCOMP)      No default     ! JBCOMP =  1   !
+        X index of UR corner (IECOMP)      No default     ! IECOMP =  100   !
+        Y index of UR corner (JECOMP)      No default     ! JECOMP =  100   !
+        receptors are used (LSAMP)         Default: T     ! LSAMP = T !
+        X index of LL corner (IBSAMP)      No default     ! IBSAMP =  1   !
+        Y index of LL corner (JBSAMP)      No default     ! JBSAMP =  1   !
+        X index of UR corner (IESAMP)      No default     ! IESAMP =  100   !
+        Y index of UR corner (JESAMP)      No default     ! JESAMP =  100   !
+        grid (MESHDN)                      Default: 1     ! MESHDN =  1  !
+!END!
+   Concentrations (ICON)              1                   !  ICON =  1   !
+   Dry Fluxes (IDRY)                  1                   !  IDRY =  0   !
+   Wet Fluxes (IWET)                  1                   !  IWET =  0   !
+   Relative Humidity (IVIS)           1                   !  IVIS =  0   !
+   (LCOMPRS)                           Default: T         ! LCOMPRS = T !
+       (IMFLX)                         Default: 0         ! IMFLX =  0  !
+       (IMBAL)                         Default: 0         ! IMBAL =  0  !
+       Print concentrations (ICPRT)    Default: 0         ! ICPRT =  0   !
+       Print dry fluxes (IDPRT)        Default: 0         ! IDPRT =  0   !
+       Print wet fluxes (IWPRT)        Default: 0         ! IWPRT =  0   !
+       (ICFRQ) in hours                Default: 1         ! ICFRQ =  1   !
+       (IDFRQ) in hours                Default: 1         ! IDFRQ =  1   !
+       (IWFRQ) in hours                Default: 1         ! IWFRQ =  1   !
+       (IPRTU)                         Default: 1         ! IPRTU =  1   !
+       (IMESG)                         Default: 2         ! IMESG =  2   !
+!          SO2 =     0,           1,           0,           0,           0,           0,           0   !
+       (LDEBUG)                                 Default: F     ! LDEBUG = F !
+       (IPFDEB)                                 Default: 1     ! IPFDEB =  1  !
+       (NPFDEB)                                 Default: 1     ! NPFDEB =  1  !
+       (NN1)                                    Default: 1     ! NN1 =  1   !
+       (NN2)                                    Default: 10    ! NN2 =  10  !
+!END!
+       Number of terrain features (NHILL)       Default: 0     ! NHILL =  0   !
+       receptors  (NCTREC)                      Default: 0     ! NCTREC =  0   !
+       (MHILL)                                  No Default     ! MHILL =  2   !
+       Factor to convert horizontal dimensions  Default: 1.0   ! XHILL2M = 1. !
+       Factor to convert vertical dimensions    Default: 1.0   ! ZHILL2M = 1. !
+       X-origin of CTDM system relative to      No Default     ! XCTDMKM = 0.0E00 !
+       Y-origin of CTDM system relative to      No Default     ! YCTDMKM = 0.0E00 !
+! END !
+!END!
+!END!
+     (RCUTR)                           Default: 30    !  RCUTR = 30.0 !
+     (RGR)                             Default: 10    !    RGR = 10.0 !
+     (REACTR)                          Default: 8     ! REACTR = 8.0 !
+     (NINT)                            Default: 9     !   NINT =  9  !
+     (IVEG)                            Default: 1     !   IVEG =  1   !
+!END!
+!END!
+     Ozone data input option (MOZ)     Default: 1            ! MOZ =  0   !
+     !  BCKO3 = 80.00, 80.00, 80.00, 80.00, 80.00, 80.00, 80.00, 80.00, 80.00, 80.00, 80.00, 80.00 !
+     !  BCKNH3 = 10.00, 10.00, 10.00, 10.00, 10.00, 10.00, 10.00, 10.00, 10.00, 10.00, 10.00, 10.00 !
+     in percent/hour                   Default: 0.2          ! RNITE1 = .2 !
+     in percent/hour                   Default: 2.0          ! RNITE2 = 2.0 !
+     in percent/hour                   Default: 2.0          ! RNITE3 = 2.0 !
+     H2O2 data input option (MH2O2)    Default: 1            ! MH2O2 =  1   !
+     !  BCKH2O2 = 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 !
+     !  BCKPMF = 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 !
+     !  OFRAC  = 0.15, 0.15, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.15 !
+     !  VCNX   = 50.00, 50.00, 50.00, 50.00, 50.00, 50.00, 50.00, 50.00, 50.00, 50.00, 50.00, 50.00 !
+!END!
+     sigma-z (SYTDEP)                           Default: 550.   ! SYTDEP = 5.5E02 !
+     (MHFTSZ)                                   Default: 0      ! MHFTSZ =  0   !
+     layer (JSUP)                               Default: 5      ! JSUP =  5   !
+     conditions (k1 in Eqn. 2.7-3)  (CONK1)     Default: 0.01   ! CONK1 = .01 !
+     (CONK2)                                    Default: 0.1    ! CONK2 = .1 !
+     (TBD)                                      Default: 0.5    ! TBD = .5 !
+     (IURB1, IURB2)                             Default: 10     ! IURB1 =  10  !
+                                                         19     ! IURB2 =  19  !
+        (ILANDUIN)                              Default: 20     ! ILANDUIN =  20  !
+        (Z0IN)                                  Default: 0.25   ! Z0IN = .25 !
+        (XLAIIN)                                Default: 3.0    ! XLAIIN = 3.0 !
+        (ELEVIN)                                Default: 0.0    ! ELEVIN = .0 !
+        (XLATIN)                                Default: -999.  ! XLATIN = -999.0 !
+        (XLONIN)                                Default: -999.  ! XLONIN = -999.0 !
+        (ANEMHT)                                Default: 10.    ! ANEMHT = 10.0 !
+        (ISIGMAV)                               Default: 1      ! ISIGMAV =  1  !
+        (IMIXCTDM)                              Default: 0      ! IMIXCTDM =  0  !
+     (XMXLEN)                                   Default: 1.0    ! XMXLEN = 1.0 !
+     (XSAMLEN)                                  Default: 1.0    ! XSAMLEN = 1.0 !
+     (MXNEW)                                    Default: 99     ! MXNEW =  99   !
+     (MXSAM)                                    Default: 99     ! MXSAM =  99   !
+     (NCOUNT)                                   Default: 2      ! NCOUNT =  2   !
+     (SYMIN)                                    Default: 1.0    ! SYMIN = 1.0  !
+     (SZMIN)                                    Default: 1.0    ! SZMIN = 1.0  !
+                                       ! SVMIN = 0.500, 0.500, 0.500, 0.500, 0.500, 0.500!
+                                       ! SWMIN = 0.200, 0.120, 0.080, 0.060, 0.030, 0.016!
+     (CDIV(2))                                  Default: 0.0,0.0  ! CDIV = .0, .0 !
+     (WSCALM)                                   Default: 0.5    ! WSCALM = .5 !
+     (XMAXZI)                                   Default: 3000.  ! XMAXZI = 3000.0 !
+     (XMINZI)                                   Default: 50.    ! XMINZI = 50.0 !
+                                       ! WSCAT = 1.54, 3.09, 5.14, 8.23, 10.80 !
+                                        ! PLX0 = 0.07, 0.07, 0.10, 0.15, 0.35, 0.55 !
+                                        ! PTG0 = 0.020,   0.035 !
+                                        !  PPC = 0.50, 0.50, 0.50, 0.50, 0.35, 0.35 !
+     (SL2PF)                               Default: 10.        ! SL2PF = 10.0 !
+       (NSPLIT)                            Default:   3        ! NSPLIT =  3  !
+       !  IRESPLIT = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0 !
+       (ZISPLIT)                           Default: 100.       ! ZISPLIT = 100.0 !
+       (ROLDMAX)                           Default: 0.25       ! ROLDMAX = 0.25 !
+       (NSPLITH)                           Default:   5        ! NSPLITH =  5  !
+       (SYSPLITH)                          Default:  1.0       ! SYSPLITH = 1.0 !
+       (SHSPLITH)                          Default:  2.        ! SHSPLITH = 2.0 !
+       (CNSPLITH)                          Default:  1.0E-07   ! CNSPLITH = 1.0E-07 !
+       (EPSSLUG)                           Default:   1.0e-04  ! EPSSLUG = 1.0E-04 !
+       (EPSAREA)                           Default:   1.0e-06  ! EPSAREA = 1.0E-06 !
+       (DSRISE)                            Default:   1.0      ! DSRISE = 1.0 !
+       (HTMINBC)                           Default:   500.     ! HTMINBC = 500.0 !
+       (RSAMPBC)                           Default:   4.      ! RSAMPBC = 10.0 !
+       (MDEPBC)                            Default:   1        ! MDEPBC =  1  !
+!END!
+     parameters provided below      (NPT1)  No default  !  NPT1 =  0  !
+     emissions below                (IPTU)  Default: 1  !  IPTU =   1  !
+     provided below in (13d)        (NSPT1) Default: 0  !  NSPT1 =  0  !
+     provided in external file      (NPT2)  No default  !  NPT2 =  0  !
+!END!
+     parameters specified below (NAR1)       No default  !  NAR1 =  0   !
+     emissions below            (IARU)       Default: 1  !  IARU =   1  !
+     provided below in (14d)        (NSAR1) Default: 0  !  NSAR1 =  0  !
+     parameters (NAR2)                      No default  !  NAR2 =  0   !
+!END!
+     parameters (NLN2)                              No default  !  NLN2 =  0   !
+     Number of buoyant line sources (NLINES)        No default   ! NLINES =  0  !
+     emissions below                (ILNU)          Default: 1  !  ILNU =   1  !
+     provided below in (15c)        (NSLN1) Default: 0  !  NSLN1 =  0  !
+     each line (MXNSEG)                             Default: 7   ! MXNSEG =  7  !
+        Number of distances at which                Default: 6   ! NLRISE =  6  !
+        Average building length (XL)                No default   ! XL = .0 !
+        Average building height (HBL)               No default   ! HBL = .0 !
+        Average building width (WBL)                No default   ! WBL = .0 !
+        Average line source width (WML)             No default   ! WML = .0 !
+        Average separation between buildings (DXL)  No default   ! DXL = .0 !
+        Average buoyancy parameter (FPRIMEL)        No default   ! FPRIMEL = .0 !
+!END!
+     parameters provided in 16b,c (NVL1)     No default  !  NVL1 =  2   !
+     emissions below in 16b       (IVLU)     Default: 1  !  IVLU =   1  !
+     provided below in (16c)      (NSVL1)    Default: 0  !  NSVL1 =  0  !
+     parameters                   (NVL2)     No default  !  NVL2 =   0   !
+!END!
+   1! SRCNAM = V1 !
+! X =    734.786, 1398.656,    10.0,   1400.0,      50.0,      10.0, 1.0E00 ! !END!
+   2! SRCNAM = V2 !
+! X =    734.786, 1408.656,    10.0,   1400.0,      50.0,      10.0, 2.0E01 ! !END!
+     Number of non-gridded receptors (NREC)  No default  !  NREC =  0   !
+!END!

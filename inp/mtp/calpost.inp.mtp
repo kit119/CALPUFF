@@ -1,0 +1,104 @@
+
+
+
+---------------- Run title (3 lines) ------------------------------------------
+Conc/Dep Flux File        MODEL.DAT          ! MODDAT =CALPUFF.CON   !
+List File                 CALPOST.LST        ! PSTLST =CALPOST.LST   !
+Timeseries                TSttUUUU.DAT       * TSUNAM =   *
+                      or  RttiiUUU.GRD       ! TUNAM = SO2   !
+                      or  XttUUUUU.GRD       * XUNAM =   *
+(Specific Days)       or  jjjtthhU.GRD       * EUNAM =   *
+Visibility Plot           V24UUUUU.DAT       * VUNAM =   *
+         T = lower case      ! LCFILES = T !
+!END!
+     in the met. file(s)  (METRUN)        Default: 0   ! METRUN =   1  !
+     Starting date:    Year  (ISYR) --    No default   ! ISYR  =  1999   !
+     (used only if     Month (ISMO) --    No default   ! ISMO  =  0   !
+      METRUN = 0)      Day   (ISDY) --    No default   ! ISDY  =  0   !
+                       Hour  (ISHR) --    No default   ! ISHR  =  0   !
+     Number of hours to process (NHRS) -- No default   ! NHRS  =  0  !
+     Process every hour of data?(NREP) -- Default: 1   ! NREP  =  1  !
+      Species to process (ASPEC)       -- No default   ! ASPEC = SO2  !
+      Layer/deposition code (ILAYER)   -- Default: 1   ! ILAYER =  1  !
+      Scaling factors of the form:     -- Defaults:    ! A =  0.0    !
+            X(new) = X(old) * A + B         A = 0.0    ! B =  0.0    !
+                              (LBACK)  -- Default: F   ! LBACK =  F !
+                             (MSOURCE) -- Default: 0   ! MSOURCE =  0  !
+  Gridded receptors processed?    (LG) -- Default: F   ! LG  = T  !
+  Discrete receptors processed?   (LD) -- Default: F   ! LD  = F  !
+                                 (LCT) -- Default: F   ! LCT = F  !
+  (only used when LD = T)     (LDRING) -- Default: F   ! LDRING = F  !
+                                               ! NDRECP =  -1  !
+       X index of LL corner (IBGRID) -- Default: -1     ! IBGRID = -1  !
+       Y index of LL corner (JBGRID) -- Default: -1     ! JBGRID = -1  !
+       X index of UR corner (IEGRID) -- Default: -1     ! IEGRID = -1  !
+       Y index of UR corner (JEGRID) -- Default: -1     ! JEGRID = -1  !
+                           (NGONOFF) -- Default: 0      ! NGONOFF =  0  !
+!END!
+                                (MFRH) -- Default: 2   ! MFRH   =  2  !
+                               (RHMAX) -- Default: 98  ! RHMAX  = 98.0 !
+     Include SULFATE?          (LVSO4) -- Default: T   ! LVSO4  = T  !
+     Include NITRATE?          (LVNO3) -- Default: T   ! LVNO3  = T  !
+     Include ORGANIC CARBON?   (LVOC)  -- Default: T   ! LVOC   = T  !
+     Include COARSE PARTICLES? (LVPMC) -- Default: T   ! LVPMC  = T  !
+     Include FINE PARTICLES?   (LVPMF) -- Default: T   ! LVPMF  = T  !
+     Include ELEMENTAL CARBON? (LVEC)  -- Default: T   ! LVEC   = T  !
+     Include BACKGROUND?       (LVBK)  -- Default: T   ! LVBK   = T  !
+                   COARSE    (SPECPMC) -- Default: PMC ! SPECPMC = PMC !
+                   FINE      (SPECPMF) -- Default: PMF ! SPECPMF = PMF !
+               PM  COARSE      (EEPMC) -- Default: 0.6 ! EEPMC  = 0.6 !
+               PM  FINE        (EEPMF) -- Default: 1.0 ! EEPMF  = 1.0 !
+               PM  COARSE    (EEPMCBK) -- Default: 0.6 ! EEPMCBK = 0.6 !
+              AMMONIUM SULFATE (EESO4) -- Default: 3.0 ! EESO4  = 3.0 !
+              AMMONIUM NITRATE (EENO3) -- Default: 3.0 ! EENO3  = 3.0 !
+              ORGANIC CARBON   (EEOC)  -- Default: 4.0 ! EEOC   = 4.0 !
+              SOIL             (EESOIL)-- Default: 1.0 ! EESOIL = 1.0 !
+              ELEMENTAL CARBON (EEEC)  -- Default: 10. ! EEEC   = 10.0 !
+    is averaged?               (LAVER) -- Default: F   ! LAVER = F  !
+                              (MVISBK) -- Default: 2   ! MVISBK =  2  !
+                              (BEXTBK) -- No default   ! BEXTBK = 0.0 !
+                              (RHFRAC) -- No default   ! RHFRAC = 0.0 !
+     (RHFAC)  -- No default     ! RHFAC = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+    ! IDWSTA = 999999 !
+    ! TZONE  = 0.0 !
+     (BKSO4)  -- No default     ! BKSO4 = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKNO3)  -- No default     ! BKNO3 = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKPMC)  -- No default     ! BKPMC = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKOC)   -- No default     ! BKOC  = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKSOIL) -- No default     ! BKSOIL= 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKEC)   -- No default     ! BKEC  = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+                             (BEXTRAY) -- Default: 10.0 ! BEXTRAY = 10.0 !
+!END!
+                                (LDOC) -- Default: F   !  LDOC = F !
+    Units for All Output       (IPRTU) -- Default: 1   ! IPRTU =  3   !
+    1-hr averages           (L1HR) -- Default: T   !   L1HR = T  !
+    3-hr averages           (L3HR) -- Default: T   !   L3HR = F  !
+    24-hr averages         (L24HR) -- Default: T   !  L24HR = F  !
+    Run-length averages    (LRUNL) -- Default: T   !  LRUNL = F  !
+                            (NAVG) -- Default: 0   !   NAVG =  0  !
+                            (LT50) -- Default: T   !   LT50 = T  !
+                           (LTOPN) -- Default: F   !  LTOPN = T  !
+                            (NTOP) -- Default: 4   ! NTOP =  1   !
+                   (ITOP(4) array) -- Default:     ! ITOP =  1   !
+                           (LEXCD) -- Default: F   !  LEXCD = F  !
+           Threshold for  1-hr averages   (THRESH1) !  THRESH1 = -1.0  !
+           Threshold for  3-hr averages   (THRESH3) !  THRESH3 = -1.0  !
+           Threshold for 24-hr averages  (THRESH24) ! THRESH24 = -1.0  !
+           Threshold for NAVG-hr averages (THRESHN) !  THRESHN = -1.0  !
+                            (NDAY) -- Default: 0   !    NDAY =  0  !
+                          (NCOUNT) -- Default: 1   !  NCOUNT =  1  !
+                           (LECHO) -- Default: F   !  LECHO = F  !
+                           (LTIME) -- Default: F   !  LTIME = F  !
+           ! IECHO  = 366*0  !
+                                 (LPLT) -- Default: F   ! LPLT  = T !
+                                 (LGRD) -- Default: F   ! LGRD  = F !
+                               (LDEBUG) -- Default: F  ! LDEBUG  = F !
+                              (LVEXTHR) -- Default: F  ! LVEXTHR = F !
+!END!

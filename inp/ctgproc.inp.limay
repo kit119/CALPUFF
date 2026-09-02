@@ -1,0 +1,36 @@
+
+
+
+---------------- Run title (3 lines) ------------------------------------------
+! NDBF  = 1        ! 
+! LUDAT = lu.dat   ! LU output
+    CTGPROC.LST    output   ! RUNLST = ctgproc.lst    !
+    GSHHS_F.B        input    ! GSHHSIN = gshhs_f.b     !
+    COAST.BLN        input or  ! COASTBLN = coast.bln      !
+    (LCFILES)                   Default: T      ! LCFILES = T     !
+!END!
+     1 !GLAZAP = data/AUSPACIF.LU!     !END!
+      (LFINAL)                  Default: T      ! LFINAL = T    !
+      (LPREV)                   Default: F      ! LPREV = F       !
+      (MESHCTG)                  Default=1       ! MESHCTG  = 1 !
+      (MESHGLAZ)                 Default=1       ! MESHGLAZ = 5 !
+     (LCOAST)                   Default: F     ! LCOAST = F     !
+      (LMARSWAP)                 Default: F      ! LMARSWAP = F     !
+      (LMARFILL)                 Default: T      ! LMARFILL = T     !
+      (IOCEAN)                   Default: 55     ! IOCEAN = 55     !
+     (LBLNREAD)                 Default: F      ! LBLNREAD = F     !
+    (DCTG)                      Default: NAS-C  ! DCTG     = NAS-C     !
+    (DUSGSLA)                   Default: ESR-S  ! DUSGSLA  = ESR-S     !
+    (DNZGEN)                    Default: WGS-84 ! DNZGEN   = WGS-84    !
+    (ITHRESH)                   Default:75      ! ITHRESH = 75  !
+!END!
+    (PMAP)                      Default: UTM    ! PMAP = UTM     !
+    (IUTMZN)                    No Default      ! IUTMZN  = 51     !
+    (UTMHEM)                    Default: N      ! UTMHEM = N     !
+    (DATUM)                     Default: WGS-84  ! DATUM = WGS-84     !
+    (XREFKM)                    No Default      ! XREFKM = 225     !
+    (YREFKM)                    No Default      ! YREFKM = 1590     !
+    No. X grid cells (NX)       No Default      ! NX = 100     !
+    No. Y grid cells (NY)       No Default      ! NY = 100     !
+    Grid Spacing (DGRIDKM)      No Default      ! DGRIDKM = .25     !
+!END!

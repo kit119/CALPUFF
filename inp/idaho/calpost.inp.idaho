@@ -1,0 +1,472 @@
+pocatello
+
+
+---------------- Run title (3 lines) ------------------------------------------
+
+                    CALPOST MODEL CONTROL FILE
+                    --------------------------
+
+-------------------------------------------------------------------------------
+
+INPUT GROUP: 0 -- Input and Output File Names
+--------------
+
+Input Files
+-----------
+
+File                      Default File Name
+----                      -----------------
+Conc/Dep Flux File        MODEL.DAT          ! MODDAT =C:\PRACAPP\OCTOBE~1\CASE4\CALPUFF.CON   !
+Relative Humidity File    VISB.DAT           * VISDAT =   *
+Background Data File      BACK.DAT           *BACKDAT =   *
+Transmissometer/          VSRN.DAT           *VSRDAT =   *
+Nephelometer Data File
+
+Output Files
+------------
+
+File                      Default File Name
+----                      -----------------
+List File                 CALPOST.LST        ! PSTLST =CALPOST.LST   !
+
+Pathname for Timeseries Files   (blank)      * TSPATH =   *
+(activate with exclamation points only if
+providing NON-BLANK character string)
+
+Pathname for Plot Files   (blank)            * PLPATH =   *
+(activate with exclamation points only if
+ providing NON-BLANK character string)
+
+User Character String (U) to augment default filenames
+(activate with exclamation points only if
+ providing NON-BLANK character string)
+
+Timeseries                TSttUUUU.DAT       * TSUNAM =   *
+
+Top Nth Rank Plot         RttUUUUU.DAT
+                      or  RttiiUUU.GRD       ! TUNAM =INK   !
+
+Exceedance Plot           XttUUUUU.DAT
+                      or  XttUUUUU.GRD       * XUNAM =   *
+
+Echo Plot                 jjjtthhU.DAT
+(Specific Days)       or  jjjtthhU.GRD       * EUNAM =   *
+
+Visibility Plot           V24UUUUU.DAT       * VUNAM =   *
+(Daily Peak Summary)    
+
+--------------------------------------------------------------------------------
+All file names will be converted to lower case if LCFILES = T
+Otherwise, if LCFILES = F, file names will be converted to UPPER CASE
+         T = lower case      ! LCFILES = F !
+         F = UPPER CASE
+NOTE: (1) file/path names can be up to 70 characters in length
+NOTE: (2) Filenames for ALL PLOT and TIMESERIES FILES are constructed
+          using a template that includes a pathname, user-supplied 
+          character(s), and fixed strings (tt,ii,jjj, and hh), where
+                tt = Averaging Period (e.g. 03)
+                ii = Rank (e.g. 02)
+                jjj= Julian Day
+                hh = Hour(ending)
+          are determined internally based on selections made below.
+          If a path or user-supplied character(s) are supplied, each
+          must contain at least 1 non-blank character.
+
+!END!
+--------------------------------------------------------------------------------
+
+INPUT GROUP: 1 -- General run control parameters
+--------------
+
+     Option to run all periods found
+     in the met. file(s)  (METRUN)        Default: 0   ! METRUN =   0  !
+
+         METRUN = 0 - Run period explicitly defined below
+         METRUN = 1 - Run all periods in CALPUFF data file(s)
+
+     Starting date:    Year  (ISYR) --    No default   ! ISYR  =  1993   !
+     (used only if     Month (ISMO) --    No default   ! ISMO  =  1   !
+      METRUN = 0)      Day   (ISDY) --    No default   ! ISDY  =  7   !
+                       Hour  (ISHR) --    No default   ! ISHR  =  0   !
+
+     Number of hours to process (NHRS) -- No default   ! NHRS  =  6  !
+
+     Process every hour of data?(NREP) -- Default: 1   ! NREP  =  1  !
+      (1 = every hour processed,
+       2 = every 2nd hour processed,
+       5 = every 5th hour processed, etc.)
+
+Species & Concentration/Deposition Information
+----------------------------------------------
+
+      Species to process (ASPEC)       -- No default   ! ASPEC = INKOM  !
+      (ASPEC = VISIB for visibility processing)
+
+      Layer/deposition code (ILAYER)   -- Default: 1   ! ILAYER =  1  !
+        '1'  for CALPUFF concentrations,
+        '-1' for dry deposition fluxes,
+        '-2' for wet deposition fluxes,
+        '-3' for wet+dry deposition fluxes.
+
+      Scaling factors of the form:     -- Defaults:    ! A =  0.0    !
+            X(new) = X(old) * A + B         A = 0.0    ! B =  0.0    !
+        (NOT applied if A = B = 0.0)        B = 0.0
+
+      Add Hourly Background Concentrations/Fluxes?
+                              (LBACK)  -- Default: F   ! LBACK =  F !
+
+Receptor information
+--------------------
+
+  Gridded receptors processed?    (LG) -- Default: F   ! LG  = T  !
+  Discrete receptors processed?   (LD) -- Default: F   ! LD  = F  !
+  CTSG Complex terrain receptors processed?
+                                 (LCT) -- Default: F   ! LCT = F  !
+
+--Report results by DISCRETE receptor RING?
+  (only used when LD = T)     (LDRING) -- Default: F   ! LDRING = F  !
+
+--Select range of DISCRETE receptors (only used when LD = T):
+
+  Select ALL DISCRETE receptors by setting NDRECP flag to -1;
+                               OR
+  Select SPECIFIC DISCRETE receptors by entering a flag (0,1) for each
+     0 = discrete receptor not processed
+     1 = discrete receptor processed
+  using repeated value notation to select blocks of receptors:
+     23*1, 15*0, 12*1
+  Flag for all receptors after the last one assigned is set to 0
+  (NDRECP) -- Default: -1
+                                               ! NDRECP =  -1  !
+
+
+--Select range of GRIDDED receptors (only used when LG = T):
+
+       X index of LL corner (IBGRID) -- Default: -1     ! IBGRID = -1  !
+           (-1 OR 1 <= IBGRID <= NX)
+
+       Y index of LL corner (JBGRID) -- Default: -1     ! JBGRID = -1  !
+           (-1 OR 1 <= JBGRID <= NY)
+
+       X index of UR corner (IEGRID) -- Default: -1     ! IEGRID = -1  !
+           (-1 OR 1 <= IEGRID <= NX)
+
+       Y index of UR corner (JEGRID) -- Default: -1     ! JEGRID = -1  !
+           (-1 OR 1 <= JEGRID <= NY)
+
+  Note: Entire grid is processed if IBGRID=JBGRID=IEGRID=JEGRID=-1
+
+
+--Specific gridded receptors can also be excluded from CALPOST
+  processing by filling a processing grid array with 0s and 1s.  If the
+  processing flag for receptor index (i,j) is 1 (ON), that receptor
+  will be processed if it lies within the range delineated by IBGRID,
+  JBGRID,IEGRID,JEGRID and if LG=T. If it is 0 (OFF), it will not be
+  processed in the run.  By default, all array values are set to 1 (ON).
+
+  Number of gridded receptor rows provided in Subgroup (1a) to
+  identify specific gridded receptors to process
+                           (NGONOFF) -- Default: 0      ! NGONOFF =  0  !
+
+!END!
+
+
+--------------
+Subgroup (1a) -- Specific gridded receptors included/excluded
+--------------
+
+    Specific gridded receptors are excluded from CALPOST processing
+    by filling a processing grid array with 0s and 1s.  A total of
+    NGONOFF lines are read here.  Each line corresponds to one 'row'
+    in the sampling grid, starting with the NORTHERNMOST row that
+    contains receptors that you wish to exclude, and finishing with
+    row 1 to the SOUTH (no intervening rows may be skipped).  Within
+    a row, each receptor position is assigned either a 0 or 1,
+    starting with the westernmost receptor.
+       0 = gridded receptor not processed
+       1 = gridded receptor processed
+
+    Repeated value notation may be used to select blocks of receptors:
+       23*1, 15*0, 12*1
+
+    Because all values are initially set to 1, any receptors north of
+    the first row entered, or east of the last value provided in a row,
+    remain ON.
+
+    (NGXRECP) -- Default: 1
+
+
+-------------------------------------------------------------------------------
+
+INPUT GROUP: 2 -- Visibility Parameters (ASPEC = VISIB)
+--------------
+
+    Maximum relative humidity (%) used in particle growth curve
+                               (RHMAX) -- Default: 98   ! RHMAX  = 98.0 !
+
+    Modeled species to be included in computing the light extinction
+     Include SULFATE?          (LVSO4) -- Default: T   ! LVSO4  = T  !
+     Include NITRATE?          (LVNO3) -- Default: T   ! LVNO3  = T  !
+     Include ORGANIC CARBON?   (LVOC)  -- Default: T   ! LVOC   = T  !
+     Include COARSE PARTICLES? (LVPMC) -- Default: T   ! LVPMC  = T  !
+     Include FINE PARTICLES?   (LVPMF) -- Default: T   ! LVPMF  = T  !
+     Include ELEMENTAL CARBON? (LVEC)  -- Default: T   ! LVEC   = T  !
+
+    And, when ranking for TOP-N, TOP-50, and Exceedance tables,
+     Include BACKGROUND?       (LVBK)  -- Default: T   ! LVBK   = T  !
+
+    Species name used for particulates in MODEL.DAT file
+                   COARSE    (SPECPMC) -- Default: PMC ! SPECPMC = PMC !
+                   FINE      (SPECPMF) -- Default: PMF ! SPECPMF = PMF !
+
+Extinction Efficiency (1/Mm per ug/m**3)
+----------------------------------------
+    MODELED particulate species:
+               PM  COARSE      (EEPMC) -- Default: 0.6 ! EEPMC  = 0.6 !
+               PM  FINE        (EEPMF) -- Default: 1.0 ! EEPMF  = 1.0 !
+    BACKGROUND particulate species:
+               PM  COARSE    (EEPMCBK) -- Default: 0.6 ! EEPMCBK = 0.6 !
+    Other species:
+              AMMONIUM SULFATE (EESO4) -- Default: 3.0 ! EESO4  = 3.0 !
+              AMMONIUM NITRATE (EENO3) -- Default: 3.0 ! EENO3  = 3.0 !
+              ORGANIC CARBON   (EEOC)  -- Default: 4.0 ! EEOC   = 4.0 !
+              SOIL             (EESOIL)-- Default: 1.0 ! EESOIL = 1.0 !
+              ELEMENTAL CARBON (EEEC)  -- Default: 10. ! EEEC   = 10.0 !
+
+Background Extinction Computation
+---------------------------------
+
+    Method used for background light extinction
+                              (MVISBK) -- Default: 2   ! MVISBK =  2  !
+
+         1 =  Supply single light extinction and hygroscopic fraction
+              - IWAQM (1993) RH adjustment applied to hygroscopic background
+                and modeled sulfate and nitrate
+         2 =  Compute extinction from speciated PM measurements (A)
+              - Hourly RH adjustment applied to observed and modeled sulfate
+                and nitrate
+              - RH factor is capped at RHMAX
+         3 =  Compute extinction from speciated PM measurements (B)
+              - Hourly RH adjustment applied to observed and modeled sulfate
+                and nitrate
+              - Receptor-hour excluded if RH>RHMAX
+              - Receptor-day excluded if fewer than 6 valid receptor-hours
+         4 =  Read hourly transmissometer background extinction measurements
+              - Hourly RH adjustment applied to modeled sulfate and nitrate
+              - Hour excluded if measurement invalid (missing, interference,
+                or large RH)
+              - Receptor-hour excluded if RH>RHMAX
+              - Receptor-day excluded if fewer than 6 valid receptor-hours
+         5 =  Read hourly nephelometer background extinction measurements
+              - Rayleigh extinction value (BEXTRAY) added to measurement
+              - Hourly RH adjustment applied to modeled sulfate and nitrate
+              - Hour excluded if measurement invalid (missing, interference,
+                or large RH)
+              - Receptor-hour excluded if RH>RHMAX
+              - Receptor-day excluded if fewer than 6 valid receptor-hours
+         6 =  Compute extinction from speciated PM measurements
+              - FLAG RH adjustment factor applied to observed and
+                modeled sulfate and nitrate
+
+    Additional inputs used for MVISBK = 1:
+    --------------------------------------
+     Background light extinction (1/Mm)
+                              (BEXTBK) -- No default   ! BEXTBK = 0.0 !
+     Percentage of particles affected by relative humidity
+                              (RHFRAC) -- No default   ! RHFRAC = 0.0 !
+
+    Additional inputs used for MVISBK = 6:
+    --------------------------------------
+     Extinction coefficients for hygroscopic species (modeled and
+     background) are computed using a monthly RH adjustment factor
+     in place of an hourly RH factor (VISB.DAT file is NOT needed).
+     Enter the 12 monthly factors here (RHFAC).  Month 1 is January.
+
+     (RHFAC)  -- No default     ! RHFAC = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+
+    Additional inputs used for MVISBK = 2,3,6:
+    ----------------------------------------
+     Background extinction coefficients are computed from monthly
+     CONCENTRATIONS of ammonium sulfate (BKSO4), ammonium nitrate (BKNO3),
+     coarse particulates (BKPMC), organic carbon (BKOC), soil (BKSOIL), and
+     elemental carbon (BKEC).  Month 1 is January.
+     (ug/m**3)
+
+     (BKSO4)  -- No default     ! BKSO4 = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKNO3)  -- No default     ! BKNO3 = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKPMC)  -- No default     ! BKPMC = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKOC)   -- No default     ! BKOC  = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKSOIL) -- No default     ! BKSOIL= 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+     (BKEC)   -- No default     ! BKEC  = 0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0, 
+                                          0.0, 0.0, 0.0, 0.0 !
+
+    Additional inputs used for MVISBK = 2,3,5,6:
+    ------------------------------------------
+     Extinction due to Rayleigh scattering is added (1/Mm)
+                             (BEXTRAY) -- Default: 10.0 ! BEXTRAY = 10.0 !
+ 
+!END!
+-------------------------------------------------------------------------------
+
+INPUT GROUP: 3 -- Output options
+--------------
+
+Documentation
+-------------
+
+    Documentation records contained in the header of the
+    CALPUFF output file may be written to the list file.
+    Print documentation image?
+                                (LDOC) -- Default: F   !  LDOC = F !
+
+Output Units
+------------
+    Units for All Output       (IPRTU) -- Default: 1   ! IPRTU =  3   !
+                     for            for
+                Concentration    Deposition
+       1 =         g/m**3         g/m**2/s
+       2 =        mg/m**3        mg/m**2/s
+       3 =        ug/m**3        ug/m**2/s
+       4 =        ng/m**3        ng/m**2/s
+       5 =      Odour Units
+
+    Visibility: extinction expressed in 1/Mega-meters (IPRTU is ignored)
+
+
+Averaging time(s) reported
+--------------------------
+
+    1-hr averages           (L1HR) -- Default: T   !   L1HR = T  !
+
+    3-hr averages           (L3HR) -- Default: T   !   L3HR = F  !
+
+    24-hr averages         (L24HR) -- Default: T   !  L24HR = F  !
+
+    Run-length averages    (LRUNL) -- Default: T   !  LRUNL = F  !
+
+    User-specified averaging time in hours - results for
+    an averaging time of NAVG hours are reported for
+    NAVG greater than 0:
+                            (NAVG) -- Default: 0   !   NAVG =  0  !
+
+
+Types of tabulations reported
+------------------------------
+
+   1) Visibility: daily visibility tabulations are always reported
+                  for the selected receptors when ASPEC = VISIB.
+                  In addition, any of the other tabulations listed
+                  below may be chosen to characterize the light
+                  extinction coefficients.
+                  [List file or Plot/Analysis File]
+
+
+   2) Top 50 table for each averaging time selected
+      [List file only]
+                            (LT50) -- Default: T   !   LT50 = T  !
+
+   3) Top 'N' table for each averaging time selected
+      [List file or Plot file]
+                           (LTOPN) -- Default: F   !  LTOPN = T  !
+
+        -- Number of 'Top-N' values at each receptor
+           selected (NTOP must be <= 4)
+                            (NTOP) -- Default: 4   ! NTOP =  1   !
+
+        -- Specific ranks of 'Top-N' values reported
+           (NTOP values must be entered)
+                   (ITOP(4) array) -- Default:     ! ITOP =  1   !
+                                      1,2,3,4
+
+
+   4) Threshold exceedance counts for each receptor and each averaging
+      time selected
+      [List file or Plot file]
+                           (LEXCD) -- Default: F   !  LEXCD = F  !
+
+        -- Identify the threshold for each averaging time by assigning a
+           non-negative value (output units).
+
+                                   -- Default: -1.0
+           Threshold for  1-hr averages   (THRESH1) !  THRESH1 = -1.0  !
+           Threshold for  3-hr averages   (THRESH3) !  THRESH3 = -1.0  !
+           Threshold for 24-hr averages  (THRESH24) ! THRESH24 = -1.0  !
+           Threshold for NAVG-hr averages (THRESHN) !  THRESHN = -1.0  !
+
+
+        -- Counts for the shortest averaging period selected can be
+           tallied daily, and receptors that experience more than NCOUNT
+           counts over any NDAY period will be reported.  This type of
+           exceedance violation output is triggered only if NDAY > 0.
+
+           Accumulation period(Days)
+                            (NDAY) -- Default: 0   !    NDAY =  0  !
+           Number of exceedances allowed
+                          (NCOUNT) -- Default: 1   !  NCOUNT =  1  !
+
+
+   5) Selected day table(s)
+
+      Echo Option -- Many records are written each averaging period
+      selected and output is grouped by day
+      [List file or Plot file]
+                           (LECHO) -- Default: F   !  LECHO = F  !
+
+      Timeseries Option -- Averages at all selected receptors for
+      each selected averaging period are written to timeseries files.
+      Each file contains one averaging period, and all receptors are
+      written to a single record each averaging time.
+      [TSttUUUU.DAT files]
+                           (LTIME) -- Default: F   !  LTIME = F  !
+
+        -- Days selected for output
+                      (IECHO(366)) -- Default: 366*0
+           ! IECHO  = 366*0  !
+           (366 values must be entered)
+
+Plot output options
+-------------------
+
+     Plot files can be created for the Top-N, Exceedance, and Echo
+     tables selected above.  Two formats for these files are available,
+     DATA and GRID.  In the DATA format, results at all receptors are
+     listed along with the receptor location [x,y,val1,val2,...].
+     In the GRID format, results at only gridded receptors are written,
+     using a compact representation.  The gridded values are written in
+     rows (x varies), starting with the most southern row of the grid.
+     The GRID format is given the .GRD extension, and includes headers
+     compatible with the SURFER(R) plotting software.
+
+     A plotting and analysis file can also be created for the daily
+     peak visibility summary output, in DATA format only.
+
+     Generate Plot file output in addition to writing tables
+     to List file?
+                                 (LPLT) -- Default: F   ! LPLT  = T !
+
+     Use GRID format rather than DATA format,
+     when available?
+                                 (LGRD) -- Default: F   ! LGRD  = F !
+
+
+Additional Debug Output
+-----------------------
+
+   Output selected information to List file
+    for debugging?
+                               (LDEBUG) -- Default: F  ! LDEBUG  = F !
+
+!END!

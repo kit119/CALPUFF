@@ -1,0 +1,71 @@
+
+
+
+---------------- Run title (3 lines) ------------------------------------------
+     CALMET.DAT    input     ! METDAT  = calmet.dat  !
+     PRTMET.LST    output    ! RUNLST  = prtmet.lst      !
+     PRTTIME.DAT   output    ! PRTTIME  = prttime.dat      !
+     (LCFILES)                  Default: T      ! LCFILES = T     !
+!END!
+     Starting date:   Year (IBYR) -- No default       ! IBYR = 2002  !
+                     Month (IBMO) -- No default       ! IBMO = 1  !
+                       Day (IBDY) -- No default       ! IBDY = 2  !
+              [00-23] Hour (IBHR) -- No default       ! IBHR = 5  !
+     Ending date:     Year (IEYR) -- No default       ! IEYR = 2002  !
+                     Month (IEMO) -- No default       ! IEMO = 1  !
+                       Day (IEDY) -- No default       ! IEDY = 2  !
+              [00-23] Hour (IEHR) -- No default       ! IEHR = 19  !
+     (ICHR)                     Default: 1      ! ICHR = 1  !
+     (NBX)                      Default: 0      ! NBX = 0  !
+     (NBY)                      Default: 0      ! NBY = 0  !
+     (NEX)                      Default: 0      ! NEX = 0  !
+     (NEY)                      Default: 0      ! NEY = 0  !
+!END!
+     (LHDV)                     Default: T      ! LHDV = T  !
+     (LMETCF)                   Default: F      ! LMETCF = F  !
+     (LSFC)  surface            Default: F      ! LSFC = F  !
+     (LUPC)  upper air          Default: F      ! LUPC = F  !
+     (LPRC)  precipitation      Default: F      ! LPRC = F  !
+     (LNEARS)                   Default: F      ! LNEARS = F  !
+     (LSURF)                    Default: F      ! LSURF = F  !
+     (LLI)  Leaf Area Index     Default: F      ! LLI = F  !
+     (LLU)  Landuse             Default: F      ! LLU = F  !
+     (LTE)  Terrain             Default: F      ! LTE = F  !
+     (LZ0)  Roughness           Default: F      ! LZ0 = F  !
+     (FLI)  Leaf Area Index     Default: 0      ! FLI = 0  !
+     (FLU)  Landuse             Default: 0      ! FLU = 0  !
+     (FTE)  Terrain             Default: 0      ! FTE = 0  !
+     (FZ0)  Roughness           Default: 0      ! FZ0 = 0  !
+     (LSTAB)  PG stability      Default: F      ! LSTAB = F  !
+     (LUSTR)  u-star            Default: F      ! LUSTR = F  !
+     (LMOLN)  Monin-Obukhov L   Default: F      ! LMOLN = F  !
+     (LWSTR)  w-star            Default: F      ! LWSTR = F  !
+     (LMXHT)  mixing ht         Default: F      ! LMXHT = F  !
+     (LPRAT)  precip. rate      Default: F      ! LPRAT = F  !
+     (FSTAB)  PG stability      Default: 0      ! FSTAB = 0  !
+     (FUSTR)  u-star            Default: 0      ! FUSTR = 0  !
+     (FMOLN)  Monin-Obukhov L   Default: 0      ! FMOLN = 0  !
+     (FWSTR)  w-star            Default: 0      ! FWSTR = 0  !
+     (FMXHT)  mixing ht         Default: 0      ! FMXHT = 0  !
+     (FPRAT)  precip. rate      Default: 0      ! FPRAT = 0  !
+     (IPWS)                     Default: 1      ! IPWS = 0  !
+     (WSFAC)                    Default: 1.0    ! WSFAC = 1.0  !
+     (FWS)                      Default: 0      ! FWS = 0  !
+     (N3D)                      Default: 0      ! N3D = 1  !
+!END!
+! X =    1 ,        1 ,        0 ,        1       !  !END!
+        (LVECT)  Wind Vectors  (*.wsp,*.wdr)    Default: F      ! LVECT = T  !
+        (LTEMP)  Temperature   (*.deg)          Default: F      ! LTEMP = T  !
+        (LPREC)  Precipitation (*.prc)          Default: F      ! LPREC = F  !
+        (LMIXH)  Mixing Height (*.mix)          Default: F      ! LMIXH = F  !
+        (LIPGT)  PGT Stability (*.pgt)          Default: F      ! LIPGT = F  !
+     (LSNAPTXT)                                 Default: T      ! LSNAPTXT = T  !
+     (MVECT)                                    Default: 0      ! MVECT = 1  !
+     (NZPLOT)                                   Default: 0      ! NZPLOT = 1  !
+     (NSNAP)                                    Default: 0      ! NSNAP = 0  !
+!END!
+! X =    1 ,        1 ,          1       !  !END!
+     (NMEAN)                    Default: 0      ! NMEAN = 0 !
+     (IBEGAV)                   Default: 1      ! IBEGAV = 1 !
+     (IENDAV)                   Default: 1      ! IENDAV = 1 !
+!END!

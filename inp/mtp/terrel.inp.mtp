@@ -1,0 +1,49 @@
+
+
+
+---------------- Run title (3 lines) ------------------------------------------
+    (NTDF)                Default: 0     ! NTDF = 1  !
+    TERREL.DAT       output    ! OUTFIL = terr.dat      !
+    TERREL.LST       output    ! LSTFIL = terr.lst      !
+    TERREL.GRD       output    ! PLTFIL = terr.grd      !
+    TERREL.SAV       output    ! SAVEFIL = terr.sav     !
+    (LCFILES)       Default: T       ! LCFILES = T     !
+!END!
+     1 !SRTM3 = data/n12e101.hgt!     !END!
+    (DUSGS90)       Default: WGS-72  ! DUSGS90  = WGS-72    !
+    (DUSGS30)       Default: NAS-C   ! DUSGS30  = NAS-C     !
+    (DARM3)         Default: NAS-C   ! DARM3    = NAS-C     !
+    (D3CD)          Default: WGS-72  ! D3CD     = WGS-72    !
+    (DDMDF)         Default: NAS-C   ! DDMDF    = NAS-C     !
+    (DSRTM1)        Default: WGS-96  ! DSRTM1   = WGS-96    !
+    (DSRTM3)        Default: WGS-96  ! DSRTM3   = WGS-96    !
+    (DGTOPO30)      Default: WGS-84  ! DGTOPO30 = WGS-84    !
+    (DUSGSLA)       Default: ESR-S   ! DUSGSLA  = ESR-S     !
+    (DNZGEN)        Default: WGS-84  ! DNZGEN   = WGS-84    !
+    (DGEN)          Default: WGS-84  ! DGEN     = WGS-84    !
+    (DWVS)          Default: WGS-84  ! DWVS     = WGS-84    !
+!END!
+      (LPREV)          Default: F        ! LPREV = F    !
+      (LXY)          Default: F        ! LXY = F       !
+      (NXYCOL)       Default: 4   ! NXYCOL = 4     !
+     (LCOAST)                   Default: F     ! LCOAST = F     !
+     (LBLNREAD)                 Default: F      ! LBLNREAD = F     !
+          ! INOISEREP = 0,      0  !
+          !    ZNOISE =   0 ,      0   !
+            ! ITERREP =  0,      0  !
+            !  TERDEF =  0,      0  !
+      (IMODEL)           Default: 1     ! IMODEL = 1     !
+      (ITHRES)           Default: 75   ! ITHRES = 75     !
+!END!
+    (PMAP)           Default: UTM   ! PMAP = UTM     !
+    (IUTMZN)         No Default   ! IUTMZN = 47     !
+    (UTMHEM)         Default: N   ! UTMHEM = N     !
+    (DATUM)           Default: WGS-84  ! DATUM = WGS-84     !
+    (IGRID)      Default = 1         ! IGRID = 1     !
+    (XREFKM)        No Default         ! XREFKM = 722     !
+    (YREFKM)        No Default         ! YREFKM = 1395     !
+    No. X grid cells (NX)  No Default         ! NX = 100     !
+    No. Y grid cells (NY)  No Default         ! NY = 100     !
+    Grid Spacing (km) (DGRIDKM) No Default         ! DGRIDKM = .25     !
+    (IPROC)                  Default = 2        ! IPROC = 2     !
+!END!

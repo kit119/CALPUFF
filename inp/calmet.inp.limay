@@ -1,0 +1,171 @@
+
+
+
+---------------- Run title (3 lines) ------------------------------------------
+GEO.DAT       input    ! GEODAT=GEO.DAT       !
+SURF.DAT      input    ! SRFDAT=SURF.DAT      !
+CALMET.LST    output   ! METLST=CALMET.LST     !
+CALMET.DAT    output   ! METDAT=CALMET.DAT    !
+         T = lower case      ! LCFILES = T !
+    Number of upper air stations (NUSTA)  No default     ! NUSTA =  1  !
+                                 (NOWSTA) No default     ! NOWSTA =  0  !
+                       !END!
+UP1.DAT       input     1  ! UPDAT=UP.DAT!    !END!
+                         !END!
+     Starting date:   Year (IBYR) -- No default       ! IBYR=  1999  !
+                     Month (IBMO) -- No default       ! IBMO=  1  !
+                       Day (IBDY) -- No default       ! IBDY=  7  !
+                      Hour (IBHR) -- No default       ! IBHR=  0  !
+     Base time zone        (IBTZ) -- No default       ! IBTZ= -7  !
+     Length of run (hours) (IRLG) -- No default       ! IRLG=  6  !
+     Run type            (IRTYPE) -- Default: 1       ! IRTYPE=  1  !
+     in additional to regular            Default: T    ! LCALGRD = T !
+      SETUP phase (ITEST)             Default: 2       ! ITEST=  2   !
+     values? (MREG)                   No Default       ! MREG =  0   !
+!END!
+     (PMAP)                     Default: UTM    ! PMAP = UTM  !
+     (FEAST)                    Default=0.0     ! FEAST  = 0.000  !
+     (FNORTH)                   Default=0.0     ! FNORTH = 0.000  !
+     (IUTMZN)                   No Default      ! IUTMZN =  51   !
+     (UTMHEM)                   Default: N      ! UTMHEM = N  !
+     (RLAT0)                    No Default      ! RLAT0 =  0N  !
+     (RLON0)                    No Default      ! RLON0 =  0E  !
+     (XLAT1)                    No Default      ! XLAT1 =  0N  !
+     (XLAT2)                    No Default      ! XLAT2 =  0N  !
+     (DATUM)                    Default: WGS-84    ! DATUM = WGS-84  !
+            No. X grid cells (NX)      No default     ! NX =   100  !
+            No. Y grid cells (NY)      No default     ! NY =   100  !
+     Grid spacing (DGRIDKM)            No default     ! DGRIDKM = 0.25 !
+        X coordinate (XORIGKM)         No default     ! XORIGKM = 225.000 !
+        Y coordinate (YORIGKM)         No default     ! YORIGKM = 1590.000 !
+        No. of vertical layers (NZ)    No default     ! NZ =  10  !
+        ! ZFACE = 0.,20.,40.,80.,160.,320.,640.,1280.,2000.,2500.,3000. !
+!END!
+       output file ?              (LSAVE)  Default: T     ! LSAVE = T !
+       (IFORMO)                            Default: 1    ! IFORMO =  1  !
+       Print met. fields ?  (LPRINT)       Default: F     ! LPRINT = F !
+       (IPRINF) in hours                   Default: 1     ! IPRINF =  1  !
+       ! IUVOUT =  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0  !
+        ! IWOUT =  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0  !
+        ! ITOUT =  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0  !
+      !  STABILITY  =           0           ! - PGT stability class
+      !  USTAR      =           0           ! - Friction velocity
+      !  MONIN      =           0           ! - Monin-Obukhov length
+      !  MIXHT      =           0           ! - Mixing height
+      !  WSTAR      =           0           ! - Convective velocity scale
+      !  PRECIP     =           0           ! - Precipitation rate
+      !  SENSHEAT   =           0           ! - Sensible heat flux
+      !  CONVZI     =           0           ! - Convective mixing ht.
+          internal variables (LDB)         Default: F       ! LDB = F !
+          are printed (NN1)                Default: 1       ! NN1 =  1  !
+          are printed (NN2)                Default: 1       ! NN2 =  2  !
+          (0=Do not write, 1=write)        Default: 0       ! IOUTD =  0  !
+          to print (NZPRN2)                Default: 1       ! NZPRN2 =  1  !
+          (IPR0) (0=no, 1=yes)             Default: 0       !  IPR0 =  0  !
+          (IPR1) (0=no, 1=yes)             Default: 0       !  IPR1 =  0  !
+          (IPR2) (0=no, 1=yes)             Default: 0       !  IPR2 =  0  !
+          (IPR3) (0=no, 1=yes)             Default: 0       !  IPR3 =  0  !
+          (IPR4) (0=no, 1=yes)             Default: 0       !  IPR4 =  0  !
+          (IPR5) (0=no, 1=yes)             Default: 0       !  IPR5 =  0  !
+          (IPR6) (0=no, 1=yes)             Default: 0       !  IPR6 =  0  !
+          (IPR7) (0=no, 1=yes)             Default: 0       !  IPR7 =  0  !
+          (IPR8) (0=no, 1=yes)             Default: 0       !  IPR8 =  0  !
+!END!
+    NO OBSERVATION MODE             (NOOBS)  Default: 0     ! NOOBS =  0   !
+       Number of surface stations   (NSSTA)  No default     ! NSSTA =  2  !
+                                    (NPSTA)  No default     ! NPSTA =  0  !
+                                   (ICLOUD)  Default: 0     ! ICLOUD =  0  !
+                                   (IFORMS)  Default: 2     ! IFORMS =  2  !
+                                   (IFORMP)  Default: 2     ! IFORMP =  2  !
+                                   (IFORMC)  Default: 2     ! IFORMC =  2  !
+!END!
+       Model selection variable (IWFCOD)     Default: 1      ! IWFCOD =  1  !
+       effects ? (IFRADJ)                    Default: 1      ! IFRADJ =  1  !
+       Compute kinematic effects ? (IKINE)   Default: 0      ! IKINE  =  0  !
+       of the vertical velocity ? (IOBR)     Default: 0      ! IOBR =  0  !
+       Compute slope flow effects ? (ISLOPE) Default: 1      ! ISLOPE  =  1  !
+       to upper layers ? (IEXTRP)            Default: -4     ! IEXTRP = -4  !
+       if calm? (ICALM)                      Default: 0      ! ICALM  =  0  !
+                               ! BIAS = -1 , -1 , -1 , -1 ,  0 ,  1 ,  1 ,  1 ,  1 ,  1  !
+                                              Default: 4.    ! RMIN2 = 4.0 !
+       wind field model (IPROG)              Default: 0      ! IPROG =  0  !
+       model input data   (ISTEPPG)          Default: 1      ! ISTEPPG =  1   !
+       Use varying radius of influence       Default: F      ! LVARY =  F!
+       in the surface layer (RMAX1)          No default      ! RMAX1 = 5. !
+       aloft (RMAX2)                         No default      ! RMAX2 = 5. !
+       (RMAX3)                               No default      ! RMAX3 = 50. !
+       the wind field interpolation (RMIN)   Default: 0.1    ! RMIN = 0.1 !
+       features (TERRAD)                     No default      ! TERRAD = 15. !
+       SURFACE layer (R1)                    No default      ! R1 = 2. !
+       layers ALOFT (R2)                     No default      ! R2 = 2. !
+       prognostic wind field data (RPROG)    No default      ! RPROG = 0. !
+       (DIVLIM)                              Default: 5.E-6  ! DIVLIM= 5.0E-06 !
+       divergence min. procedure (NITER)     Default: 50     ! NITER =  50  !
+            Default: 2,(mxnz-1)*4 ! NSMTH = 2 ,  4 ,  4 ,  4 ,  4 ,  4 ,  4 ,  4 ,  4 ,  4  !
+       NOTE: NZ values must be entered       Default: 99.    ! NINTR2 = 99 ,  99 ,  99 ,  99 ,  99 ,  99 ,  99 ,  99 ,  99 ,  99  !
+       Critical Froude number (CRITFN)       Default: 1.0    ! CRITFN = 1. !
+       (ALPHA)                               Default: 0.1    ! ALPHA = 0.1 !
+        ! FEXTR2 = 0., 0., 0., 0., 0., 0., 0., 0., 0., 0. !
+       of the wind fields (NBAR)             Default: 0      ! NBAR =  0  !
+       apply (KBAR)                          Default: NZ     ! KBAR =  12  !
+          of each barrier (XBBAR(NBAR))      ! XBBAR = 0. !
+          of each barrier (YBBAR(NBAR))      ! YBBAR = 0. !
+          of each barrier (XEBAR(NBAR))      ! XEBAR = 0. !
+          of each barrier (YEBAR(NBAR))      ! YEBAR = 0. !
+       Surface temperature (IDIOPT1)         Default: 0      ! IDIOPT1 =  0  !
+          the surface temperature (ISURFT)   No default     ! ISURFT =  1  !
+       rate (IDIOPT2)                        Default: 0     ! IDIOPT2 =  0  !
+          the domain-scale lapse rate (IUPT) No default     ! IUPT   =  1  !
+          lapse rate is computed (ZUPT)      Default: 200.  ! ZUPT = 200. !
+       (IDIOPT3)                             Default: 0     ! IDIOPT3 =  0  !
+          the domain-scale winds (IUPWND)    Default: -1    ! IUPWND = -1  !
+          (ZUPWND(1), ZUPWND(2))        Defaults: 1., 1000. ! ZUPWND= 1., 1000. !
+       for wind field module (IDIOPT4)  Default: 0     ! IDIOPT4 =  0  !
+       for wind field module (IDIOPT5)  Default: 0     ! IDIOPT5 =  0  !
+                                           Default: F      ! LLBREZE = F !
+           Number of lake breeze regions (NBOX)            ! NBOX =  0  !
+                                                        ! XG1 = 0. !
+                                                        ! XG2 = 0. !
+                                                        ! YG1 = 0. !
+                                                        ! YG2 = 0. !
+                   (XBCST)  (KM)   Default: none    ! XBCST = 0. !
+                   (YBCST)  (KM)   Default: none    ! YBCST = 0. !
+                   (XECST)  (KM)   Default: none    ! XECST = 0. !
+                   (YECST)  (KM)   Default: none    ! YECST = 0. !
+       Number of stations in the region     Default: none ! NLB =  0 ! 
+         ! METBXID =  0 !
+!END!
+       (CONSTB)                              Default: 1.41   ! CONSTB = 1.41 !
+       (CONSTE)                              Default: 0.15   ! CONSTE = 0.15 !
+       (CONSTN)                              Default: 2400.  ! CONSTN = 2400.!
+       (CONSTW)                              Default: 0.16   ! CONSTW = 0.16 !
+       parameter (FCORIOL)                   Default: 1.E-4  ! FCORIOL = 1.0E-04!
+       (IAVEZI)  (0=no, 1=yes)               Default: 1      ! IAVEZI =  1  !
+       process (MNMDAV)                      Default: 1      ! MNMDAV =  1  !
+       for averaging (HAFANG)                Default: 30.    ! HAFANG = 30. !
+       averaging (ILEVZI)                    Default: 1      ! ILEVZI =  1  !
+       current convective mixing ht.         Default: 0.001  ! DPTMIN = 0.001 !
+       mixing height through which lapse     Default: 200.   ! DZZI = 200. !
+       Minimum overland mixing height        Default:  50.   ! ZIMIN = 50. !
+       Maximum overland mixing height        Default: 3000.  ! ZIMAX = 3000. !
+       Minimum overwater mixing height       Default:   50.  ! ZIMINW = 50. !
+       Maximum overwater mixing height       Default: 3000.  ! ZIMAXW = 3000. !
+       from prognostic data? (ITPROG)        Default:0         !ITPROG =  0   !
+       (1 = 1/R ; 2 = 1/R**2)                Default:1         ! IRAD =  1  !
+       interpolation (TRADKM)                Default: 500.     ! TRADKM = 500. !
+       in temperature interpolation (NUMTS)  Default: 5        ! NUMTS = 5  !
+       eratures (IAVET)  (0=no, 1=yes)         Default: 1     ! IAVET =  1  !
+       Default temperature gradient        Default: -.0098 ! TGDEFB = -0.0098 !
+       Default temperature gradient        Default: -.0045 ! TGDEFA = -0.0045 !
+       land use categories for temperature                    ! JWAT1 =  999  !
+       interpolation over water -- Make                       ! JWAT2 =  999  !
+       Method of interpolation (NFLAGP)      Default = 2    ! NFLAGP =  2  !
+       Radius of Influence (km) (SIGMAP)     Default = 100.0  ! SIGMAP = 100. !
+       Minimum Precip. Rate Cutoff (mm/hr)   Default = 0.01  ! CUTP = 0.01 !
+!END!
+! SS1  ='STA1'     1001       497.610     1668.700   -7    10  !
+! SS2  ='STA2'     1002       507.170     1670.000   -7    10  !
+!END!
+! US1  ='UP1'    2001    497.610   1668.700   -7  !
+!END!
+!END!

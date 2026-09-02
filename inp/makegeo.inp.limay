@@ -1,0 +1,83 @@
+
+
+
+---------------- Run title (3 lines) ------------------------------------------
+    LU.DAT       input    ! LUDAT = lu.dat      !
+    TERR.DAT     input    ! TERRDAT = terr.dat      !
+    GEO.DAT      output   ! GEODAT = geo.dat      !
+    MAKEGEO.LST  output   ! RUNLST = makegeo.lst      !
+    QALUSE.GRD   output   ! LUGRD  = qaluse.grd      !
+    QATERR.GRD   output   ! TEGRD =  qaterr.grd !
+    (LCFILES)   Default: T    ! LCFILES = T     !
+!END!
+    (LTERR)          Default: T        ! LTERR = T    !
+    (LLU2)           Default: F        ! LLU2 = F    !
+    (IXQA)      Default:0            ! IXQA = 0     !
+    (IYQA)      Default:0            ! IYQA = 0     !
+!END!
+    (PMAP)           Default: UTM   ! PMAP = UTM     !
+    (IUTMZN)         No Default   ! IUTMZN = 51     !
+    (UTMHEM)         Default: N   ! UTMHEM = N     !
+    (DATUM)           Default: WGS-84  ! DATUM = WGS-84     !
+    (XREFKM)              No Default         ! XREFKM = 225     !
+    (YREFKM)              No Default         ! YREFKM = 1590     !
+    No. X grid cells (NX)  No Default         ! NX = 100     !
+    No. Y grid cells (NY)  No Default         ! NY = 100     !
+    Grid Spacing (DGRIDKM) No Default         ! DGRIDKM = .25     !
+!END!
+    (NOUTCAT)         Default:14          ! NOUTCAT = 14     !
+    (IWAT1)         Default:50          ! IWAT1 = 50     !
+    (IWAT2)         Default:55          ! IWAT2 = 55     !
+!END!
+    ! OUTCAT = 10, 20, -20, 30, 40, 51, 54, 55, 60, 61!   !END!
+    ! OUTCAT = 62, 70, 80, 90!   !END!
+    (NINCAT)         Default:38          ! NINCAT = 38     !
+    (NUMWAT)         Default:5          ! NUMWAT = 5     !
+    (NSPLIT)         Default:0          ! NSPLIT = 0     !
+    (CFRACT)         Default:0.5        ! CFRACT = 0.5     !
+    (IMISS)         Default:55          ! IMISS = 55     !
+    (FLUMIN)        Default: 0.96       ! FLUMIN = 0.96     !
+!END!
+    ! X = 11,  0.5,     0.18,  1.0,     0.20,        0.0,    1.0,      10 ! !END!
+    ! X = 12,  1.0,     0.18,  1.5,     0.25,        0.0,    0.2,      10 ! !END!
+    ! X = 13,  1.0,     0.18,  1.5,     0.25,        0.0,    0.2,      10 ! !END!
+    ! X = 14,  1.0,     0.18,  1.5,     0.25,        0.0,    0.2,      10 ! !END!
+    ! X = 15,  1.0,     0.18,  1.5,     0.25,        0.0,    0.2,      10 ! !END!
+    ! X = 16,  1.0,     0.18,  1.5,     0.25,        0.0,    0.2,      10 ! !END!
+    ! X = 17,  1.0,     0.18,  1.5,     0.25,        0.0,    0.2,      10 ! !END!
+    ! X = 21, 0.25,     0.15,  1.0,     0.15,        0.0,    3.0,      20 ! !END!
+    ! X = 22, 0.25,     0.15,  1.0,     0.15,        0.0,    3.0,      20 ! !END!
+    ! X = 23, 0.25,     0.15,  1.0,     0.15,        0.0,    3.0,      20 ! !END!
+    ! X = 24, 0.25,     0.15,  1.0,     0.15,        0.0,    3.0,      20 ! !END!
+    ! X = 31, 0.05,     0.25,  1.0,     0.15,        0.0,    0.5,      30 ! !END!
+    ! X = 32, 0.05,     0.25,  1.0,     0.15,        0.0,    0.5,      30 ! !END!
+    ! X = 33, 0.05,     0.25,  1.0,     0.15,        0.0,    0.5,      30 ! !END!
+    ! X = 41,  1.0,      0.1,  1.0,     0.15,        0.0,    7.0,      40 ! !END!
+    ! X = 42,  1.0,      0.1,  1.0,     0.15,        0.0,    7.0,      40 ! !END!
+    ! X = 43,  1.0,      0.1,  1.0,     0.15,        0.0,    7.0,      40 ! !END!
+    ! X = 51,0.001,      0.1,  0.0,      1.0,        0.0,    0.0,      51 ! !END!
+    ! X = 52,0.001,      0.1,  0.0,      1.0,        0.0,    0.0,      51 ! !END!
+    ! X = 53,0.001,      0.1,  0.0,      1.0,        0.0,    0.0,      51 ! !END!
+    ! X = 54,0.001,      0.1,  0.0,      1.0,        0.0,    0.0,      54 ! !END!
+    ! X = 55,0.001,      0.1,  0.0,      1.0,        0.0,    0.0,      55 ! !END!
+    ! X = 61,  1.0,      0.1,  0.5,     0.25,        0.0,    2.0,      61 ! !END!
+    ! X = 62,  0.2,      0.1,  0.1,     0.25,        0.0,    1.0,      62 ! !END!
+    ! X = 71, 0.05,      0.3,  1.0,     0.15,        0.0,   0.05,      70 ! !END!
+    ! X = 72, 0.05,      0.3,  1.0,     0.15,        0.0,   0.05,      70 ! !END!
+    ! X = 73, 0.05,      0.3,  1.0,     0.15,        0.0,   0.05,      70 ! !END!
+    ! X = 74, 0.05,      0.3,  1.0,     0.15,        0.0,   0.05,      70 ! !END!
+    ! X = 75, 0.05,      0.3,  1.0,     0.15,        0.0,   0.05,      70 ! !END!
+    ! X = 76, 0.05,      0.3,  1.0,     0.15,        0.0,   0.05,      70 ! !END!
+    ! X = 77, 0.05,      0.3,  1.0,     0.15,        0.0,   0.05,      70 ! !END!
+    ! X = 81, 0.02,      0.3,  0.5,     0.15,        0.0,    0.0,      80 ! !END!
+    ! X = 82, 0.02,      0.3,  0.5,     0.15,        0.0,    0.0,      80 ! !END!
+    ! X = 83, 0.02,      0.3,  0.5,     0.15,        0.0,    0.0,      80 ! !END!
+    ! X = 84, 0.02,      0.3,  0.5,     0.15,        0.0,    0.0,      80 ! !END!
+    ! X = 85, 0.02,      0.3,  0.5,     0.15,        0.0,    0.0,      80 ! !END!
+    ! X = 91, 0.05,      0.7,  0.5,     0.15,        0.0,    0.0,      90 ! !END!
+    ! X = 92, 0.05,      0.7,  0.5,     0.15,        0.0,    0.0,      90 ! !END!
+    ! IWAT = 51! !END!
+    ! IWAT = 52! !END!
+    ! IWAT = 53! !END!
+    ! IWAT = 54! !END!
+    ! IWAT = 55! !END!
