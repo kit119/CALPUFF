@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Kontour</title>
+<link  href="https://cdn2.iconfinder.com/data/icons/geography-color/64/contour-line-isobar-equal-elevation-altitude-map-32.png" rel="icon">
+
+<script src="https://unpkg.com/@tgwf/co2@0.13.6/dist/iife/index.js"></script>
+<script src="https://unpkg.com/d3@4.13.0/build/d3.min.js"></script>
+
+
+<!-- jquery and bootstrap -->
+<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+<link  href="https://unpkg.com/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet" >
+<script src="https://unpkg.com/chroma-js@2.0.3/chroma.min.js"></script>
+<script src="https://unpkg.com/moment@2.29.1/min/moment-with-locales.min.js"></script>
+  
+<!-- leaflet and plugins -->
+<script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+<link  href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" rel="stylesheet">
+<style>
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {background:rgba(255,255,255,0.85);color:#333;box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);}
+</style>
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-choropleth@1.1.4/dist/choropleth.js"></script>
+<script src="https://unpkg.com/leaflet-textpath@1.2.3/leaflet.textpath.js"></script>
+<link  href="https://unpkg.com/leaflet-velocity@1.9.2/dist/leaflet-velocity.css" rel="stylesheet" />
+<script src="https://unpkg.com/leaflet-velocity@1.9.2/dist/leaflet-velocity.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-path-flow@1.0.0/dashflow.min.js"></script>
+<script src="https://tcoupin.github.io/leaflet-paintpolygon/dist/Leaflet.PaintPolygon.js"></script>
+<link   href="https://unpkg.com/leaflet-pulse-icon@0.1.0/src/L.Icon.Pulse.css" rel="stylesheet" />
+<script src="https://unpkg.com/leaflet-pulse-icon@0.1.0/src/L.Icon.Pulse.js"></script>
+<link  href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" rel="stylesheet" />
+<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+<script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate.js"></script>
+<script src="https://unpkg.com/leaflet-moving-rotated-marker@0.0.1/leaflet.movingRotatedMarker.js"></script>
+
+
+<!-- 
+<script src="https://unpkg.com/leaflet-rotate@0.2.8/lib/debug.js"></script>
+<script src="https://unpkg.com/leaflet-rotatedmarker@0.2.0/leaflet.rotatedMarker.js"></script>
+<link  href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.14.2/dist/leaflet-geoman.css" rel="stylesheet"/>
+<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.14.2/dist/leaflet-geoman.min.js"></script>
+<script src="https://unpkg.com/leaflet-canvaslayer-field@1.4.1/dist/leaflet.canvaslayer.field.js"></script>
+<script src="assets/js/leaflet-idw.js"></script> 
+<script src="assets/leaflet-1.8.0.js"></script>
+<script src="https://raw.githubusercontent.com/FreeGIS/kriging-contour/master/dist/kriging-contour.js"></script>
+-->
+<script>!function(t){function e(i){if(n[i])return n[i].exports;var r=n[i]={i:i,l:!1,exports:{}};return t[i].call(r.exports,r,r.exports,e),r.l=!0,r.exports}var n={};e.m=t,e.c=n,e.i=function(t){return t},e.d=function(t,n,i){e.o(t,n)||Object.defineProperty(t,n,{configurable:!1,enumerable:!0,get:i})},e.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=13)}([function(t,e,n){"use strict";function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),o=function(){function t(e,n,r){var o=arguments.length>3&&void 0!==arguments[3]?arguments[3]:r;i(this,t),this.center=e,this.value=n,this.xSize=r,this.ySize=o}return r(t,[{key:"equals",value:function(t){return this.center.equals(t.center)&&this._equalValues(this.value,t.value)&&this.xSize===t.xSize&&this.ySize===t.ySize}},{key:"_equalValues",value:function(t,e){var n=t.constructor.name;return{Number:t===e,Vector:t.u===e.u&&t.v===e.v}[n]}},{key:"getBounds",value:function(){var t=this.xSize/2,e=this.ySize/2,n=this.center.lat,i=this.center.lng,r=L.latLng([n+e,i-t]),o=L.latLng([n-e,i+t]);return L.latLngBounds(L.latLng(o.lat,r.lng),L.latLng(r.lat,o.lng))}}]),t}();e.a=o},function(t,e,n){"use strict";function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var r=n(0),o=n(11),a=n.n(o),s=function(){function t(t,e){var n=[],i=!0,r=!1,o=void 0;try{for(var a,s=t[Symbol.iterator]();!(i=(a=s.next()).done)&&(n.push(a.value),!e||n.length!==e);i=!0);}catch(t){r=!0,o=t}finally{try{!i&&s.return&&s.return()}finally{if(r)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),l=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),u=function(){function t(e){i(this,t),this.params=e,this.nCols=e.nCols,this.nRows=e.nRows,this.width=e.nCols,this.height=e.nRows,this.xllCorner=e.xllCorner,this.yllCorner=e.yllCorner,this.xurCorner=e.xllCorner+e.nCols*e.cellXSize,this.yurCorner=e.yllCorner+e.nRows*e.cellYSize,this.cellXSize=e.cellXSize,this.cellYSize=e.cellYSize,this.grid=null,this.isContinuous=this.xurCorner-this.xllCorner>=360,this.longitudeNeedsToBeWrapped=this.xurCorner>180,this._inFilter=null,this._spatialMask=null}return l(t,[{key:"_buildGrid",value:function(){throw new TypeError("Must be overriden")}},{key:"_updateRange",value:function(){this.range=this._calculateRange()}},{key:"numCells",value:function(){return this.nRows*this.nCols}},{key:"getCells",value:function(){for(var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:1,e=[],n=0;n<this.nRows;n+=t)for(var i=0;i<this.nCols;i+=t){var o=this._lonLatAtIndexes(i,n),a=s(o,2),l=a[0],u=a[1],h=L.latLng(u,l),c=this._valueAtIndexes(i,n),f=new r.a(h,c,this.cellXSize,this.cellYSize);e.push(f)}return e}},{key:"setFilter",value:function(t){this._inFilter=t,this._updateRange()}},{key:"setSpatialMask",value:function(t){this._spatialMask=t}},{key:"extent",value:function(){var t=this._getWrappedLongitudes(),e=s(t,2),n=e[0],i=e[1];return[n,this.yllCorner,i,this.yurCorner]}},{key:"_getWrappedLongitudes",value:function(){var t=this.xllCorner,e=this.xurCorner;return this.longitudeNeedsToBeWrapped&&(this.isContinuous?(t=-180,e=180):(e=this.xurCorner-360,t=this.xllCorner-360)),[t,e]}},{key:"contains",value:function(t,e){return this._spatialMask?this._pointInMask(t,e):this._pointInExtent(t,e)}},{key:"_pointInExtent",value:function(t,e){var n=this._getWrappedLongitudes(),i=s(n,2),r=i[0],o=i[1],a=t>=r&&t<=o,l=e>=this.yllCorner&&e<=this.yurCorner;return a&&l}},{key:"_pointInMask",value:function(t,e){var n={type:"Feature",geometry:{type:"Point",coordinates:[t,e]},properties:{}},i=this._spatialMask;return a()(n,i)}},{key:"notContains",value:function(t,e){return!this.contains(t,e)}},{key:"interpolatedValueAt",value:function(t,e){if(this.notContains(t,e))return null;var n=this._getDecimalIndexes(t,e),i=s(n,2),r=i[0],o=i[1];return this.interpolatedValueAtIndexes(r,o)}},{key:"interpolatedValueAtIndexes",value:function(t,e){var n=this._getFourSurroundingIndexes(t,e),i=s(n,4),r=i[0],o=i[1],a=i[2],l=i[3],u=this._getFourSurroundingValues(r,o,a,l);if(u){var h=s(u,4),c=h[0],f=h[1],d=h[2],p=h[3];return this._doInterpolation(t-r,e-a,c,f,d,p)}return null}},{key:"_getDecimalIndexes",value:function(t,e){return this.longitudeNeedsToBeWrapped&&t<this.xllCorner&&(t+=360),[(t-this.xllCorner)/this.cellXSize,(this.yurCorner-e)/this.cellYSize]}},{key:"_getFourSurroundingIndexes",value:function(t,e){var n=Math.floor(t),i=n+1;this.isContinuous&&i>=this.nCols&&(i=0),i=this._clampColumnIndex(i);var r=this._clampRowIndex(Math.floor(e));return[n,i,r,this._clampRowIndex(r+1)]}},{key:"_getFourSurroundingValues",value:function(t,e,n,i){var r;if(r=this.grid[n]){var o=r[t],a=r[e];if(this._isValid(o)&&this._isValid(a)&&(r=this.grid[i])){var s=r[t],l=r[e];if(this._isValid(s)&&this._isValid(l))return[o,a,s,l]}}return null}},{key:"valueAt",value:function(t,e){if(this.notContains(t,e))return null;var n=this._getDecimalIndexes(t,e),i=s(n,2),r=i[0],o=i[1],a=Math.floor(r),l=Math.floor(o),u=this._clampColumnIndex(a),h=this._clampRowIndex(l),c=this._valueAtIndexes(u,h);return this._inFilter&&!this._inFilter(c)?null:c}},{key:"hasValueAt",value:function(t,e){var n=this.valueAt(t,e),i=null!==n,r=!0;return this._inFilter&&(r=this._inFilter(n)),i&&r}},{key:"notHasValueAt",value:function(t,e){return!this.hasValueAt(t,e)}},{key:"randomPosition",value:function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},e=Math.random()*this.nCols|0,n=Math.random()*this.nRows|0;return t.x=this._longitudeAtX(e),t.y=this._latitudeAtY(n),t}},{key:"_valueAtIndexes",value:function(t,e){return this.grid[e][t]}},{key:"_lonLatAtIndexes",value:function(t,e){return[this._longitudeAtX(t),this._latitudeAtY(e)]}},{key:"_longitudeAtX",value:function(t){var e=this.cellXSize/2,n=this.xllCorner+e+t*this.cellXSize;return this.longitudeNeedsToBeWrapped&&(n=n>180?n-360:n),n}},{key:"_latitudeAtY",value:function(t){var e=this.cellYSize/2;return this.yurCorner-e-t*this.cellYSize}},{key:"_doInterpolation",value:function(t,e,n,i,r,o){throw new TypeError("Must be overriden")}},{key:"_clampColumnIndex",value:function(t){var e=t;t<0&&(e=0);var n=this.nCols-1;return t>n&&(e=n),e}},{key:"_clampRowIndex",value:function(t){var e=t;t<0&&(e=0);var n=this.nRows-1;return t>n&&(e=n),e}},{key:"_isValid",value:function(t){return null!==t&&void 0!==t}}]),t}();e.a=u},function(t,e,n){"use strict";function i(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}function r(t,e,n){return e in t?Object.defineProperty(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function a(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function s(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}var l=n(1),u=function(){function t(t,e){var n=[],i=!0,r=!1,o=void 0;try{for(var a,s=t[Symbol.iterator]();!(i=(a=s.next()).done)&&(n.push(a.value),!e||n.length!==e);i=!0);}catch(t){r=!0,o=t}finally{try{!i&&s.return&&s.return()}finally{if(r)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),h=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),c=function(t){function e(t){o(this,e);var n=a(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return n.zs=t.zs,n.grid=n._buildGrid(),n._updateRange(),n}return s(e,t),h(e,null,[{key:"fromASCIIGrid",value:function(t){for(var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:1,i=t.split("\n"),r=e._parseASCIIGridHeader(i.slice(0,6)),o=[],a=6;a<i.length;a++){var s=i[a].trim();if(""===s)break;s.split(" ").forEach(function(t){var e=parseFloat(t),i=e!==r.noDataValue?e*n:null;o.push(i)})}var l=r;return l.zs=o,new e(l)}},{key:"_parseASCIIGridHeader",value:function(t){try{var e=t.map(function(t){var e=t.split(" ").filter(function(t){return""!=t});return r({},e[0].trim().toUpperCase(),parseFloat(e[1].trim()))}),n="XLLCORNER"in e[2],i=e[4].CELLSIZE;return{nCols:parseInt(e[0].NCOLS),nRows:parseInt(e[1].NROWS),xllCorner:n?e[2].XLLCORNER:e[2].XLLCENTER-i,yllCorner:n?e[3].YLLCORNER:e[3].YLLCENTER-i,cellXSize:i,cellYSize:i,noDataValue:e[5].NODATA_VALUE}}catch(t){throw new Error("Not a valid ASCIIGrid Header: "+t)}}},{key:"fromGeoTIFF",value:function(t){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0;return e.multipleFromGeoTIFF(t,[n])[0]}},{key:"multipleFromGeoTIFF",value:function(t,n){var r=GeoTIFF.parse(t),o=r.getImage(),a=o.readRasters(),s=o.getTiePoints()[0],l=o.getFileDirectory(),h=u(l.ModelPixelScale,2),c=h[0],f=h[1];void 0!==n&&0!==n.length||(n=[].concat(i(Array(a.length).keys())));return n.map(function(t){var n=a[t];if(l.GDAL_NODATA){var i=parseFloat(l.GDAL_NODATA);n=Array.from(n).map(function(t){return t===i?null:t})}return new e({nCols:o.getWidth(),nRows:o.getHeight(),xllCorner:s.x,yllCorner:s.y-o.getHeight()*f,cellXSize:c,cellYSize:f,zs:n})})}}]),h(e,[{key:"_buildGrid",value:function(){return this._arrayTo2d(this.zs,this.nRows,this.nCols)}},{key:"_arrayTo2d",value:function(t,e,n){for(var i=[],r=0,o=0;o<e;o++){for(var a=[],s=0;s<n;s++,r++){var l=t[r];a[s]=this._isValid(l)?l:null}i[o]=a}return i}},{key:"_newDataArrays",value:function(t){t.zs=[]}},{key:"_pushValueToArrays",value:function(t,e){t.zs.push(e)}},{key:"_makeNewFrom",value:function(t){return new e(t)}},{key:"_calculateRange",value:function(){var t=this.zs;return this._inFilter&&(t=t.filter(this._inFilter)),[d3.min(t),d3.max(t)]}},{key:"_doInterpolation",value:function(t,e,n,i,r,o){var a=1-t,s=1-e;return n*a*s+i*t*s+r*a*e+o*t*e}}]),e}(l.a);e.a=c},function(t,e,n){"use strict";function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var r=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),o=function(){function t(e,n){i(this,t),this.u=e,this.v=n}return r(t,[{key:"magnitude",value:function(){return Math.sqrt(this.u*this.u+this.v*this.v)}},{key:"directionTo",value:function(){var t=Math.atan2(this.u,this.v),e=t*(180/Math.PI);return e<0&&(e+=360),e}},{key:"directionFrom",value:function(){return(this.directionTo()+180)%360}}]),t}();e.a=o},function(t,e,n){"use strict";function i(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function r(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function o(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}var a=n(3),s=n(1),l=n(2),u=function(){function t(t,e){var n=[],i=!0,r=!1,o=void 0;try{for(var a,s=t[Symbol.iterator]();!(i=(a=s.next()).done)&&(n.push(a.value),!e||n.length!==e);i=!0);}catch(t){r=!0,o=t}finally{try{!i&&s.return&&s.return()}finally{if(r)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),h=function(){function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}return function(e,n,i){return n&&t(e.prototype,n),i&&t(e,i),e}}(),c=function(t){function e(t){i(this,e);var n=r(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return n.us=t.us,n.vs=t.vs,n.grid=n._buildGrid(),n.range=n._calculateRange(),n}return o(e,t),h(e,null,[{key:"fromASCIIGrids",value:function(t,n){var i=arguments.length>2&&void 0!==arguments[2]?arguments[2]:1,r=l.a.fromASCIIGrid(t,i),o=l.a.fromASCIIGrid(n,i);return new e(e._paramsFromScalarFields(r,o))}},{key:"fromGeoTIFFs",value:function(t,n){var i=l.a.fromGeoTIFF(t),r=l.a.fromGeoTIFF(n);return new e(e._paramsFromScalarFields(i,r))}},{key:"fromMultibandGeoTIFF",value:function(t){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:[0,1],i=l.a.multipleFromGeoTIFF(t,n),r=u(i,2),o=r[0],a=r[1];return new e(e._paramsFromScalarFields(o,a))}},{key:"_paramsFromScalarFields",value:function(t,e){return{nCols:t.nCols,nRows:t.nRows,xllCorner:t.xllCorner,yllCorner:t.yllCorner,cellXSize:t.cellXSize,cellYSize:t.cellYSize,us:t.zs,vs:e.zs}}}]),h(e,[{key:"getScalarField",value:function(t){var e=this._getFunctionFor(t),n={nCols:this.params.nCols,nRows:this.params.nRows,xllCorner:this.params.xllCorner,yllCorner:this.params.yllCorner,cellXSize:this.params.cellXSize,cellYSize:this.params.cellYSize,zs:this._applyOnField(e)};return new l.a(n)}},{key:"_getFunctionFor",value:function(t){return function(e,n){return new a.a(e,n)[t]()}}},{key:"_applyOnField",value:function(t){for(var e=[],n=this.numCells(),i=0;i<n;i++){var r=this.us[i],o=this.vs[i];this._isValid(r)&&this._isValid(o)?e.push(t(r,o)):e.push(null)}return e}},{key:"_buildGrid",value:function(){return this._arraysTo2d(this.us,this.vs,this.nRows,this.nCols)}},{key:"_arraysTo2d",value:function(t,e,n,i){for(var r=[],o=0,s=0;s<n;s++){for(var l=[],u=0;u<i;u++,o++){var h=t[o],c=e[o],f=this._isValid(h)&&this._isValid(c);l[u]=f?new a.a(h,c):null}r[s]=l}return r}},{key:"_newDataArrays",value:function(t){t.us=[],t.vs=[]}},{key:"_pushValueToArrays",value:function(t,e){t.us.push(e.u),t.vs.push(e.v)}},{key:"_makeNewFrom",value:function(t){return new e(t)}},{key:"_calculateRange",value:function(){var t=this.getCells().map(function(t){return t.value}).filter(function(t){return null!==t});this._inFilter&&(t=t.filter(this._inFilter));var e=t.map(function(t){return t.magnitude()});return[d3.min(e),d3.max(e)]}},{key:"_doInterpolation",value:function(t,e,n,i,r,o){var s=1-t,l=1-e,u=s*l,h=t*l,c=s*e,f=t*e,d=n.u*u+i.u*h+r.u*c+o.u*f,p=n.v*u+i.v*h+r.v*c+o.v*f;return new a.a(d,p)}},{key:"_isValid",value:function(t){return null!==t&&void 0!==t}}]),e}(s.a);e.a=c},function(t,e){var n=function(){function t(t,e){var n=[],i=!0,r=!1,o=void 0;try{for(var a,s=t[Symbol.iterator]();!(i=(a=s.next()).done)&&(n.push(a.value),!e||n.length!==e);i=!0);}catch(t){r=!0,o=t}finally{try{!i&&s.return&&s.return()}finally{if(r)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}();L.Control.ColorBar=L.Control.extend({options:{position:"bottomleft",width:300,height:15,margin:15,background:"#fff",textColor:"black",steps:100,decimals:2,units:"uds",title:"Legend",labels:[],labelFontSize:10,labelTextPosition:"middle"},initialize:function(t,e,n){this.color=t,this.range=e,L.Util.setOptions(this,n)},onAdd:function(t){this._map=t;var e=L.DomUtil.create("div","leaflet-control-colorBar leaflet-bar leaflet-control");return e.style.opacity=0.85,e.style.padding="0px",L.DomEvent.addListener(e,"click",L.DomEvent.stopPropagation).addListener(e,"click",L.DomEvent.preventDefault),e.style.backgroundColor=this.options.background,e.style.cursor="text",e.innerHTML=this.title()+this.palette(),e},title:function(){var t=document.createElement("div");return d3.select(t).append("span").style("color",this.options.textColor).style("display","block").style("margin-bottom","5px").attr("class","leaflet-control-colorBar-title").text(this.options.title),t.innerHTML},palette:function(){var t=document.createElement("div"),e=this._createSvgIn(t);return this._appendColorBarTo(e),this.options.labels&&this._appendLabelsTo(e),t.innerHTML},_createSvgIn:function(t){var e=this.options.labels?this.options.margin:0;return d3.select(t).append("svg").attr("width",this.options.width+2*this.options.margin).attr("height",this.options.height+e)},_appendColorBarTo:function(t){var e=this,n=this._getColorPerValue(),i=this.options.width/n.length,r=t.append("g").attr("id","colorBar-buckets"),o=r.selectAll("rect").data(n).enter().append("rect");o.attr("x",function(t,n){return n*i+e.options.margin}).attr("y",function(){return 0}).attr("height",function(){return e.options.height}).attr("width",function(){return i}).attr("stroke-width",2).attr("stroke-linecap","butt").attr("stroke",function(t){return t.color.hex()}).attr("fill",function(t){return t.color.hex()}),o.append("title").text(function(t){return t.value.toFixed(e.options.decimals)+" "+e.options.units})},_appendLabelsTo:function(t){var e=this,n=this._getPositionPerLabelValue();t.append("g").attr("id","colorBar-labels").selectAll("text").data(n).enter().append("text").attr("x",function(t){return t.position+e.options.margin}).attr("y",this.options.height+this.options.margin).attr("font-size",this.options.labelFontSize+"px").attr("text-anchor",this.options.labelTextPosition).attr("fill",this.options.textColor).attr("class","leaflet-control-colorBar-label").text(function(t){return""+t.value.toFixed(e.options.decimals)})},_getColorPerValue:function(){var t=this,e=n(this.range,2),i=e[0],r=e[1],o=(r-i)/this.options.steps;return d3.range(i,r+o,o).map(function(e){return{value:e,color:t.color(e)}})},_getPositionPerLabelValue:function(){var t=d3.scaleLinear().range([0,this.options.width]).domain(this.range);return this.options.labels.map(function(e){return{value:e,position:t(e)}})}}),L.control.colorBar=function(t,e,n){return new L.Control.ColorBar(t,e,n)}},function(t,e){L.CanvasLayer.Field=L.CanvasLayer.extend({options:{mouseMoveCursor:{value:"pointer",noValue:"default"},opacity:1,onClick:null,onMouseMove:null,inFilter:null},initialize:function(t,e){L.Util.setOptions(this,e),this._visible=!0,t&&this.setData(t)},getEvents:function(){var t=L.CanvasLayer.prototype.getEvents.call(this);return t.zoomstart=this._hideCanvas.bind(this),t.zoomend=this._showCanvas.bind(this),t},onLayerDidMount:function(){this._enableIdentify(),this._ensureCanvasAlignment()},show:function(){this._visible=!0,this._showCanvas(),this._enableIdentify()},hide:function(){this._visible=!1,this._hideCanvas(),this._disableIdentify()},isVisible:function(){return this._visible},_showCanvas:function(){this._canvas&&this._visible&&(this._canvas.style.visibility="visible")},_hideCanvas:function(){this._canvas&&(this._canvas.style.visibility="hidden")},_enableIdentify:function(){this._map.on("click",this._onClick,this),this._map.on("mousemove",this._onMouseMove,this),this.options.onClick&&this.on("click",this.options.onClick,this),this.options.onMouseMove&&this.on("mousemove",this.options.onMouseMove,this)},_disableIdentify:function(){this._map.off("click",this._onClick,this),this._map.off("mousemove",this._onMouseMove,this),this.options.onClick&&this.off("click",this.options.onClick,this),this.options.onMouseMove&&this.off("mousemove",this.options.onMouseMove,this)},_ensureCanvasAlignment:function(){var t=this._map.containerPointToLayerPoint([0,0]);L.DomUtil.setPosition(this._canvas,t)},onLayerWillUnmount:function(){this._disableIdentify()},needRedraw:function(){this._map&&this._field&&L.CanvasLayer.prototype.needRedraw.call(this)},onDrawLayer:function(t){throw new TypeError("Must be overriden")},setData:function(t){this.options.inFilter&&t.setFilter(this.options.inFilter),this._field=t,this.needRedraw(),this.fire("load")},setFilter:function(t){this.options.inFilter=t,this._field&&this._field.setFilter(t),this.needRedraw()},setOpacity:function(t){return this.options.opacity=t,this._canvas&&this._updateOpacity(),this},getBounds:function(){var t=this._field.extent(),e=L.latLng(t[1],t[0]),n=L.latLng(t[3],t[2]);return L.latLngBounds(e,n)},_onClick:function(t){var e=this._queryValue(t);this.fire("click",e)},_onMouseMove:function(t){var e=this._queryValue(t);this._changeCursorOn(e),this.fire("mousemove",e)},_changeCursorOn:function(t){if(this.options.mouseMoveCursor){var e=this.options.mouseMoveCursor,n=e.value,i=e.noValue;this._map.getContainer().style.cursor=null!==t.value?n:i}},_updateOpacity:function(){L.DomUtil.setOpacity(this._canvas,this.options.opacity)},_queryValue:function(t){var e=this._field?this._field.valueAt(t.latlng.lng,t.latlng.lat):null;return{latlng:t.latlng,value:e}},_getDrawingContext:function(){var t=this._canvas.getContext("2d");return t.clearRect(0,0,this._canvas.width,this._canvas.height),t}})},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=n(0),r=function(){function t(t,e){var n=[],i=!0,r=!1,o=void 0;try{for(var a,s=t[Symbol.iterator]();!(i=(a=s.next()).done)&&(n.push(a.value),!e||n.length!==e);i=!0);}catch(t){r=!0,o=t}finally{try{!i&&s.return&&s.return()}finally{if(r)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}();L.CanvasLayer.ScalarField=L.CanvasLayer.Field.extend({options:{type:"colormap",color:null,interpolate:!1,vectorSize:20,arrowDirection:"from"},initialize:function(t,e){L.CanvasLayer.Field.prototype.initialize.call(this,t,e),L.Util.setOptions(this,e)},_defaultColorScale:function(){return chroma.scale(["white","black"]).domain(this._field.range)},setColor:function(t){this.options.color=t,this.needRedraw()},onDrawLayer:function(t){if(this.isVisible()){this._updateOpacity();this._getRendererMethod()()}},_getRendererMethod:function(){switch(this.options.type){case"colormap":return this._drawImage.bind(this);case"vector":return this._drawArrows.bind(this);default:throw Error("Unkwown renderer type: "+this.options.type)}},_ensureColor:function(){null===this.options.color&&this.setColor(this._defaultColorScale())},_showCanvas:function(){L.CanvasLayer.Field.prototype._showCanvas.call(this),this.needRedraw()},_drawImage:function(){this._ensureColor();var t=this._getDrawingContext(),e=this._canvas.width,n=this._canvas.height,i=t.createImageData(e,n),r=i.data;this._prepareImageIn(r,e,n),t.putImageData(i,0,0)},_prepareImageIn:function(t,e,n){for(var i=this.options.interpolate?"interpolatedValueAt":"valueAt",o=0,a=0;a<n;a++)for(var s=0;s<e;s++){var l=this._map.containerPointToLatLng([s,a]),u=l.lng,h=l.lat,c=this._field[i](u,h);if(null!==c){var f=this._getColorFor(c),d=f.rgba(),p=r(d,4),v=p[0],y=p[1],m=p[2],_=p[3];t[o]=v,t[o+1]=y,t[o+2]=m,t[o+3]=parseInt(255*_)}o+=4}},_drawArrows:function(){var t=this._pixelBounds(),e=(t.max.x-t.min.x)/this._field.nCols,n=Math.max(1,Math.floor(1.2*this.options.vectorSize/e)),o=this._getDrawingContext();o.strokeStyle=this.options.color;for(var a=this._map.getBounds(),s=0;s<this._field.height;s+=n)for(var l=0;l<this._field.width;l+=n){var u=this._field._lonLatAtIndexes(l,s),h=r(u,2),c=h[0],f=h[1],d=this._field.valueAt(c,f),p=L.latLng(f,c);if(null!==d&&a.contains(p)){var v=new i.a(p,d,this.cellXSize,this.cellYSize);this._drawArrow(v,o)}}},_pixelBounds:function(){var t=this.getBounds(),e=this._map.latLngToContainerPoint(t.getNorthWest()),n=this._map.latLngToContainerPoint(t.getSouthEast());return L.bounds(e,n)},_drawArrow:function(t,e){var n=this._map.latLngToContainerPoint(t.center),i=this.options.color;"function"==typeof i&&(e.strokeStyle=i(t.value));var r=this.options.vectorSize;e.save(),e.translate(n.x,n.y);var o=(90+t.value)*Math.PI/180;"towards"===this.options.arrowDirection&&(o+=Math.PI),e.rotate(o),e.beginPath(),e.moveTo(-r/2,0),e.lineTo(+r/2,0),e.moveTo(.25*r,.25*-r),e.lineTo(+r/2,0),e.lineTo(.25*r,.25*r),e.stroke(),e.restore()},_getColorFor:function(t){var e=this.options.color;return"function"==typeof e&&(e=this.options.color(t)),chroma(e)}}),L.canvasLayer.scalarField=function(t,e){return new L.CanvasLayer.ScalarField(t,e)}},function(t,e){function n(t){if(Array.isArray(t)){for(var e=0,n=Array(t.length);e<t.length;e++)n[e]=t[e];return n}return Array.from(t)}L.CanvasLayer.SimpleLonLat=L.CanvasLayer.extend({options:{color:"gray"},initialize:function(t,e){this.points=t,L.Util.setOptions(this,e)},onLayerDidMount:function(){},onLayerWillUnmount:function(){},setData:function(t){this.needRedraw()},onDrawLayer:function(t){var e=t.canvas.getContext("2d");e.clearRect(0,0,t.canvas.width,t.canvas.height),e.fillStyle=this.options.color;var n=!0,i=!1,r=void 0;try{for(var o,a=this.points[Symbol.iterator]();!(n=(o=a.next()).done);n=!0){var s=o.value,l=t.layer._map.latLngToContainerPoint(s);e.beginPath(),e.fillRect(l.x,l.y,2,2),e.fill(),e.closePath(),e.stroke()}}catch(t){i=!0,r=t}finally{try{!n&&a.return&&a.return()}finally{if(i)throw r}}},getBounds:function(){var t=this.points.map(function(t){return t.lng}),e=this.points.map(function(t){return t.lat}),i=Math.min.apply(Math,n(t)),r=Math.min.apply(Math,n(e)),o=Math.max.apply(Math,n(t)),a=Math.max.apply(Math,n(e)),s=L.latLng(r,i),l=L.latLng(a,o);return L.latLngBounds(s,l)}}),L.canvasLayer.simpleLonLat=function(t,e){return new L.CanvasLayer.SimpleLonLat(t,e)}},function(t,e){L.CanvasLayer.VectorFieldAnim=L.CanvasLayer.Field.extend({options:{paths:800,color:"white",width:1,fade:.96,duration:20,maxAge:200,velocityScale:2e-4},initialize:function(t,e){L.CanvasLayer.Field.prototype.initialize.call(this,t,e),L.Util.setOptions(this,e),this.timer=null},onLayerDidMount:function(){L.CanvasLayer.Field.prototype.onLayerDidMount.call(this),this._map.on("move resize",this._stopAnimation,this)},onLayerWillUnmount:function(){L.CanvasLayer.Field.prototype.onLayerWillUnmount.call(this),this._map.off("move resize",this._stopAnimation,this),this._stopAnimation()},_hideCanvas:function(){L.CanvasLayer.Field.prototype._hideCanvas.call(this),this._stopAnimation()},onDrawLayer:function(t){function e(){r.forEach(function(t){t.age>o.options.maxAge&&(t.age=0,o._field.randomPosition(t));var e=o._field.valueAt(t.x,t.y);if(null===e)t.age=o.options.maxAge;else{var n=t.x+e.u*o.options.velocityScale,i=t.y+e.v*o.options.velocityScale;o._field.hasValueAt(n,i)?(t.xt=n,t.yt=i,t.m=e.magnitude()):t.age=o.options.maxAge}t.age+=1})}function n(){var e=i.globalCompositeOperation;i.globalCompositeOperation="destination-in",i.fillRect(0,0,i.canvas.width,i.canvas.height),i.globalCompositeOperation=e,i.fillStyle="rgba(0, 0, 0, "+o.options.fade+")",i.lineWidth=o.options.width,i.strokeStyle=o.options.color,r.forEach(function(e){o._drawParticle(t,i,e)})}if(this._field&&this.isVisible()){this._updateOpacity();var i=this._getDrawingContext(),r=this._prepareParticlePaths();this.timer=d3.timer(function(){e(),n()},this.options.duration);var o=this}},_drawParticle:function(t,e,n){var i=new L.latLng(n.y,n.x),r=new L.latLng(n.yt,n.xt);if(t.bounds.contains(i)&&n.age<=this.options.maxAge){var o=t.layer._map.latLngToContainerPoint(i),a=t.layer._map.latLngToContainerPoint(r);e.beginPath(),e.moveTo(o.x,o.y),e.lineTo(a.x,a.y),n.x=n.xt,n.y=n.yt;var s=this.options.color;"function"==typeof s&&(e.strokeStyle=s(n.m));var l=this.options.width;"function"==typeof l&&(e.lineWidth=l(n.m)),e.stroke()}},_prepareParticlePaths:function(){for(var t=[],e=0;e<this.options.paths;e++){var n=this._field.randomPosition();n.age=this._randomAge(),t.push(n)}return t},_randomAge:function(){return Math.floor(Math.random()*this.options.maxAge)},_stopAnimation:function(){this.timer&&this.timer.stop()}}),L.canvasLayer.vectorFieldAnim=function(t,e){return new L.CanvasLayer.VectorFieldAnim(t,e)}},function(t,e){L.CanvasLayer=L.Layer.extend({initialize:function(t){this._map=null,this._canvas=null,this._frame=null,this._delegate=null,L.setOptions(this,t)},delegate:function(t){return this._delegate=t,this},needRedraw:function(){return this._frame||(this._frame=L.Util.requestAnimFrame(this.drawLayer,this)),this},_onLayerDidResize:function(t){this._canvas.width=t.newSize.x,this._canvas.height=t.newSize.y},_onLayerDidMove:function(){var t=this._map.containerPointToLayerPoint([0,0]);L.DomUtil.setPosition(this._canvas,t),this.drawLayer()},getEvents:function(){var t={resize:this._onLayerDidResize,moveend:this._onLayerDidMove};return this._map.options.zoomAnimation&&L.Browser.any3d&&(t.zoomanim=this._animateZoom),t},onAdd:function(t){this._map=t,this._canvas=L.DomUtil.create("canvas","leaflet-layer"),this.tiles={};var e=this._map.getSize();this._canvas.width=e.x,this._canvas.height=e.y;var n=this._map.options.zoomAnimation&&L.Browser.any3d;L.DomUtil.addClass(this._canvas,"leaflet-zoom-"+(n?"animated":"hide")),t._panes.overlayPane.appendChild(this._canvas),t.on(this.getEvents(),this);var i=this._delegate||this;i.onLayerDidMount&&i.onLayerDidMount(),this.needRedraw()},onRemove:function(t){var e=this._delegate||this;e.onLayerWillUnmount&&e.onLayerWillUnmount(),t.getPanes().overlayPane.removeChild(this._canvas),t.off(this.getEvents(),this),this._canvas=null},addTo:function(t){return t.addLayer(this),this},LatLonToMercator:function(t){return{x:6378137*t.lng*Math.PI/180,y:6378137*Math.log(Math.tan((90+t.lat)*Math.PI/360))}},drawLayer:function(){var t=this._map.getSize(),e=this._map.getBounds(),n=this._map.getZoom(),i=this.LatLonToMercator(this._map.getCenter()),r=this.LatLonToMercator(this._map.containerPointToLatLng(this._map.getSize())),o=this._delegate||this;o.onDrawLayer&&o.onDrawLayer({layer:this,canvas:this._canvas,bounds:e,size:t,zoom:n,center:i,corner:r}),this._frame=null},_animateZoom:function(t){var e=this._map.getZoomScale(t.zoom),n=this._map._latLngToNewLayerPoint(this._map.getBounds().getNorthWest(),t.zoom,t.center);L.DomUtil.setTransform(this._canvas,n,e)}}),L.canvasLayer=function(){return new L.CanvasLayer}},function(t,e,n){function i(t,e,n){var i=!1;e[0][0]===e[e.length-1][0]&&e[0][1]===e[e.length-1][1]&&(e=e.slice(0,e.length-1));for(var r=0,o=e.length-1;r<e.length;o=r++){var a=e[r][0],s=e[r][1],l=e[o][0],u=e[o][1];if(t[1]*(a-l)+s*(l-t[0])+u*(t[0]-a)==0&&(a-t[0])*(l-t[0])<=0&&(s-t[1])*(u-t[1])<=0)return!n;s>t[1]!=u>t[1]&&t[0]<(l-a)*(t[1]-s)/(u-s)+a&&(i=!i)}return i}function r(t,e){return e[0]<=t[0]&&e[1]<=t[1]&&e[2]>=t[0]&&e[3]>=t[1]}var o=n(12),a=o.getCoord,s=o.getCoords;t.exports=function(t,e,n){if(!t)throw new Error("point is required");if(!e)throw new Error("polygon is required");var o=a(t),l=s(e),u=e.geometry?e.geometry.type:e.type,h=e.bbox;if(h&&!1===r(o,h))return!1;"Polygon"===u&&(l=[l]);for(var c=0,f=!1;c<l.length&&!f;c++)if(i(o,l[c][0],n)){for(var d=!1,p=1;p<l[c].length&&!d;)i(o,l[c][p],!n)&&(d=!0),p++;d||(f=!0)}return f}},function(t,e){function n(t){if(!t)throw new Error("obj is required");var e=i(t);if(e.length>1&&"number"==typeof e[0]&&"number"==typeof e[1])return e;throw new Error("Coordinate is not a valid Point")}function i(t){if(!t)throw new Error("obj is required");var e;if(t.length?e=t:t.coordinates?e=t.coordinates:t.geometry&&t.geometry.coordinates&&(e=t.geometry.coordinates),e)return r(e),e;throw new Error("No valid coordinates")}function r(t){if(t.length>1&&"number"==typeof t[0]&&"number"==typeof t[1])return!0;if(Array.isArray(t[0])&&t[0].length)return r(t[0]);throw new Error("coordinates must only contain numbers")}function o(t,e,n){if(!e||!n)throw new Error("type and name required");if(!t||t.type!==e)throw new Error("Invalid input to "+n+": must be a "+e+", given "+t.type)}function a(t,e,n){if(!t)throw new Error("No feature passed");if(!n)throw new Error(".featureOf() requires a name");if(!t||"Feature"!==t.type||!t.geometry)throw new Error("Invalid input to "+n+", Feature with geometry required");if(!t.geometry||t.geometry.type!==e)throw new Error("Invalid input to "+n+": must be a "+e+", given "+t.geometry.type)}function s(t,e,n){if(!t)throw new Error("No featureCollection passed");if(!n)throw new Error(".collectionOf() requires a name");if(!t||"FeatureCollection"!==t.type)throw new Error("Invalid input to "+n+", FeatureCollection required");for(var i=0;i<t.features.length;i++){var r=t.features[i];if(!r||"Feature"!==r.type||!r.geometry)throw new Error("Invalid input to "+n+", Feature with geometry required");if(!r.geometry||r.geometry.type!==e)throw new Error("Invalid input to "+n+": must be a "+e+", given "+r.geometry.type)}}function l(t){if(!t)throw new Error("geojson is required");if(void 0!==t.geometry)return t.geometry;if(t.coordinates||t.geometries)return t;throw new Error("geojson must be a valid Feature or Geometry Object")}function u(t){if(!t)throw new Error("geojson is required");var e=l(t);if(e)return e.type}t.exports={geojsonType:o,collectionOf:s,featureOf:a,getCoord:n,getCoords:i,containsNumber:r,getGeom:l,getGeomType:u}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=n(3),r=n(0),o=n(1),a=n(2),s=n(4);window.L.Vector=i.a,window.L.Cell=r.a,window.L.Field=o.a,window.L.ScalarField=a.a,window.L.VectorField=s.a,n(10),n(8),n(6),n(7),n(9),n(5)}]);</script>
+
+<script src="./js/kriging-contour.js"></script>
+<script src="./js/gaussian-plume.js"></script>
+
+<!-- tabulator -->
+<link  href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css" rel="stylesheet">
+<script src="https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js"></script>
+<script src="https://unpkg.com/luxon@3.3.0/build/global/luxon.min.js"></script>
+
+<!-- notify -->
+<script src="https://raw.githubusercontent.com/jpillora/notifyjs/refs/heads/master/dist/notify.js"></script>
+
+<!-- echarts -->
+<script src="https://unpkg.com/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/echarts@5.4.3/dist/extension/dataTool.min.js"></script>
+<script src="https://unpkg.com/echarts-gl@2.0.9/dist/echarts-gl.min.js"></script>
+<script src="https://unpkg.com/echarts-stat@1.2.0/dist/ecStat.min.js"></script>
+
+<!-- highcharts -->
+<script src="https://unpkg.com/highcharts@11.1.0/highcharts.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/highcharts-more.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/modules/full-screen.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/modules/exporting.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/modules/windbarb.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/modules/heatmap.js"></script>
+<!-- 
+<script src="https://unpkg.com/highcharts@11.1.0/modules/sankey.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/modules/dependency-wheel.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/modules/timeline.js"></script>
+<script src="https://unpkg.com/highcharts@11.1.0/modules/sunburst.js"></script>
+<script src="https://unpkg.com/highcharts-regression@2.2.0/highcharts-regression.js"></script>
+<style>.highcharts-tooltip-container {z-index: 999999 !important;}</style>
+-->
+<script src='./js/data.json'></script>
+<script>
+
+//lon,lat,val,vec,note
+points=[[ 1,99.733802,18.327237,70,0,'พื้นที่ A4.1'],[ 2,99.711486,18.337349,62,0,'พื้นที่ WW-C1'],[ 3,99.708068,18.310006,81,0,'พื้นที่ SW'],[ 4,99.726792,18.293489,60,0,'พื้นที่ SE'],[ 5,99.695393,18.346714,89,0,'พื้นที่ NW-Dump'],[ 6,99.740151,18.367423,66,0,'ต้นคลองผันน้ำหลัก'],[ 7,99.737605,18.371272,69,0,'ปลายทางห้วยหลวง'],[ 8,99.700250,18.300300,80,0,'ปลายคลองผันน้ำหลัก'],[ 9,99.716857,18.288523,87,0,'สะพานหานฮุง'],[10,99.730500,18.384920,68,0,'อ่างตกตะกอน N'],[11,99.748876,18.367503,77,0,'อ่างตกตะกอน NE'],[12,99.687906,18.321339,69,0,'อ่างตกตะกอน SW'],[13,99.707392,18.298947,63,0,'อ่างตกตะกอนห้วยทราย'],[14,99.740800,18.302270,77,0,'อ่างฟื้นฟู'],[15,99.735193,18.292839,93,0,'สถานีหลัก'],[16,99.702982,18.294180,89,0,'บ้านพักห้วยคิง'],[17,99.655783,18.280475,96,0,'ศุนย์ราชการแม่เมาะ'],[18,99.787810,18.278874,97,0,'บ้านแม่จาง'],]
+function randomInt(min,max) { return ~~(Math.random() * (max - min + 1) + min) }
+kmutnb=[[ 1,100.514543,13.821880,randomInt(60,120),0,"ประตูหลัง"],[ 2,100.515117,13.823544,randomInt(60,120),0,"ร้านขายของชำ"],[ 3,100.513492,13.821677,randomInt(60,120),0,"คณะวิศวกรรมศาสตร์"],[ 4,100.514028,13.823333,randomInt(60,120),0,"ร้านลุงจ่า"],[ 5,100.514970,13.821531,randomInt(60,120),0,"คณะวิทยาศาสตร์ประยุกต์"],[ 6,100.513199,13.822177,randomInt(60,120),0,"คณะวิศวกรรมเครื่องกล"],[ 7,100.515318,13.822296,randomInt(60,120),0,"ร้านถ่ายเอกสาร"],[ 8,100.514363,13.823597,randomInt(60,120),0,"หมูบ้านสวนคุณพระ"],[ 9,100.512494,13.823312,randomInt(60,120),0,"หอพักนักศึกษา"],[10,100.513245,13.822442,randomInt(60,120),0,"วิศวกรรมวัสดุ"],[11,100.513806,13.821364,randomInt(60,120),0,"คณะวิศวกรรมไฟฟ้า"],[12,100.512892,13.823621,randomInt(60,120),0,"หอพักชาย"],[13,100.514673,13.821057,randomInt(60,120),0,"ตึก 40 ปี"],[14,100.513014,13.822719,randomInt(60,120),0,"วิทยาลัยนานาชาติ"],[15,100.512714,13.822068,randomInt(60,120),0,"อาคาร 89"],[16,100.514015,13.822675,randomInt(60,120),0,"ร้านไอติม"],]
+wangnoi=[
+[ 1,100.777787,14.237599,randomInt(60,120),0,"หลวงพ่อเจ็ดกษัตริย์"],
+[ 2,100.782855,14.234562,randomInt(60,120),45,"โกดัง"],
+[ 3,100.779275,14.230944,randomInt(60,120),90,"หอหล่อเย็น"],
+[ 4,100.777749,14.228196,randomInt(60,120),135,"ซับวังน้อย"],
+[ 5,100.775876,14.234198,randomInt(60,120),180,"สถานีก๊าซ"],
+[ 6,100.776778,14.222929,randomInt(60,120),225,"วัดลำพระยา"],
+]
+mahidol=[
+[ 1,100.324103,13.794461,randomInt(60,120),0,"ห้องสมุดและคลังความรู้"],
+[ 2,100.318460,13.800265,randomInt(60,120),45,"โรงเรียนมหิดลวิทยานุสรณ์"],
+[ 3,100.321075,13.793905,randomInt(60,120),90,"ศูนย์การเรียนรู้มหิดล"],
+[ 4,100.319962,13.791188,randomInt(60,120),135,"อุทยานธรรมชาติ"],
+[ 5,100.318210,13.793371,randomInt(60,120),180,"สนามฟุตบอล"],
+[ 6,100.326024,13.788763,randomInt(60,120),225,"คณะพยาบาลศาสตร์"],
+
+]
+
+points=mahidol
+//[1,99.225425,9.071555,],[2,99.224296,9.072179,],[3,99.224500,9.071388,],[4,99.223002,9.071917,],[5,99.224924,9.070602,],[6,99.224581,9.070215,],
+kolor={'BREWER':{'Names':['Spectral','Viridis','RdBu','Reds','Oranges','Greens','Blues','Purples','Greys','Accent','Paired','Dark2','Pastel1','Pastel2','Set1','Set2','Set3'],'OrRd':['#fff7ec','#fee8c8','#fdd49e','#fdbb84','#fc8d59','#ef6548','#d7301f','#b30000','#7f0000'],'PuBu':['#fff7fb','#ece7f2','#d0d1e6','#a6bddb','#74a9cf','#3690c0','#0570b0','#045a8d','#023858'],'BuPu':['#f7fcfd','#e0ecf4','#bfd3e6','#9ebcda','#8c96c6','#8c6bb1','#88419d','#810f7c','#4d004b'],'Oranges':['#fff5eb','#fee6ce','#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704'],'BuGn':['#f7fcfd','#e5f5f9','#ccece6','#99d8c9','#66c2a4','#41ae76','#238b45','#006d2c','#00441b'],'YlOrBr':['#ffffe5','#fff7bc','#fee391','#fec44f','#fe9929','#ec7014','#cc4c02','#993404','#662506'],'YlGn':['#ffffe5','#f7fcb9','#d9f0a3','#addd8e','#78c679','#41ab5d','#238443','#006837','#004529'],'Reds':['#fff5f0','#fee0d2','#fcbba1','#fc9272','#fb6a4a','#ef3b2c','#cb181d','#a50f15','#67000d'],'RdPu':['#fff7f3','#fde0dd','#fcc5c0','#fa9fb5','#f768a1','#dd3497','#ae017e','#7a0177','#49006a'],'Greens':['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b','#74c476','#41ab5d','#238b45','#006d2c','#00441b'],'YlGnBu':['#ffffd9','#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#253494','#081d58'],'Purples':['#fcfbfd','#efedf5','#dadaeb','#bcbddc','#9e9ac8','#807dba','#6a51a3','#54278f','#3f007d'],'GnBu':['#f7fcf0','#e0f3db','#ccebc5','#a8ddb5','#7bccc4','#4eb3d3','#2b8cbe','#0868ac','#084081'],'Greys':['#ffffff','#f0f0f0','#d9d9d9','#bdbdbd','#969696','#737373','#525252','#252525','#000000'],'YlOrRd':['#ffffcc','#ffeda0','#fed976','#feb24c','#fd8d3c','#fc4e2a','#e31a1c','#bd0026','#800026'],'PuRd':['#f7f4f9','#e7e1ef','#d4b9da','#c994c7','#df65b0','#e7298a','#ce1256','#980043','#67001f'],'Blues':['#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b'],'PuBuGn':['#fff7fb','#ece2f0','#d0d1e6','#a6bddb','#67a9cf','#3690c0','#02818a','#016c59','#014636'],'Viridis':['#fee825','#b6de2b','#6cce5a','#1f9d8a','#26838f','#31678e','#3f4a8a','#482777','#440154'],'Spectral':['#5e4fa2','#3288bd','#66c2a5','#abdda4','#e6f598','#ffffbf','#fee08b','#fdae61','#f46d43','#d53e4f','#9e0142'],'RdYlGn':['#a50026','#d73027','#f46d43','#fdae61','#fee08b','#ffffbf','#d9ef8b','#a6d96a','#66bd63','#1a9850','#006837'],'GnYlRd':['#006837','#1a9850','#66bd63','#a6d96a','#d9ef8b','#ffffbf','#fee08b','#fdae61','#f46d43','#d73027','#a50026'],'RdBu':['#67001f','#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac','#053061'],'PiYG':['#8e0152','#c51b7d','#de77ae','#f1b6da','#fde0ef','#f7f7f7','#e6f5d0','#b8e186','#7fbc41','#4d9221','#276419'],'PRGn':['#40004b','#762a83','#9970ab','#c2a5cf','#e7d4e8','#f7f7f7','#d9f0d3','#a6dba0','#5aae61','#1b7837','#00441b'],'RdYlBu':['#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffffbf','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'],'BuYlRd':['#313695','#4575b4','#74add1','#abd9e9','#e0f3f8','#ffffbf','#fee090','#fdae61','#f46d43','#d73027','#a50026'],'BrBG':['#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#f5f5f5','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'],'RdGy':['#67001f','#b2182b','#d6604d','#f4a582','#fddbc7','#ffffff','#e0e0e0','#bababa','#878787','#4d4d4d','#1a1a1a'],'PuOr':['#7f3b08','#b35806','#e08214','#fdb863','#fee0b6','#f7f7f7','#d8daeb','#b2abd2','#8073ac','#542788','#2d004b'],'Set2':['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3'],'Accent':['#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666'],'Set1':['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'],'Set3':['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f'],'Dark2':['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02','#a6761d','#666666'],'Paired':['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928'],'Pastel2':['#b3e2cd','#fdcdac','#cbd5e8','#f4cae4','#e6f5c9','#fff2ae','#f1e2cc','#cccccc'],'Pastel1':['#fbb4ae','#b3cde3','#ccebc5','#decbe4','#fed9a6','#ffffcc','#e5d8bd','#fddaec','#f2f2f2']},'VIRIDIS':{'Names':['Viridis','Magma','Inferno','Plasma','Cividis','Mako','Rocket','Turbo'],'Viridis':['#440154ff','#472d7bff','#3b528bff','#2c728eff','#21908cff','#27ad81ff','#5dc863ff','#aadc32ff','#fde725ff'],'Magma':['#fcfdbfff','#fec287ff','#fb8861ff','#e65164ff','#b63679ff','#822681ff','#51127cff','#1d1147ff','#000004ff'],'Inferno':['#fcffa4ff','#f9c932ff','#f98c0aff','#e35932ff','#bb3754ff','#89226aff','#56106eff','#210c4aff','#000004ff'],'Plasma':['#f0f921ff','#fdc328ff','#f89441ff','#e56b5dff','#cc4678ff','#a92395ff','#7e03a8ff','#4c02a1ff','#0d0887ff'],'Cividis':['#ffea46ff','#e0cb5eff','#bcaf6fff','#9b9477ff','#7c7b78ff','#61646fff','#414d6bff','#05366eff','#00204dff'],'Mako':['#def5e5ff','#96ddb5ff','#49c1adff','#359eaaff','#357ba2ff','#3b5698ff','#3e356bff','#2b1c35ff','#0b0405ff'],'Rocket':['#faebddff','#f6bb97ff','#f4875eff','#ec4b3eff','#cb1b4fff','#961c5bff','#611f53ff','#30173aff','#03051aff'],'Turbo':['#30123bff','#466be3ff','#28bbecff','#31f299ff','#a2fc3cff','#edd03aff','#fb8022ff','#d23105ff','#7a0403ff']},'CARTO':{'Names':['Burg','BurgYl','RedOr','OrYel','Peach','PinkYl','Mint','BluGrn','DarkMint','Emrld','BluYl','Teal','TealGrn','Purp','PurpOr','Sunset','Magenta','SunsetDark','BrwnYl','ArmyRose','Fall','Geyser','Temps','TealRose','Tropic','Earth','Antique','Bold','Pastel','Prism','Safe','Vivid'],'Burg':['#ffc6c4','#f4a3a8','#e38191','#cc607d','#ad466c','#8b3058','#672044'],'BurgYl':['#fbe6c5','#f5ba98','#ee8a82','#dc7176','#c8586c','#9c3f5d','#70284a'],'RedOr':['#f6d2a9','#f5b78e','#f19c7c','#ea8171','#dd686c','#ca5268','#b13f64'],'OrYel':['#ecda9a','#efc47e','#f3ad6a','#f7945d','#f97b57','#f66356','#ee4d5a'],'Peach':['#fde0c5','#facba6','#f8b58b','#f59e72','#f2855d','#ef6a4c','#eb4a40'],'PinkYl':['#fef6b5','#ffdd9a','#ffc285','#ffa679','#fa8a76','#f16d7a','#e15383'],'Mint':['#e4f1e1','#b4d9cc','#89c0b6','#63a6a0','#448c8a','#287274','#0d585f'],'BluGrn':['#c4e6c3','#96d2a4','#6dbc90','#4da284','#36877a','#266b6e','#1d4f60'],'DarkMint':['#d2fbd4','#a5dbc2','#7bbcb0','#559c9e','#3a7c89','#235d72','#123f5a'],'Emrld':['#d3f2a3','#97e196','#6cc08b','#4c9b82','#217a79','#105965','#074050'],'BluYl':['#f7feae','#b7e6a5','#7ccba2','#46aea0','#089099','#00718b','#045275'],'Teal':['#d1eeea','#a8dbd9','#85c4c9','#68abb8','#4f90a6','#3b738f','#2a5674'],'TealGrn':['#b0f2bc','#89e8ac','#67dba5','#4cc8a3','#38b2a3','#2c98a0','#257d98'],'Purp':['#f3e0f7','#e4c7f1','#d1afe8','#b998dd','#9f82ce','#826dba','#63589f'],'PurpOr':['#f9ddda','#f2b9c4','#e597b9','#ce78b3','#ad5fad','#834ba0','#573b88'],'Sunset':['#f3e79b','#fac484','#f8a07e','#eb7f86','#ce6693','#a059a0','#5c53a5'],'Magenta':['#f3cbd3','#eaa9bd','#dd88ac','#ca699d','#b14d8e','#91357d','#6c2167'],'SunsetDark':['#fcde9c','#faa476','#f0746e','#e34f6f','#dc3977','#b9257a','#7c1d6f'],'BrwnYl':['#ede5cf','#e0c2a2','#d39c83','#c1766f','#a65461','#813753','#541f3f'],'ArmyRose':['#798234','#a3ad62','#d0d3a2','#fdfbe4','#f0c6c3','#df91a3','#d46780'],'Fall':['#3d5941','#778868','#b5b991','#f6edbd','#edbb8a','#de8a5a','#ca562c'],'Geyser':['#008080','#70a494','#b4c8a8','#f6edbd','#edbb8a','#de8a5a','#ca562c'],'Temps':['#009392','#39b185','#9ccb86','#e9e29c','#eeb479','#e88471','#cf597e'],'TealRose':['#009392','#72aaa1','#b1c7b3','#f1eac8','#e5b9ad','#d98994','#d0587e'],'Tropic':['#009B9E','#42B7B9','#A7D3D4','#F1F1F1','#E4C1D9','#D691C1','#C75DAB'],'Earth':['#A16928','#bd925a','#d6bd8d','#edeac2','#b5c8b8','#79a7ac','#2887a1'],'Antique':['#855C75','#D9AF6B','#AF6458','#736F4C','#526A83','#625377','#68855C','#9C9C5E','#A06177','#8C785D','#467378','#7C7C7C'],'Bold':['#7F3C8D','#11A579','#3969AC','#F2B701','#E73F74','#80BA5A','#E68310','#008695','#CF1C90','#f97b72','#4b4b8f','#A5AA99'],'Pastel':['#66C5CC','#F6CF71','#F89C74','#DCB0F2','#87C55F','#9EB9F3','#FE88B1','#C9DB74','#8BE0A4','#B497E7','#D3B484','#B3B3B3'],'Prism':['#5F4690','#1D6996','#38A6A5','#0F8554','#73AF48','#EDAD08','#E17C05','#CC503E','#94346E','#6F4070','#994E95','#666666'],'Safe':['#88CCEE','#CC6677','#DDCC77','#117733','#332288','#AA4499','#44AA99','#999933','#882255','#661100','#6699CC','#888888'],'Vivid':['#E58606','#5D69B1','#52BCA3','#99C945','#CC61B0','#24796C','#DAA51B','#2F8AC4','#764E9F','#ED645A','#CC3A8E','#A5AA99']},'SCICO':{'Names':['Berlin','Davos','Devon','Hawaii','Lapaz','Lisbon','Oslo','Roma','Tokyo','Vik'],'Berlin':['#9eb0ff','#519fd3','#286886','#14303e','#180b09','#3f1101','#7b321c','#bc6d61','#ffacac'],'Davos':['#2c194c','#264477','#3569af','#5983bf','#7c9bb4','#a2b4aa','#c8ce9d','#e7e7c0','#ffffff'],'Devon':['#2b194c','#27386b','#26588e','#3c6fba','#788bda','#ada7ed','#c8c3f3','#e3e1f8','#ffffff'],'Hawaii':['#8c0172','#922d55','#964d3e','#9a6e28','#9b951b','#89bc48','#6bd48c','#66e8d3','#b2f2fd'],'Lapaz':['#190c65','#213682','#2b5b99','#3e7ca6','#6598a4','#96a394','#c6ac89','#f9d0b7','#fff2f2'],'Lisbon':['#e5e5ff','#90a7cc','#416a97','#16334f','#161919','#433f28','#7f784c','#c1ba87','#ffffd8'],'Oslo':['#000000','#0c1d2f','#163c60','#275c95','#4d7cc6','#7797ca','#9fafc8','#cbcdd0','#ffffff'],'Roma':['#7e1900','#a1621c','#c1a53a','#e2e187','#d1ecc9','#79d5da','#479bc5','#3165ae','#1a3399'],'Tokyo':['#190d33','#4e2050','#7b476f','#8a6b7e','#908b86','#95ac8f','#a0cf9a','#d3f7ba','#ffffd8'],'Vik':['#001260','#014380','#2e7ca5','#91bdd1','#eaede9','#d4c095','#af893d','#854b01','#601200']},'RBASE':{'Names':['Rainbow','Heat','Terrain','Topo','CM','Jet'],'Rainbow':['#ff0000','#ffaa00','#aaff00','#00ff00','#00ffaa','#00aaff','#0000ff','#aa00ff','#ff00aa'],'Heat':['#ff0000','#ff2a00','#ff5500','#ff8000','#ffaa00','#ffd500','#ffff00','#ffff40','#ffffbf'],'Terrain':['#00a600','#3ebb00','#8bd000','#e6e600','#e8c32e','#ebb25e','#edb48e','#f0c9c0','#f2f2f2'],'Topo':['#4c00ff','#004cff','#00e5ff','#00ff4d','#4dff00','#e6ff00','#ffff00','#ffde59','#ffe0b3'],'CM':['#80ffff','#9fffff','#bfffff','#dfffff','#ffffff','#ffdfff','#ffbfff','#ff9fff','#ff80ff'],'Jet':['#00007f','blue','#007fff','cyan','#7fff7f','yellow','#ff7f00','red','#7f0000']},'HCL':{'Names':['Pastel1','Dark2','Dark3','Set2','Set3','Warm','Cold','Harmonic','Dynamic','Grays','LightGrays','Blues2','Blues3','Purples2','Purples3','Reds2','Reds3','Greens2','Greens3','Oslo','Purple-Blue','Red-Purple','Red-Blue','Purple-Orange','Purple-Yellow','Blue-Yellow','Green-Yellow','Red-Yellow','Heat','Heat2','Terrain','Terrain2','Viridis','Plasma','Inferno','Rocket','Mako','DarkMint','Mint','BluGrn','Teal','TealGrn','Emrld','BluYl','ag_GrnYl','Peach','PinkYl','Burg','BurgYl','RedOr','OrYel','Purp','PurpOr','Sunset','Magenta','SunsetDark','ag_Sunset','BrwnYl','YlOrRd','YlOrBr','OrRd','Oranges','YlGn','YlGnBu','Reds','RdPu','PuRd','Purples','PuBuGn','PuBu','Greens','BuGn','GnBu','BuPu','Blues','Lajolla','Turku','Hawaii','Batlow','Blue-Red','Blue-Red2','Blue-Red3','Red-Green','Purple-Green','Purple-Brown','Green-Brown','Blue-Yellow2','Blue-Yellow3','Green-Orange','Cyan-Magenta','Tropic','Broc','Cork','Vik','Berlin','Lisbon','Tofino'],'Pastel1':['#ffc5d0','#f5ccb5','#dcd6a7','#bbdeb1','#9fe2ca','#9ce0e6','#b8d8f8','#ddcdfa','#f8c5eb'],'Dark2':['#c87a8a','#b9865f','#9a9346','#6b9d59','#22a382','#00a1a9','#5f96c2','#9e85c5','#c179b0'],'Dark3':['#e16a86','#cb7f2f','#9f9400','#50a315','#00ac79','#00aab7','#009ade','#a87be4','#da65c3'],'Set2':['#ed90a4','#dc9e70','#b7ae50','#7eba68','#1dc199','#00bfc8','#6fb1e7','#bb9dea','#e48fd1'],'Set3':['#ffb3b5','#ebbe8f','#c6cc82','#95d69a','#67dac2','#70d5e7','#aac8fc','#dfb8f9','#fcafde'],'Warm':['#abb065','#baac65','#c7a76c','#d2a277','#db9d85','#e19995','#e495a5','#e493b4','#e093c3'],'Cold':['#aca4e2','#96aae1','#7db0dd','#64b5d6','#4cb9cc','#3bbcbf','#39beb1','#47bea2','#5cbd92'],'Harmonic':['#c7a76c','#b3ae64','#99b56b','#7cba7c','#5cbd92','#3fbea9','#3bbcbf','#57b8d1','#7db0dd'],'Dynamic':['#db9d85','#bfaa67','#93b66e','#5cbd92','#38bdbb','#6cb4d9','#aca4e2','#d596d2','#e494af'],'Grays':['#1b1b1b','#393939','#585858','#787878','#969696','#b4b4b4','#d0d0d0','#e8e8e8','#f9f9f9'],'LightGrays':['#474747','#606060','#7a7a7a','#919191','#a8a8a8','#bcbcbc','#cdcdcd','#dbdbdb','#e2e2e2'],'Blues2':['#023fa5','#485ca8','#6a76b2','#878fbd','#a1a6c8','#b7bbd1','#cbcdd9','#dadbdf','#e2e2e2'],'Blues3':['#00366c','#00538e','#0072b4','#468fd0','#79abe2','#a1c4f1','#c3dbfd','#e1eeff','#f9f9f9'],'Purples2':['#3c2692','#544895','#6c64a2','#847eb0','#9d98be','#b4b2cd','#cbc9da','#e0dfe7','#f1f1f1'],'Purples3':['#312271','#4f4293','#6d60bb','#8b80d1','#a79fe1','#c2bcf0','#dad6fa','#edebff','#f9f9f9'],'Reds2':['#7f000d','#953339','#a9565a','#ba7679','#ca9496','#d7b1b2','#e2cbcb','#ebe1e1','#f1f1f1'],'Reds3':['#69000c','#990e1f','#cc1c2f','#f53c4b','#ff7078','#ff999e','#ffbec1','#ffdee0','#f6f6f6'],'Greens2':['#006027','#3b754a','#5e8b68','#7d9f84','#9ab39f','#b5c6b8','#cdd7cf','#e2e6e3','#f1f1f1'],'Greens3':['#004616','#06692d','#188b41','#3da95d','#74c286','#9fd7ab','#c4e8cb','#e3f5e6','#f9f9f9'],'Oslo':['#fcfcfc','#d0daed','#a4b8dd','#7698ce','#3c79c0','#2c5a91','#1d3e64','#0f233b','#040404'],'Purple-Blue':['#6b0077','#6f418d','#7665a4','#8085b8','#8da3ca','#a0bdd8','#b7d5e4','#d2e7ed','#f1f1f1'],'Red-Purple':['#7d0112','#9a2a4d','#b34a78','#c76a9e','#d68abe','#e1a8d9','#e9c4ee','#efddfa','#f2f0f6'],'Red-Blue':['#a93154','#b33c73','#ba4b8e','#bd5ca5','#bc6eb9','#b981c8','#b494d5','#b0a6de','#aeb6e5'],'Purple-Orange':['#5b3794','#7d439b','#9953a1','#b266a7','#c87aad','#db90b2','#eba8ba','#f8c0c5','#f8dcd9'],'Purple-Yellow':['#80146e','#8145a0','#6474b9','#399ac2','#34b8c0','#6acfba','#a4e0b7','#d5ecc0','#f5f2d8'],'Blue-Yellow':['#2d3184','#09679a','#0a92ac','#43b5b8','#77cfbe','#a5e2c3','#cbedca','#e6f2d4','#f3f1e4'],'Green-Yellow':['#006e37','#478b53','#74a56e','#98bc88','#b7d0a0','#d1e0b6','#e6edca','#f3f4db','#f9f7ea'],'Red-Yellow':['#7d0112','#94371d','#aa592c','#bd7940','#ce9758','#ddb472','#e8ce8f','#f0e4af','#f2f1e4'],'Heat':['#8e063b','#af4548','#cb6d53','#e08e5c','#eeab65','#f5c36e','#f5d579','#eee286','#e2e6bd'],'Heat2':['#d33f6a','#db595c','#e1704c','#e6853b','#e99a2c','#eaaf29','#e8c33c','#e5d75d','#e2e6bd'],'Terrain':['#26a63a','#6ead1c','#9bb306','#c0b727','#e1bb4e','#ffc076','#ffc59e','#ffccc5','#f1f1f1'],'Terrain2':['#027c1e','#558d2d','#7f9d43','#a2ab5c','#c0b878','#d8c493','#e9ceae','#f2d8c8','#e2e2e2'],'Viridis':['#4b0055','#403173','#00588b','#007b97','#009b95','#00b785','#53cc67','#b2dc3c','#fde333'],'Plasma':['#001889','#5f008c','#91008d','#b62485','#d24e71','#e4774d','#eda200','#e9cf00','#daff47'],'Inferno':['#040404','#2d1243','#611163','#961474','#c53270','#eb5c4c','#f69422','#f8c952','#fffe9e'],'Rocket':['#070707','#3c033d','#690056','#970064','#c30e62','#e6464b','#ed8353','#f1b889','#fdf5eb'],'Mako':['#070707','#311a35','#423460','#375788','#007fa8','#00a5b3','#48c2b4','#a0ddc2','#e0f7e1'],'DarkMint':['#0e3f5c','#1a566b','#2a6d7a','#3f8489','#579c97','#72b4a6','#8fccb4','#afe4c4','#d1fbd4'],'Mint':['#005d67','#006f73','#1b817f','#44948c','#64a79a','#81bba9','#9fceba','#bde1cd','#e0f2e6'],'BluGrn':['#14505c','#1e646b','#2a7979','#3a8e85','#4ca38f','#63b797','#81ca9f','#a6d9ac','#c7e5be'],'Teal':['#2a5676','#336b88','#3b809a','#5095a8','#67a9b6','#7fbcc3','#99cfd1','#b3e1de','#d2eeea'],'TealGrn':['#177f97','#0092a1','#00a4a8','#0bb5ad','#2ec6af','#4dd5af','#72e2ad','#98ebaf','#b7f1b2'],'Emrld':['#0b4151','#005762','#006e70','#0a867b','#329d84','#58b48a','#80ca90','#a9df97','#d4f3a3'],'BluYl':['#2e4f79','#1a6886','#028190','#1d9997','#46b09b','#70c69e','#9cdaa1','#caeda7','#f9ffaf'],'ag_GrnYl':['#255668','#066a75','#007e7d','#009380','#17a77e','#51b977','#82cc6c','#b5dd60','#edef5c'],'Peach':['#ea4c3b','#ee6544','#f17b51','#f48e61','#f6a173','#f8b287','#f9c29c','#fad1b0','#faddc3'],'PinkYl':['#e24c80','#e96677','#ef7e71','#f3946f','#f6a972','#f8bd7b','#fad18b','#fbe39e','#fdf6b5'],'Burg':['#67223f','#81304e','#9c3e5d','#b74d6c','#cb627b','#d97c8c','#e6959f','#f4adb3','#ffc5c7'],'BurgYl':['#772c4b','#8e3d54','#a74f5a','#bf625e','#d6765d','#e39068','#edaa7d','#f4c499','#f8dfc1'],'RedOr':['#b13f63','#c24e63','#d35d60','#dd7060','#e38566','#e99870','#eeac7d','#f3be90','#f5d1a8'],'OrYel':['#ef4868','#f55d57','#f5744d','#f48848','#f39b4c','#f1ac59','#efbc6b','#edcb81','#ecd999'],'Purp':['#645a9f','#7a67b1','#8f75c0','#a385cb','#b696d6','#c9a7e2','#dbb9ec','#ebccf6','#f6e2fb'],'PurpOr':['#583c88','#7c4598','#9d50a6','#b762ab','#cc78af','#de8fb3','#eda7ba','#f7c0c5','#f8dcd9'],'Sunset':['#704d9e','#9a51a7','#bc5aa9','#d868a3','#ed7c97','#f6978a','#f9b282','#f8cd86','#f3e79a'],'Magenta':['#6d1c68','#853177','#9e4387','#b75597','#cb6ca2','#db83ad','#e99bb9','#f4b2c5','#f3cad2'],'SunsetDark':['#7d1d67','#a02074','#c22b79','#e13c77','#f65a6d','#fd806d','#ffa076','#ffbd88','#ffd99f'],'ag_Sunset':['#4b1d91','#80119a','#a8139c','#ca2a97','#e54787','#f16e6f','#f3935f','#f0b566','#e7d39a'],'BrwnYl':['#541c3a','#703048','#8d4653','#aa5c5a','#bd7864','#ca9578','#d6b191','#e1cbae','#ebe2ca'],'YlOrRd':['#7d0025','#af1100','#da3500','#ee6700','#f39300','#f6b732','#f9d67e','#fdeeae','#ffffc8'],'YlOrBr':['#682714','#9a3f00','#c75c00','#e97d00','#f2a400','#f7c54c','#fae094','#fdf4c6','#fefee3'],'OrRd':['#88002d','#b30f32','#dd3b24','#f16c39','#fe945c','#ffb681','#ffd3a7','#ffe9cc','#fdf5eb'],'Oranges':['#802a07','#aa3c00','#d35000','#ed6f00','#f7921e','#fdb16e','#ffcda1','#ffe5cc','#fef5ec'],'YlGn':['#004533','#006a48','#278e57','#4daf5e','#85c876','#b5dc98','#d8edb7','#f1f8d2','#fefee3'],'YlGnBu':['#26185f','#004c90','#007eb3','#00a0ae','#18bdb0','#85d5b7','#bce9c5','#e3f8d4','#fcffdd'],'Reds':['#6d0026','#9c0032','#cc1a36','#f3413a','#ff755f','#ff9e86','#ffc1ad','#ffdfd3','#fcf5f2'],'RdPu':['#490062','#76067d','#aa1c97','#db36a9','#ed70a9','#fa9bb0','#ffc0c0','#ffdfd7','#fcf5f2'],'PuRd':['#611300','#990028','#d50069','#de249e','#db6ac0','#d699d6','#d7bfe3','#e3deee','#f6f6fc'],'Purples':['#3d1778','#583a99','#715daa','#8b7ebb','#a69dcc','#bfbadd','#d8d4ec','#edecf9','#fcfbff'],'PuBuGn':['#004533','#006459','#00828b','#0096b8','#76a6d0','#b1b8df','#d7cee9','#f0e4f2','#fff7fd'],'PuBu':['#0e3f5c','#055987','#1173b2','#5c8ac2','#89a2ce','#adbada','#cbd2e7','#e5e8f3','#f8f9ff'],'Greens':['#004616','#16682b','#30893b','#50a84f','#81c07a','#a8d69f','#cae8c1','#e4f5de','#f6fbf4'],'BuGn':['#1b4414','#176a31','#009052','#32ad82','#70c5ac','#a0dacd','#c6eae5','#e3f5f5','#f2fbfc'],'GnBu':['#2f327d','#0064a5','#0090ba','#00b1bc','#54cabe','#98dec4','#c7ecd0','#e6f5df','#f5f8ea'],'BuPu':['#540046','#6e2072','#8346a1','#8674b8','#9099ca','#a3bad9','#bed6e6','#dbecf3','#f2fbfc'],'Blues':['#273871','#305596','#3573b9','#5c90c6','#7fabd3','#a1c4e0','#c1dbec','#deeef7','#f4fafe'],'Lajolla':['#fcffc9','#f0e298','#e8c167','#e09d34','#d67500','#b75437','#913640','#631c37','#1d0b14'],'Turku':['#ffe9ea','#ffc9be','#eaad89','#bc9972','#928261','#6c6852','#4b4c40','#2c2e2a','#040404'],'Hawaii':['#8b0069','#9d3051','#a75529','#a77700','#9a9800','#80b74d','#5dd291','#55e9cf','#b0f4fa'],'Batlow':['#201158','#003e5f','#005e5e','#00784c','#578b21','#a89800','#e89e6b','#ffadc1','#ffcef4'],'Blue-Red':['#023fa5','#6a76b2','#a1a6c8','#cbcdd9','#e2e2e2','#dbc9cc','#ca9ca4','#b16273','#8e063b'],'Blue-Red2':['#4a6fe3','#788ce1','#9da8e2','#c0c5e3','#e2e2e2','#e6bcc3','#e495a5','#dd6d87','#d33f6a'],'Blue-Red3':['#002f70','#3167bb','#879fdb','#c8d2f1','#f6f6f6','#f4c8c8','#da8a8b','#ae4647','#5f1415'],'Red-Green':['#841859','#d05196','#f398c4','#ffd0e8','#f6f6f6','#c1e9c1','#7cc57d','#129416','#005600'],'Purple-Green':['#492050','#90529c','#c490cf','#e4cae9','#f1f1f1','#bcdabc','#72b173','#2c792d','#023903'],'Purple-Brown':['#312a56','#665c9e','#9c92df','#d0caf8','#f9f9f9','#f1c7ae','#cd8d5a','#8d5928','#492900'],'Green-Brown':['#004b40','#00897b','#2ebeb0','#a9e4dc','#f6f6f6','#eed5b8','#cba46c','#966d12','#533600'],'Blue-Yellow2':['#4f53b7','#7e80c4','#aaabd5','#d1d2e5','#f1f1f1','#d6d4c1','#b5af80','#918923','#6b6100'],'Blue-Yellow3':['#9fa2ff','#c0c2ff','#d7d9ff','#e7e8ff','#f1f1f1','#f5eeb8','#eae191','#d7cc5f','#baae00'],'Green-Orange':['#11c638','#66ce70','#95d69a','#bdddbf','#e2e2e2','#ebcfbd','#f0bc95','#f1aa66','#ef9708'],'Cyan-Magenta':['#0fcfc0','#89dbd0','#bce5df','#dfecea','#f1f1f1','#f2e6ed','#f5d3e7','#f6bbde','#f79cd4'],'Tropic':['#009b9f','#00b0b3','#7dc5c7','#badadc','#f1f1f1','#e8cdde','#dea9cc','#d385bb','#c75daa'],'Broc':['#002b4b','#05557c','#6483a0','#a9b8c8','#f9f9f9','#b8b8a1','#838254','#545300','#292800'],'Cork':['#00294d','#1e5a89','#6a8db7','#b1c1d8','#f1f1f1','#adc7aa','#659760','#246318','#002f00'],'Vik':['#002e60','#005e95','#5a90bb','#aac2dd','#f1f1f1','#d3bca1','#a9854d','#784f00','#3e2000'],'Berlin':['#7fbff5','#0080bd','#004b73','#00263c','#111111','#3b1917','#713430','#ba5c56','#f8a29e'],'Lisbon':['#e2fcff','#93bfe8','#65829d','#3b4958','#181818','#494933','#828156','#bfbd7d','#fcfcd3'],'Tofino':['#d6e0ff','#99a5e0','#666e9a','#373d58','#111111','#2d4424','#557a47','#82b56f','#c2efb4']},'PLOTLY':{'Names':['Autumn','Bathymetry','Blackbody','Bluered','Bone','Cdom','Chlorophyll','Cool','Cold','Copper','Cubehelix','Density','Earth','Electric','FreesurfaceBlue','FreesurfaceRed','Greens','Greys','Hot','Hsv','Inferno','Jet','Magma','Oxygen','Par','Phase','Picnic','Plasma','Portland','Rainbow','RainbowSoft','Rdbu','Salinity','Spring','Summer','Temperature','Turbidity','VelocityBlue','VelocityGreen','Viridis','Warm','Winter','Yignbu','Yiorrd'],'Autumn':['#ff0000','#ffff00'],'Bathymetry':['#281a2c','#3b315a','#404c8b','#3f6e97','#488e9e','#55aea3','#78cea3','#bbe6ac','#fdfecc'],'Blackbody':['#000000','#e60000','#e6d200','#ffffff','#a0c8ff'],'Bluered':['#0000ff','#ff0000'],'Bone':['#000000','#545474','#a9c8c8','#ffffff'],'Cdom':['#2f0f3e','#571756','#821c63','#ab2960','#ce4356','#e66a54','#f29567','#f9c187','#feedb0'],'Chlorophyll':['#122414','#193f29','#185b3b','#0d7748','#129450','#50ad59','#84c47a','#afdda2','#d7f9d0'],'Cool':['#7d00b3','#7400da','#624aed','#4492e7','#00ccc5','#00f792','#00ff58','#28ff08','#93ff00'],'Cold':['#00ffff','#ff00ff'],'Copper':['#000000','#ffa066','#ffc77f'],'Cubehelix':['#000000','#16053b','#3c0469','#6d0187','#a10093','#d2028e','#fb0b7b','#ff1d61','#ff3645','#ff552e','#ff7822','#ff9d25','#f1bf39','#e0dc5d','#daf18e','#e3fdc6'],'Density':['#360e24','#591750','#6e2d84','#784db2','#7871d5','#7397e4','#86b9e3','#b1d6e3','#e6f1f1'],'Earth':['#000082','#00b4b4','#28d228','#e6e632','#784614','#ffffff'],'Electric':['#000000','#1e0064','#780064','#a05a00','#e6c800','#fffadc'],'FreesurfaceBlue':['#1e046e','#2f0eb0','#292dec','#1963d4','#4483c8','#729cc5','#9db5cb','#c8d0d8','#f1edec'],'FreesurfaceRed':['#3c0912','#64111b','#8e141d','#b12b1b','#c0573f','#cd7d69','#d8a294','#e3c7c1','#f1edec'],'Greens':['#00441b','#006d2c','#238b45','#41ab5d','#74c476','#a1d99b','#c7e9c0','#e5f5e0','#f7fcf5'],'Greys':['#000000','#ffffff'],'Hot':['#000000','#e60000','#ffd200','#ffffff'],'Hsv':['#ff0000','#fdff02','#f7ff02','#00fc04','#00fc0a','#01f9ff','#0200fd','#0800fd','#ff00fb','#ff00f5','#ff0006'],'Inferno':['#000004','#1f0c48','#550f6d','#88226a','#ba3655','#e35933','#f98c0a','#f9c932','#fcffa4'],'Jet':['#000083','#003caa','#05ffff','#ffff00','#fa0000','#800000'],'Magma':['#000004','#1c1044','#4f127b','#812581','#b5367a','#e55064','#fb8761','#fec287','#fcfdbf'],'Oxygen':['#400505','#6a060f','#901a07','#a84003','#bc6404','#ce880b','#dcae19','#e7d72c','#f8fe69'],'Par':['#331418','#5a2023','#812c22','#9f4419','#b66313','#c78616','#d4ab23','#ddd236','#e1fd4b'],'Phase':['#916912','#b84726','#ba3a73','#a047b9','#6e61da','#327ba4','#1f836e','#4d8122','#916912'],'Picnic':['#0000ff','#3399ff','#66ccff','#99ccff','#ccccff','#ffffff','#ffccff','#ff99ff','#ff66cc','#ff6666','#ff0000'],'Plasma':['#0d0887','#4b03a1','#7d03a8','#a82296','#cb4679','#e56b5d','#f89441','#fdc328','#f0f921'],'Portland':['#0c3383','#0a88ba','#f2d338','#f28f38','#d91e1e'],'Rainbow':['#96005a','#0000c8','#0019ff','#0098ff','#2cff96','#97ff00','#ffea00','#ff6f00','#ff0000'],'RainbowSoft':['#7d00b3','#c700b4','#ff0079','#ff6c00','#dec200','#96ff00','#00ff37','#00f696','#32a7de','#6733eb','#7c00ba'],'Rdbu':['#050aac','#6a89f7','#bebebe','#dcaa84','#e6915a','#b20a1c'],'Salinity':['#2a186c','#2132a2','#0f5a91','#287689','#3b9287','#4faf7e','#78cb68','#c1dd64','#fdef9a'],'Spring':['#ff00ff','#ffff00'],'Summer':['#008066','#ffff66'],'Temperature':['#042333','#17337a','#553b9d','#814f8f','#af5f82','#de7065','#f99242','#f9c441','#e8fa5b'],'Turbidity':['#221f1b','#413229','#624534','#835939','#a1703b','#b98c42','#caae58','#d8d17e','#e9f6ab'],'VelocityBlue':['#112040','#233474','#1d519c','#1f71a2','#3290a9','#57adb0','#95c4bd','#cbddd3','#fefbe6'],'VelocityGreen':['#172313','#184026','#0b5f2d','#277b23','#5f920c','#98a512','#c9ba45','#e9d889','#fffdcd'],'Viridis':['#440154','#472c7a','#3b518b','#2c718e','#21908d','#27ad81','#5cc863','#aadc32','#fde725'],'Warm':['#7d00b3','#ac00bb','#db00aa','#ff0082','#ff3f4a','#ff7b00','#eab000','#bee400','#93ff00'],'Winter':['#0000ff','#00ff80'],'Yignbu':['#081d58','#253494','#225ea8','#1d91c0','#41b6c4','#7fcdbb','#c7e9b4','#edf8d9','#ffffd9'],'Yiorrd':['#800026','#bd0026','#e31a1c','#fc4e2a','#fd8d3c','#feb24c','#fed976','#ffeda0','#ffffcc']},'WESANDERSON':{'Names':['BottleRocket1','BottleRocket2','Rushmore1','Rushmore','Royal1','Royal2','Zissou1','Darjeeling1','Darjeeling2','Chevalier1','FantasticFox1','Moonrise1','Moonrise2','Moonrise3','Cavalcanti1','GrandBudapest1','GrandBudapest2','IsleofDogs1','IsleofDogs2'],'BottleRocket1':['#a42820','#5f5647','#9b110e','#3f5151','#4e2a1e','#550307','#0c1707'],'BottleRocket2':['#fad510','#cb2314','#273046','#354823','#1e1e1e'],'Rushmore1':['#e1bd6d','#eabe94','#0b775e','#35274a','#f2300f'],'Rushmore':['#e1bd6d','#eabe94','#0b775e','#35274a','#f2300f'],'Royal1':['#899da4','#c93312','#faefd1','#dc863b'],'Royal2':['#9a8822','#f5cdb4','#f8afa8','#fddda0','#74a089'],'Zissou1':['#3b9ab2','#78b7c5','#ebcc2a','#e1af00','#f21a00'],'Darjeeling1':['#ff0000','#00a08a','#f2ad00','#f98400','#5bbcd6'],'Darjeeling2':['#eccbae','#046c9a','#d69c4e','#abddde','#000000'],'Chevalier1':['#446455','#fdd262','#d3dddc','#c7b19c'],'FantasticFox1':['#dd8d29','#e2d200','#46acc8','#e58601','#b40f20'],'Moonrise1':['#f3df6c','#ceab07','#d5d5d3','#24281a'],'Moonrise2':['#798e87','#c27d38','#ccc591','#29211f'],'Moonrise3':['#85d4e3','#f4b5bd','#9c964a','#cdc08c','#fad77b'],'Cavalcanti1':['#d8b70a','#02401b','#a2a475','#81a88d','#972d15'],'GrandBudapest1':['#f1bb7b','#fd6467','#5b1a18','#d67236'],'GrandBudapest2':['#e6a0c4','#c6cdf7','#d8a499','#7294d4'],'IsleofDogs1':['#9986a5','#79402e','#ccba72','#0f0d0e','#d9d0d3','#8d8680'],'IsleofDogs2':['#ead3bf','#aa9486','#b6854d','#39312f','#1c1718']},}
+tmdKey="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjFhYmZhNjg5YjEwODA2ZTRhOWY2NGEyYmRiODE0YjAwNDE3Zjc1NTcyNzIxMjU4MTYxZWE2OWI2MTQ0MjEwMDJlYzhmYWVlNGYzOWZlODQ0In0.eyJhdWQiOiIyIiwianRpIjoiMWFiZmE2ODliMTA4MDZlNGE5ZjY0YTJiZGI4MTRiMDA0MTdmNzU1NzI3MjEyNTgxNjFlYTY5YjYxNDQyMTAwMmVjOGZhZWU0ZjM5ZmU4NDQiLCJpYXQiOjE2OTU2NDcxODYsIm5iZiI6MTY5NTY0NzE4NiwiZXhwIjoxNzI3MjY5NTg2LCJzdWIiOiIzNjIiLCJzY29wZXMiOltdfQ.In_iKPCGIofYiTM_bleOY4V6tMUEazFgbf6AyElXD6IAV7npYzGf7sYK7LmNcxF5uXwXnisadwHsnjBu2FsEsT1a-Dl6ek2YvhlU28bZFZjsuS_Z_gNd4C4_99tIVOB-xLqJJddYlt2lscdYSXDd8QTHETuPqnWzCPE93fw-PrnTkV3KIakfFKGdPmbyeQv-PZWll9XuzZBBvx13eEE8roXPYSGWviMEI8bMd7ZgIAQwIslj1uKPCwhi2kfP7bfnP_hF-zsZp8OfS9lSwIfrnHBNjtXChk1GMYLlZ9FOdJly-uQffYaLAJd5P4UTvQCVIOXcUmaBiZhHx0G1szMQzYtZDYU6OJf58kuh7QuTLUXYqoNMh9oHn2HDx58EptFGR_WipIfUamBIqbE2Tw-f3Wq9GWwMLTkHdDD5GfSZXksBvWOrS_Y0l2Isf_5zqFoRxFkXj7wBoxPr-nObpZdaIT4OCH2aTDfaWkk0qmNCsrBC1Opnr44hv0jBPaWd2MotlR7O6qsXA1JFuK1RdeI8bS78rxlRkhjNYzgp4xz-cmOzPOTRLXsx-RBXscQtnx-giwhWUOA_m1vqoUCo2h99Aa7h0oACUzk_cYc9RLKKEPT7ZVQASv00Onke9TCWFJaOEcCDimEfFQdVFqLrqlqZg_nuz7_-r2GAQQhO-4N8noY"
+tmdKey="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjIzNmZjODlkNTQ0NmIwMWZkNDU4ZmEzMWMxNGIxN2M5Y2ZjMTI4ZWQ2MzJmMjQ4ZDY3ZjkxM2JiZWIwMTI5YjlhYmEzOGJhZTY4OGE1ODUyIn0.eyJhdWQiOiIyIiwianRpIjoiMjM2ZmM4OWQ1NDQ2YjAxZmQ0NThmYTMxYzE0YjE3YzljZmMxMjhlZDYzMmYyNDhkNjdmOTEzYmJlYjAxMjliOWFiYTM4YmFlNjg4YTU4NTIiLCJpYXQiOjE3Mzc2MDYwNzIsIm5iZiI6MTczNzYwNjA3MiwiZXhwIjoxNzY5MTQyMDcyLCJzdWIiOiIzNjIiLCJzY29wZXMiOltdfQ.VPQOwKOrTqhmoe_j__XTiuZQD2Qo_3fWyXTxWgQI7pZdUArdpBuDy8XnPr4lVzSpyOxHm5poo6BB8KyLPwEsjYyaxXHqLjPg91bxH_zPxpy_CSKwruaatAwbwvaHl_uf_DITJbnnHZLdZNfM0cKP9qpXXpGYYkdW_nSUeesLjO80zlepGwZmJb8GFkTObZ1pct_71iYd68GAbHAcc1alu1UoV8S8byV-R_vooq9ruYKvHd_6nfWGr6ZlbEPYyOU0zQP0cSBR-h6OcdxtfHsepprHU1pXOGJ2wapLar9xB5GKTeI9rWjoj9AjJy5bXl6EfebF6IT5pq2FRYY5U-R-3BbzkLb96bB3ly5TMkb7IEHZ42qadLe_tD98N8G29ZIGREPUzrRgvwJrwxtqZnDtNlCNiHR18yMuv1t6DzGVWGHBJYICq-gB5kMG2zj4TdOtMXnii1Y2oY-v84gK9VN65ragU4ODQjWxvB6dJbsZEO8T_EH6_iT4Vd8iXkudTvqx4NhWOfbdcevGwlpa64AUvlq-pS26zreQydOX2IrS4rrGmRjedrZxXVrG7jDnrSDIP4QeBrT0yJanu7qGjdm4nDg93gaTQREmoBCUcpWXGW8YyQrNOllxuXCFTAZ8TuOxbGQN5k4Jb6xM0W7i_IVqQVqyqj7YsFFDAXuoenGnnw4"
+
+function aboutMe(){alert(
+"Kontour by Dr.Kit with features:" +
+"\n 🎶 Noise Contour Map" +
+"\n 📈 Interpolation: Kriging, IDW" +
+"\n 🎨 Colorization: Colors, Classes, Opacity, Legends" +
+"\n 🔁 Rotation: Bearing Clockwise" +
+"\n 🌐 Mapping: Random Markers" +
+"\n 🖼️ Drawing: Image Overlay" +
+"\n 🔳 Gridder: Point, Square, Triangle, Hex Grid" +
+"\n 🎨 Painter: Intersection Painted, DePainted" +
+"\n 🧮 Table: Responsive Tabulator" +
+"\n 📈 Files: html5 Save, Load geoJSON" 
+)}
+
+</script>
+
+<style>
+html,body  {width:100%; margin:0; padding:0}
+#map,#table {height:100vh;}
+.tabulator {font-size:12px}
+.tabulator .tabulator-header .tabulator-col {text-align:center}
+.tabulator, .tabulator-header, .tabulator-tableHolder{overflow:hidden !important}
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {border: 1px solid rgba(0,0,0,0.2); background-clip: padding-box;}
+.leaflet-center {left: 50%;transform: translate(-50%, 0%);}
+.leaflet-touch .leaflet-control-layers-toggle {width: 30px;height: 30px;}
+<!--skew-T -->
+.axis line,.axis path{fill:none;stroke:#000;stroke-width:1px;shape-rendering:crispEdges}.axis{fill:#000}.y.axis{font-size:13px}.y.axis.hght{font-size:9px;fill:red}.x.axis{font-size:13px}.y.axis.ticks text{display:none}.temp{fill:none;stroke:red;stroke-width:3px}.dwpt{fill:none;stroke:green;stroke-width:3px}.skline{stroke-width:1.8px;opacity:.8}.mean{stroke-width:2.5px}.gridline,.tempzero{stroke:#dfdfdf;stroke-width:.75px;fill:none}.tempzero{stroke:#aaa;stroke-width:1.25px}.windbarb{stroke:#000;stroke-width:.75px;fill:none}.flag{fill:#000}.overlay{fill:none;pointer-events:all}.focus.tmpc circle{fill:red;stroke:none}.focus.dwpc circle{fill:green;stroke:none}.focus text{font-size:12px}
+</style>
+
+</head>
+
+<body>
+
+<div class="row content" style="text-align:center">
+<select title="Method" id="methodSelect" onchange="clearMap()&Interpolation()">
+  <option value="kriging_contours">Contour</option>
+  <option value="voronoi">Contain</option>
+  <option value="tin">Connect</option>
+  <option value="idw_contours">Current</option>
+</select>
+<select title="Kriging Variogram Models" id="modelSelect" style="display:none" onchange="colorStyle()" >
+  <option value="exponential">Exponential</option><option value="exponential_x">Exponential_x</option><option value="spherical">Spherical</option><option value="spherical_x">Spherical_x</option><option value="circular">Circular</option><option value="circular_x">Circular_x</option><option value="linear">Linear</option><option value="linear_x">Linear_x</option><option value="gaussian">Gaussian</option><option value="gaussian_x">Gaussian_x</option>
+</select>
+<select title="Colors" id="colorSelect" onchange="colorStyle()">
+  <option value="VIRIDIS.Turbo">Turbo</option>
+  <option value="BREWER.Reds">Reds</option><option value="BREWER.Oranges">Oranges</option><option value="BREWER.Greens">Greens</option><option value="BREWER.Blues">Blues</option><option value="BREWER.Purples">Purples</option><option value="BREWER.Greys">Greys</option><option value="BREWER.YlOrBr">YlOrBr</option><option value="BREWER.YlOrRd">YlOrRd</option><option value="BREWER.YlGnBu">YlGnBu</option><option value="BREWER.GnYlRd">GnYlRd</option><option value="BREWER.BuYlRd">BuYlRd</option><option value="BREWER.PuBuGn">PuBuGn</option><option value="BREWER.Spectral">Spectral</option><option value="BREWER.Viridis">Viridis</option><option value="VIRIDIS.Turbo">Turbo</option><option value="VIRIDIS.Rocket">Rocket</option><option value="VIRIDIS.Mako">Mako</option><option value="VIRIDIS.Cividis">Cividis</option><option value="VIRIDIS.Plasma">Plasma</option><option value="VIRIDIS.Inferno">Inferno</option><option value="VIRIDIS.Magma">Magma</option>
+</select>
+<input title="Classes" id="colorClass" type="number" min="10" max="100" step="2" value=16 style="line-height:normal;" onchange="colorStyle()"></input>
+<input title="Opacity" id="opacityBar" type="range" min="0" max="100" value="85" style="width:100px;display:inline;vertical-align:middle;" onchange="opaqueNess()">
+<label title="Mapping" onclick="Mapping()" id="mappingBtn">🌏</label>
+<label title="Drawing" onclick="Drawing()" id="drawingBtn">🖼️</label>
+<label title="Rotater" onclick="Rotater()" id="rotaterBtn">🔁</label> <!--🔄-->
+<label title="Gridder" onclick="Gridder()" id="gridderBtn">🔳</label>
+<label title="Painter" onclick="Painter()" id="painterBtn">🎨</label>
+<label title="SaveFile" onclick=htmlSaveFile()>💾</label>
+<label title="LoadFile" onclick=htmlLoadFile()>📁</label>
+<label title="aboutMe" onclick=aboutMe()>❓</label>
+
+<!-- 
+<div style="height:10px;width:120px;background:linear-gradient(to right, white 0%, red 100%)"></div>
+-->
+</div>
+
+<div class="container-fluid">
+<div class="row content">
+<div class="col-sm-9" style="padding:0">
+  <div id="map"></div>
+</div>
+<div class="col-sm-3" style="padding:0">
+  <div id="table" style="height:50vh;"></div>
+  <div id="chart" style="height:50vh;"></div>
+  <div><image id="rImg" class="img" style="display:none"></div>
+  <div><image id="hImg" class="img" style="display:none"></div>
+</div>
+</div>
+</div>
+
+<script>
+
+Tabler()
+Plumer()
+setTimeout(function(){Mapper(),Interpolation()},500)
+
+function test(){
+windMarker = L.marker([14.22879,100.781529]).addTo(map)
+windMarker.bindPopup("<div id='popcontainer' style='width:320px;height:240px;margin:0 auto);'>Loading...</div>")
+map.on({popupopen:chartWindRose()})
+}
+  
+
+
+function demoMovingRotated(){
+path=[],points.map(a=>path.push({latLng:[a[2],a[1]],bearing:Math.random()*360}))
+//icon=L.icon({iconUrl:"https://cdn-icons-png.flaticon.com/32/4712/4712109.png",iconSize:[32,32],iconAnchor:[16,32]})
+m = L.marker(path[0].latLng).addTo(map)
+move= path.slice(1)
+function simulate() {duration=3000
+if(!move.length) {move=path.slice(1),duration= 0}
+  point=move.shift()
+  m.slideTo(point.latLng,{duration:duration,rotationAngle:0})
+  setTimeout(simulate,duration)
+}
+simulate()
+}
+
+function getPointInPoly(bound) { 
+xmin  = bound.getEast()
+xmax  = bound.getWest()
+ymin  = bound.getSouth()
+ymax  = bound.getNorth() 
+lat   = ymin + (Math.random()*(ymax-ymin))
+lng   = xmin + (Math.random()*(xmax-xmin))
+point = turf.point([lng,lat])
+poly  = paint.getData()
+inside= turf.inside(point,poly)
+if (inside) {return point.geometry.coordinates}
+else {return getPointInPoly(bound)}
+}
+
+function poi(i,lo,la,note){
+v=Math.round(60+Math.random()*60)
+lo=parseFloat(lo.toFixed(6)),la=parseFloat(la.toFixed(6))
+return [i,lo,la,v,0,note]
+}
+
+function getPoint(){
+clearMap()
+poly=paint.getData()
+void 0===poly?b=map:b=L.geoJSON(poly);
+b0=b.getBounds(),be=b0.getEast(),bw=b0.getWest(),bs=b0.getSouth(),bn=b0.getNorth(),c0=b0.getCenter()
+points=[];//points.push(poi(1,c0.lng,c0.lat,'CT')),points.push(poi(2,be,bn,'NE')),points.push(poi(3,bw,bs,'SW')),points.push(poi(4,be,bs,'SE')),points.push(poi(5,bw,bn,'NW'))
+for(i=1;i<=document.getElementById("colorClass").value;i++){
+  void 0===poly?l=turf.randomPosition([bw,bs,be,bn]):l=getPointInPoly(b0);
+  v=Math.round(60+Math.random()*60),l[0]=parseFloat(l[0].toFixed(6)),l[1]=parseFloat(l[1].toFixed(6))
+  points.push([i,l[0],l[1],v,0,''])
+}
+Tabler()
+}
+
+function Tabler(){
+tables=[]; points.map(a=>tables.push({n:a[0],x:a[1],y:a[2],z:a[3],c:0,d:a[4],note:a[5]}))
+function cellMapSetView(e,cell){a=cell._cell.row.data,map.setView([a.y,a.x])}
+function cellRowDelete(e,cell){cell.getRow().delete()}
+cellContextMenu = [
+  {label:"Map SetView", action:function(e,cell){a=cell._cell.row.data, map.setView([a.y,a.x])}},
+  {label:"Add Row"  , action:function(e,cell){table.addData(cell.getRow().getData(),false)}},
+  {label:"Del Row" , action:function(e,cell){cell.getRow().delete()}},
+  //{label:"Add Row"    , action:function(e,cell){table.addData([{n:}],true)}},
+  //{label:"Clear Data"  , action:function(e,cell){table.clearData()}},
+]
+table = new Tabulator("#table", {
+  data:tables, layout:"fitColumns",index:"n",//autoColumns:true, selectable:true,
+  columns: [ //formatter:rownum, handle, buttonCross, buttonTick
+  //{title:"n", field:"n", editor:"input", width:"8px", hozAlign:"left", cellClick:cellMapSetView, contextMenu:cellContextMenu}, 
+  {title:"x", field:"x", editor:"input", width:"22px", }, //hozAlign:"center", 
+  {title:"y", field:"y", editor:"input", width:"22px", }, 
+  {title:"z", field:"z", editor:"input", width:"16px", }, 
+  //{title:"d", field:"d", editor:"input", }, 
+  {title:"note", field:"note", editor:"input", }, 
+  ],
+})
+table.on("cellEdited", function(cell){clearMap(),Interpolation()})
+}
+
+function clearMap(){Layers.remove(),Markers.remove(),Contours.remove(),Legends.remove(),Grids.remove()}
+
+function rangeLimits(p){
+ranges=[]; p.map(a=>ranges.push(a.z))
+return [Math.min(...ranges),Math.max(...ranges)]
+}
+
+function Painter(){
+p=document.getElementById("painterBtn")
+"🎨"==p.innerText?(paint.startDraw(),p.innerText="🔵"):
+"🔵"==p.innerText?(paint.startErase(),p.innerText="🔴"):
+(paint.stop(),$.notify((1e-6*turf.area(paint.getData())).toLocaleString()+' sq.km'),p.innerText="🎨"); 
+}
+
+function Rotater(){
+angle=Math.round(map._bearing*180/Math.PI+5)
+map.setBearing(angle)
+clearMap(),Interpolation()
+}
+
+function geoLocation(){
+function onLocationFound(e) {radius = e.accuracy*0.5;
+  locationMarker = L.marker(e.latlng).addTo(map).bindPopup('You are within ' + radius.toFixed(0) + ' meters from this point').openPopup();
+  locationCircle = L.circle(e.latlng,radius).addTo(map)
+}
+function onLocationError(e) {$.notify(e.message)}
+map.on('locationfound',onLocationFound);
+map.on('locationerror',onLocationError);
+}
+
+function Mapper(){
+map  = L.map("map",{attributionControl:false,rotate:true,rotateControl:{closeOnZeroBearing:true},}).fitWorld()
+map.on("contextmenu", onMapRightClick)
+gmap = L.tileLayer("http://www.google.com/maps/vt?lyrs=r&x={x}&y={y}&z={z}",{maxZoom:21})//.addTo(map)
+//gsat = L.tileLayer("http://www.google.com/maps/vt?lyrs=y&x={x}&y={y}&z={z}",{maxZoom:21}).addTo(map)
+gsat = L.tileLayer("http://www.google.com/maps/vt?lyrs=s&x={x}&y={y}&z={z}",{maxZoom:21}).addTo(map)
+osm  = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png"        ,{maxZoom:21})//.addTo(map)
+hosm = L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" ,{maxZoom:21})//.addTo(map)
+none = L.tileLayer("")
+//where = map.locate({setView:true,maxZoom:20})
+//scale = L.control.scale({metric:true,imperial:true,position:'bottomright'}).addTo(map)
+angle = map._bearing*180/Math.PI
+paint = L.control.paintPolygon({position:'topleft',menu:false}).addTo(map)
+
+//rotate= L.Rotate.debug(map);
+/*
+drawn = new L.FeatureGroup()
+map.addLayer(drawn)
+drawControl = new L.Control.Draw({
+  draw:{polyline:true,polygon:true,rectangle:true,circle:true,marker:false,circlemarker:false},
+  edit:{featureGroup:drawn,edit:true}
+}).addTo(map)
+map.on('draw:created', function(e){type=e.layerType,layer=e.layer,drawn.addLayer(layer)})
+
+*/
+
+}
+
+function Gridder(){
+map.hasLayer(Grids)&&Grids.remove()
+gridBox=turf.bbox(boundary)
+gridDis=Math.sqrt(Math.pow(gridBox[2]-gridBox[0],2)+Math.pow(gridBox[3]-gridBox[1],2))
+gridDis=gridDis/document.getElementById("colorClass").value*100
+gridder=function(t){eval("grids=turf."+t+"Grid(gridBox,gridDis,{units:'kilometers'})")}
+gd=document.getElementById("gridderBtn")
+"🔳"==gd.innerText?(gridder("square"),gd.innerText="🎲"):"🎲"==gd.innerText?(gridder("hex"),gd.innerText="🔺"):
+"🔺"==gd.innerText?(gridder("triangle"),gd.innerText="🔵"):(gridder('point'),gd.innerText="🔳");
+Grids=L.geoJSON(grids,gridsOpt).addTo(map) //❌🔺🛆ꕔ
+}
+
+function Mapping(){
+image.remove(),gsat.addTo(map)
+getPoint()
+setTimeout(function(){Interpolation()},500)
+}
+
+function Drawing(){
+e = document.createElement('a'); 
+e.innerHTML = '<input type="file">';
+a = e.firstChild
+a.addEventListener('change', function() {
+  image.remove(),gsat.remove()
+  m=map.getBounds(), mNE=m._northEast, mSW=m._southWest
+  bound = L.latLngBounds([[mNE.lat,mNE.lng],[mSW.lat,mSW.lng]]) 
+  file = a.files[0];
+  reader = new FileReader()
+  reader.onload = function(){image=L.imageOverlay(reader.result,bound).addTo(map)}
+  file&&reader.readAsDataURL(file)
+}) 
+a.click();
+}
+
+function onMapRightClick(e) {
+ll=e.latlng
+s1="document.getElementById('sacti2').value"
+s2="<option value=''>Sacti</option><option value='PlmLenFrq'>Plume Length Frequency</option><option value='PlmShdFrq'>Plume Shadowing Frequency</option><option value='TotSlrLss'>Solar Energy Loss on a Horizontal Surface</option><option value='FrcSlrDepLss'>Fractional Solar Energy Deposition Loss</option><option value='FrcBemDepLss'>Fractional Beam Energy Deposition Loss</option><option value='PlmSltDep'>Plume Salt Deposition Flux</option><option value='PlmWtrDep'>Plume Water Deposition Flux</option> <option value='HrsPlmFog'>Hours Plume Fogging</option><option value='HrsPlmIce'>Hours Plume Icing</option> "
+h1="document.getElementById('hysplit').value"
+h2="<option value=''>Calpuff</option><option value='Traj'>Trajectory</option><option value='Conc'>Concentration</option><option value='Sulf'>Sulfur&Sulfate</option><option value='DepoGas'>Gas Deposition</option><option value='DepoPar'>Particle Deposition</option><option value='DepoAll'>Total Deposition</option><option value='Anim'>Puffs & Particles</option>"
+m1="document.getElementById('meteo').value"
+m2="<option value=''>Meteo</option><option value='windrose'>Wind Rose</option><option value='meteogram'>Meteogram</option><option value='skewtlogp'>Skew-T Log-P</option><option value='wtradial'>Weather Radials</option>"
+dl="<div align='center'>"+
+"<button onclick=plumeModel(ll.lat,ll.lng)>Plume</button>"+
+//"<button onclick=chartMeteogram(ll.lat,ll.lng,48)>Meteo</button>"+
+"<select id='meteo' style='width:45px;height:16px' onchange=chartMeteo(ll.lat,ll.lng,"+m1+")>"+m2+"</select>"+
+//"<button onclick=hysplitModel()>Hysplit</button>"+
+"<select id='hysplit' style='width:45px;height:16px' onchange=hysplitModel(ll.lat,ll.lng,"+h1+")>"+h2+"</select>"+
+//"<button onclick=sactiModel(ll.lat,ll.lng,'PlmLenFrq')>Sacti2</button>"+
+"<select id='sacti2' style='width:45px;height:16px' onchange=sactiModel(ll.lat,ll.lng,"+s1+")>"+s2+"</select>"+
+"</div>"
+L.popup().setLatLng(ll).setContent(ll.toString()+dl).openOn(map);
+}
+
+function bindTable(layer) {p=layer.feature.properties
+out="<style>table {font-family: arial, sans-serif; border-collapse: collapse; width: 100%;}td,th {border: 1px solid #a0a0a0; text-align: center; padding: 2px; } thead {text-align: center;}</style>"
+out+="<font size='2'><table id='poptable'>"
+if(p){for(i in p){out+="<tr><th>"+i+ "</th><td contenteditable='true'>"+p[i]+"</td></tr>"}}
+out+="</table></font><div align='center'><br><button onclick=tableUpdate()>UPDATE</button></div>"
+return out  
+}
+
+function tableUpdate(){
+data={},t=document.getElementById("poptable"),r=t.rows,l=t.rows.length
+for(i=0;i<l;i++) {head=t.rows[i].cells[0].innerHTML,info=r[i].cells[1].innerHTML,i<=3&&(info=parseFloat(info)),eval("data."+head+"=info")}
+table.updateData([data])
+clearMap(),Interpolation()
+}
+
+function colorStyle(){
+data=table.getData()
+rangeLevel = rangeLimits(data)
+colorSteps = document.getElementById("colorClass").value
+colorScale = document.getElementById("colorSelect").value
+colorScale = eval("kolor."+colorScale)
+paint.setRadius(document.getElementById('colorClass').value*2)
+clearMap(),Interpolation()
+}
+
+function opaqueNess(){
+slider = document.getElementById("opacityBar")
+slider.oninput = function(){
+  o=slider.value*0.01,Contours.setStyle({opacity:o,fillOpacity:o})
+  //Markers.eachLayer(a=>a.setOpacity(o))
+}
+}
+
+function Imaging(imageUrl){
+m=map.getBounds(), mNE=m._northEast, mSW=m._southWest
+bound = L.latLngBounds([[mNE.lat,mNE.lng],[mSW.lat,mSW.lng]]) 
+image = L.imageOverlay(imageUrl,bound,{opacity:1.0, alt:''})//.addTo(map)
+}
+
+function Intersection(base,over){ //unused
+features = []; 
+base.features.forEach(function(feature1) {
+  over.features.forEach(function(feature2) {
+    intersection = null;
+    try {intersection = turf.intersect(feature1, feature2);} 
+    catch (e) {
+      try {
+        feature1 = turf.buffer(feature1, 0);
+        intersection = turf.intersect(feature1, feature2);
+      } 
+      catch (e) {intersection = feature1}
+    }
+    if (intersection != null) {
+      intersection.properties = feature1.properties;
+      intersection.id = (Math.random() * 100000).toFixed(0);
+      features.push(intersection);
+    }
+  })
+})
+
+return turf.featureCollection(features);
+}
+
+function Vectorization(){ //unused
+vectData=[]
+vectData.push({data:U.data, header:{ nx:U.ncols, ny:U.nrows, dx:U.cellsize, dy:U.cellsize, la2:U.yllcorner, la1:U.yllcorner+U.cellsize*U.nrows, lo1:U.xllcorner, lo2:U.xllcorner+U.cellsize*U.ncols, parameterCategory:2, parameterNumber:2, refTime:"2019-08-10T07:00:00.000Z", parameterCategoryName:"Momentum", parameterNumberName:"U-component_of_wind", parameterUnit:"m.s-1" } })
+vectData.push({data:V.data, header:{ nx:V.ncols, ny:V.nrows, dx:V.cellsize, dy:V.cellsize, la2:V.yllcorner, la1:V.yllcorner+V.cellsize*U.nrows, lo1:V.xllcorner, lo2:V.xllcorner+V.cellsize*V.ncols, parameterCategory:2, parameterNumber:3, refTime:"2019-08-10T07:00:00.000Z", parameterCategoryName:"Momentum", parameterNumberName:"V-component_of_wind", parameterUnit:"m.s-1" } })
+vectorLayer = L.velocityLayer({data:windData, displayValues:true, colorScale: ['black'], minVelocity:0, maxVelocity:2, velocityScale:0.01, particleMultiplier:1/500, displayOptions: {velocityType:'wind', position:'bottomleft', emptyString:'No data', angleConvention:'bearingCW', speedUnit:' m/s'}})//.addTo(map)
+}
+
+function vectorModel(){
+//gridsize=250,cellsize=1/gridsize
+ncols=Math.round((bbox[2]-bbox[0])*gridsize),nrows=Math.round((bbox[3]-bbox[1])*gridsize)
+xllcorner=idw_corners[0],yllcorner=idw_corners[1],data=[]
+//ncols=10,cellsize=(bbox[2]-bbox[0])/ncols,nrows=Math.round((bbox[3]-bbox[1])/cellsize)
+//xllcorner=bbox[0],yllcorner=bbox[1],data=[]
+//data=[],list=['ncols','nrows','cellsize','xllcorner','yllcorner','data']
+//U={},list.map(a=>eval("U."+a+"="+a)); V={},list.map(a=>eval("V."+a+"="+a))
+U={ncols:ncols,nrows:nrows,cellsize:cellsize,xllcorner:xllcorner,yllcorner:yllcorner,data:[]}
+V={ncols:ncols,nrows:nrows,cellsize:cellsize,xllcorner:xllcorner,yllcorner:yllcorner,data:[]}
+Z=[];idw_points.features.map(a=>Z.push(a.properties.z+90))
+Z.map(a=>U.data.push(1*Math.cos(a*Math.PI/180)))
+Z.map(a=>V.data.push(1*Math.sin(a*Math.PI/180)))
+UV = new L.VectorField({us:U.data,vs:V.data,nCols:U.ncols,nRows:U.nrows,xllCorner:U.xllcorner,yllCorner:U.yllcorner,cellXSize:U.cellsize,cellYSize:U.cellsize})
+color='white' //chroma.scale(colorScale).domain(UV.range)
+WF = L.canvasLayer.vectorFieldAnim(UV,{color:color,width:2,velocityScale:1/50000, paths:1000,fade:0.95,maxAge:2000,mouseMoveCursor:null }) 
+WF.on('click',function(v) {a=v.value; if(a!=null){L.popup().setLatLng(v.latlng).setContent(a.magnitude().toFixed(2) + ' m/s ' + a.directionTo().toFixed(0) + '°').openOn(map)}} )
+WF.setOpacity(opacityVal)//.addTo(map)
+//WF.options.color|width|velocityScale = newValue 
+WS = L.canvasLayer.scalarField(UV.getScalarField('magnitude'),{type:"colormap", interpolate:false, color:chroma.scale(colorScale).domain(UV.range), opacity:opacityVal })
+WD = L.canvasLayer.scalarField(UV.getScalarField('directionFrom'),{type:'vector', color:'white', vectorSize:25, arrowDirection:'from' })
+weatherLayer = L.layerGroup([WF,WS,WD])//.addTo(map)
+}
+
+function dragstart(e){d=e.target.getLatLng()}
+function dragend(e){i=0,l=e.target.getLatLng();table.getData().forEach(function(e){i++;check=Math.sqrt((e.x-d.lng)**2+(e.y-d.lat)**2);0===check&&(table.updateData([{n:i,x:parseFloat(l.lng.toFixed(6)),y:parseFloat(l.lat.toFixed(6))}]),clearMap(),Interpolation());})}
+function mouseover(e) {this.setStyle({color:'red'  ,weight:2.0,})}
+function mouseout(e)  {this.setStyle({color:'black',weight:0.5,}),this.setText(null)}
+function mouseclick(e){this.setText('   🡳   ',sflowOpt)} // https://symbl.cc/en/collections/arrow-symbols/
+
+function pointToLayer(f,ll) {return L.marker(L.latLng(ll),{/*opacity:opacityVal,*/draggable:true})} //{icon:L.icon.pulse({color:'red'})}
+function pitchToLayer(f,ll) {return L.marker(L.latLng(ll),{/*opacity:opacityVal,*/rotationAngle:f.properties.d,draggable:true})}
+function onEachFeatureContour(f,l) {a=f.properties.z, l.on(mouseOpt)/*, l.setText(a.toFixed(0),stextOpt)*/, l.bindTooltip(a.toFixed(0))}
+function onEachFeatureMarker(f,l)  {a=f.properties.z, l.on({dragstart:dragstart,dragend:dragend}), l.bindPopup(bindTable) }
+function filterZero(f,l){return f.properties.z>=0}
+
+function colorClassRun(){
+a=document.getElementById("colorClass"),v=parseInt(a.value);
+v>80?a.value=10:a.value=v+2;
+colorStyle()
+}
+
+function Interpolation(){
+mouseOpt = {mouseover:mouseover,mouseout:mouseout,click:mouseclick}
+stextOpt = {repeat:false,center:false,below:false,offset:0,orientation:0}
+sflowOpt = {repeat:true, center:false,below:false,offset:0,orientation:0,attributes:{fill:'black'}}
+gridsOpt = {style:{color:'white',fillOpacity:0,weight:1},pointToLayer:function(f,l){return L.circleMarker(l,{radius:3})}}
+styleOpt = {color:'black', weight:0.5, dashArray:'1', dashSpeed:0, fillOpacity:document.getElementById("opacityBar").value*0.01}
+colorScale = document.getElementById("colorSelect").value
+colorScale = eval("kolor."+colorScale)
+colorSteps = document.getElementById("colorClass").value
+opacityVal = document.getElementById("opacityBar").value*0.01
+R = rangeLevel = rangeLimits(table.getData())
+opaqueNess()
+
+markers = {type:"FeatureCollection",features:[]}
+table.getData().map(a => markers.features.push(turf.point([a.x,a.y],{'n':a.n,'x':a.x,'y':a.y,'z':a.z,'c':0,'d':a.d,'note':a.note})) )
+bnd=L.geoJSON(markers).getBounds(), bNE=bnd._northEast, bSW=bnd._southWest
+line = turf.lineString([[bNE.lng,bNE.lat],[bSW.lng,bSW.lat]]);
+bbox = turf.bbox(line);
+boundary = {"type":"FeatureCollection","features":[turf.bboxPolygon(bbox)]}; 
+0===angle&&map.fitBounds(L.geoJSON(boundary).getBounds())
+boundary=turf.transformRotate(boundary,-angle)
+
+image = L.imageOverlay('dummy.jpg',L.latLngBounds([[bNE.lat,bNE.lng],[bSW.lat,bSW.lng]]),{opacity:1.0, alt:''})//.addTo(map)
+
+domain = turf.bbox(boundary); 
+levels = chroma.limits(rangeLevel,'e',colorSteps); 
+colors = chroma.scale(colorScale).colors(levels.length)
+
+kriging_model = {model:document.getElementById("modelSelect").value,sigma2:0,alpha:100} //'exponential','gaussian','spherical'
+kriging_contours = kriging.getVectorContour(markers,'z', kriging_model, levels);
+
+function sortArea(a,b) {return turf.area(b) - turf.area(a)}
+kriging_contours.features.sort(sortArea)
+kriging_contours = turf.flatten(kriging_contours)
+kriging_contours.features.map(e=>e.properties.z=e.properties.contour_value)
+
+gridsize=250*4,cellsize=1/gridsize //grid:[square|point|hex|triangle] units:[degrees|radians|miles|kilometers]
+gridtype=["point","square","hex","triangle"]
+gridtype.map(a=>eval("idw_"+a+"s=turf.interpolate(markers,cellsize,{gridType:'"+a+"',units:'degrees',property:'z'})"))
+idw_corners  = idw_points.features[0].geometry.coordinates
+idw_contours = turf.isobands(idw_points,levels,{zProperty:'z'});
+idw_contours.features.map(e=>e.properties.z=eval(e.properties.z.replace("-","*0.5+0.5*")))
+
+vectorModel()
+
+void 0===paint.getData()?bounds=turf.flatten(boundary):bounds=turf.flatten(paint.getData());
+b0=(bbox[2]-bbox[0])*0.15,b1=(bbox[3]-bbox[1])*0.15
+voronoi = turf.voronoi(markers,{bbox:[bbox[0]-b0,bbox[1]-b1,bbox[2]+b0,bbox[3]+b1]})
+voronoi.features.map((n,i)=>{m=markers.features[i],n.properties.z=m.properties.z})
+tin=turf.tin(markers,'z')
+tin.features.map(n=>{p=n.properties,p.z=(p.a+p.b+p.c)/3})
+  
+contours=eval(document.getElementById("methodSelect").value)
+if(document.getElementById("methodSelect").value==="idw_contours"){WF.addTo(map)}
+
+//contours=kriging_contours
+  //contours=idw_contours
+  //contours=idw_hexs
+  //contours=idw_squares
+  //contours=idw_triangles
+//contours=voronoi
+//contours=tin
+
+//contours=Intersection(contours,bounds) //check to extrapolate
+
+grids=turf.pointGrid(turf.bbox(boundary),1,{units:'kilometers'})
+
+Markers  = L.geoJSON(markers,{pointToLayer:pointToLayer,onEachFeature:onEachFeatureMarker}).addTo(map)
+Marrows  = L.geoJSON(markers,{pointToLayer:pitchToLayer,onEachFeature:onEachFeatureMarker})//.addTo(map)Grids    = L.geoJSON(grids,gridsOpt) //Dummy
+Contours = Contour(contours,'z').addTo(map) 
+Legends  = Legend(R).addTo(map)
+
+baseMaps = {"None":none,"GoogleMap":gmap,"GoogleSat":gsat,"OpenStreetMap":osm,"OpenStreetMap.HOT":hosm}
+overMaps = null//{"MSPP":image}
+Layers = L.control.layers(baseMaps,overMaps,{position:'topright',collapsed:true})//.addTo(map)
+
+//chart()
+}
+
+function Legend(R){
+legendOpts={
+  position:'topright',width:150,height:10,margin:15,labelFontSize:12, 
+  background:'rgba(255,255,255,0.8)',textColor:'black',steps:colorSteps,decimals:0, 
+  labels:[R[0],(R[0]+R[1])*0.5,R[1]],units:'',title:'',labelTextPosition:'middle', // start|middle|end  
+}
+return L.control.colorBar(chroma.scale(colorScale).domain(R),R,legendOpts)
+}
+
+function Contour(contours,valueProperty){
+contourOpts = {
+  valueProperty:valueProperty,scale:colorScale,steps:colorSteps,mode:'e',//q:quantile, e:equidistant, k:k-means
+  style:styleOpt,onEachFeature:onEachFeatureContour,filter:filterZero
+}
+return L.choropleth(contours,contourOpts)
+}
+
+function htmlLoadFile() {
+e = document.createElement('a'); 
+e.innerHTML = '<input type="file">';
+a = e.firstChild;
+a.addEventListener('change', function() {
+file = a.files[0];
+if (file.name.match(/\.(txt|json|geojson)$/)) {
+  reader = new FileReader();
+  reader.readAsText(file,'utf-8'); 
+  reader.onload = function(){
+  data=JSON.parse(reader.result)
+    markers={type:'FeatureCollection',features:[]}
+    contours={type:'FeatureCollection',features:[]}
+  data.features.forEach(function(a,i){
+    if(i===0&&"MultiPolygon"===a.geometry.type) {paint.setData(a)}
+    else if("Point"===a.geometry.type){markers.features.push(a)}
+    else contours.features.push(a) 
+  })
+  clearMap()
+  Contours = L.choropleth(contours, {valueProperty:'z',scale:colorScale,steps:colorSteps,mode:'e',style:styleOpt,onEachFeature:onEachFeatureContour,}).addTo(map)
+  Markers = L.geoJSON(markers,{pointToLayer:pointToLayer,onEachFeature:onEachFeatureMarker}).addTo(map)
+  map.fitBounds(Contours.getBounds())
+  table.clearData()
+  markers.features.forEach(a=>table.addData(a.properties))
+}} 
+else {$.notify("File not supported, .txt .json or .geojson files only")}
+}); 
+a.click();
+}
+
+function htmlSaveFile() {
+fileName='data.geojson'
+contents={type:'FeatureCollection',features:[]}
+poly=paint.getData()
+poly.properties.color=document.getElementById("colorSelect").value
+void 0!==poly&&contents.features.push(turf.truncate(poly))
+ markers.features.map(a=>contents.features.push(turf.truncate(a)))
+contours.features.map(a=>contents.features.push(turf.truncate(a)))
+a = document.createElement("a");
+file = new Blob([JSON.stringify(contents)],{type:'text/plain'});
+a.href = URL.createObjectURL(file);
+a.download = fileName;
+a.click();
+$.notify(fileName+' has been saved')
+}
+
+///*** CHARTS ***///
+
+function echart(){
+myChart = echarts.init(document.getElementById('chart'),null,{renderer:'canvas',useDirtyRect:false})
+myChart.setOption({
+  tooltip:{},backgroundColor:'white',
+  visualMap:{show:false,dimension:2,min:-1,max:1,
+    inRange:{color:kolor.BREWER.Reds}},
+  xAxis3D:{type:'value'},yAxis3D: {type:'value'},zAxis3D: {type:'value'},
+  grid3D:{viewControl: {projection: 'orthographic'}},
+  series:[{
+  type:'surface',wireframe:{show:true},
+  equation:{x:{step:0.05},y:{step:0.05},z:function(a,t){return Math.abs(a)<.1&&Math.abs(t)<.1?"-":Math.sin(a*Math.PI)*Math.sin(t*Math.PI)}} 
+  }]
+}),window.addEventListener('resize', myChart.resize)
+}
+
+function hchart(){
+Highcharts.chart('chart', {
+chart:{zoomType:'xy'},title:{text:null},subtitle:{text:null},
+yAxis:{title:{text:null}},xAxis:{title:{text:null},gridLineWidth:1},
+series:[//{name:'',type:'column',colorByPoint:false,data:table.getData().map(a=>a.z)}
+  {name:'',type:'bubble',colorByPoint:true,data:table.getData()},
+],
+})
+}
+
+function chartImage(where,image){Highcharts.chart(where,{chart:{plotBackgroundImage:image, /*events:{click:function(event){window.open(image)}}*/},credits: {enabled:false},title: {text:"", style:{fontSize:'15px'}}, subtitle: {text:null},credits: {enabled: false}, yAxis:{title:{text:null}}, xAxis:{title:{text:null}},})}
+
+function chartMeteo(p1,p2,param){
+document.getElementById('chart').innerHTML = "";
+if(param==="windrose"){chartWindRose(p1,p2,48)}
+if(param==="meteogram"){chartMeteogram(p1,p2,48)}
+//if(param==="skewtlogp"){chartSkewTLogP()}
+if(param==="skewtlogp"){chartImage('chart','https://weather.uwyo.edu/upperair/images/2023100100.48327.skewt.parc.gif')}
+if(param==="wtradial"){chartWeatherRadials()}
+map.closePopup()
+}
+
+function chartWindRose(){
+  series=[{name:"< 0.5 m/s",data:[1.81,0.62,0.82,0.59,0.62,1.22,1.61,2.04,2.66,2.96,2.53,1.97,1.64,1.32,1.58,1.51]},{name:"0.5-2 m/s",data:[1.78,1.09,0.82,1.22,2.20,2.01,3.06,3.42,4.74,4.14,4.01,2.66,1.71,2.40,4.28,5.00]},{name:"  2-4 m/s",data:[0.16,0.00,0.07,0.07,0.49,1.55,2.37,1.97,0.43,0.26,1.22,1.97,0.92,0.99,1.28,1.32]},{name:"  4-6 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.30,2.14,0.86,0.00,0.00,0.49,0.79,1.45,1.61,0.76,0.13]},{name:"  6-8 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.13,1.74,0.53,0.00,0.00,0.13,0.30,0.26,0.33,0.66,0.23]},{name:" 8-10 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.00,0.39,0.49,0.00,0.00,0.00,0.00,0.10,0.00,0.69,0.13]},{name:">  10 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.00,0.13,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.03,0.07]},]
+Highcharts.chart('chart', {
+  exporting:{enabled:true},credits:{enabled:false},
+  chart:{type:'column',polar:true,backgroundColor:'rgba(255,255,255,1)'},title:{text:null},subtitle:{text:null},
+  legend:{enabled:true, align:'right',verticalAlign:'top',y:100,layout:'vertical'},
+  xAxis:{categories:['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'],},
+  yAxis:{min:0,endOnTick:false,showLastLabel:true,title:{text:'Frequency (%)'},labels:{format:'{value}%'},reversedStacks:false},
+  tooltip:{valueDecimals:2,valueSuffix:'%'},
+  plotOptions:{series:{stacking:'normal',shadow:false,groupPadding:0,pointPlacement:'on'}},
+  series:series
+})
+
+}
+
+
+function chartWindRoseTMD(lat,lon,hour){
+tmdApi = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/" //forecast/area/box
+tmdApi += "at?lat="+lat+"&lon="+lon;
+tmdApi += "&date="+moment().startOf('hour').format("YYYY-MM-DD");
+tmdApi += "&hour="+moment().startOf('hour').format("H");
+tmdApi += "&fields="+"ws10m,wd10m"; 
+tmdApi += "&duration=+"+hour;
+tmdSet = {"url":tmdApi,"async":true,"crossDomain":true, "method":"GET","headers":{"accept":"application/json","authorization":"Bearer "+tmdKey}}
+tmdTxt = "แผนภูมิลม พิกัด ("+lat.toFixed(3)+","+lon.toFixed(3)+")"
+$.ajax(tmdSet).fail(function(){alert("Too Many Requests")}).done(function(tmdData){
+a=tmdData.WeatherForecasts[0].forecasts
+series=[{name:"< 0.5 m/s",data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{name:"0.5-2 m/s",data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{name:"2-4 m/s",data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{name:"4-6 m/s",data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{name:"6-8 m/s",data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{name:"8-10 m/s",data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{name:"> 10 m/s",data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}]
+for(i=0;i<a.length;i++){b=a[i].data,ws=b.ws10m,wd=b.wd10m,series[Math.round(ws/2)].data[Math.round(wd/22.5)]+=100/a.length} 
+Highcharts.chart('chart', {
+  chart:{type:'column',polar:true},title:{text:tmdTxt},subtitle:{text:null},
+  legend:{align:'right',verticalAlign:'top',y:100,layout:'vertical'},
+  xAxis:{categories:['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'],},
+  yAxis:{min:0,endOnTick:false,showLastLabel:true,title:{text:'Frequency (%)'},labels:{format:'{value}%'},reversedStacks:false},
+  tooltip:{valueDecimals:2,valueSuffix:'%'},
+  plotOptions:{series:{stacking:'normal',shadow:false,groupPadding:0,pointPlacement:'on'}},
+  //series:[{name:"< 0.5 m/s",data:[1.81,0.62,0.82,0.59,0.62,1.22,1.61,2.04,2.66,2.96,2.53,1.97,1.64,1.32,1.58,1.51]},{name:"0.5-2 m/s",data:[1.78,1.09,0.82,1.22,2.20,2.01,3.06,3.42,4.74,4.14,4.01,2.66,1.71,2.40,4.28,5.00]},{name:"  2-4 m/s",data:[0.16,0.00,0.07,0.07,0.49,1.55,2.37,1.97,0.43,0.26,1.22,1.97,0.92,0.99,1.28,1.32]},{name:"  4-6 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.30,2.14,0.86,0.00,0.00,0.49,0.79,1.45,1.61,0.76,0.13]},{name:"  6-8 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.13,1.74,0.53,0.00,0.00,0.13,0.30,0.26,0.33,0.66,0.23]},{name:" 8-10 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.00,0.39,0.49,0.00,0.00,0.00,0.00,0.10,0.00,0.69,0.13]},{name:">  10 m/s",data:[0.00,0.00,0.00,0.00,0.00,0.00,0.13,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.03,0.07]},]
+  series:series
+})
+})
+}
+
+function chartMeteogram(lat,lon,hour) {
+tmdApi = "https://data.tmd.go.th/nwpapi/v1/forecast/location/hourly/" //forecast/area/box
+tmdApi += "at?lat="+lat+"&lon="+lon;
+tmdApi += "&date="+moment().startOf('hour').format("YYYY-MM-DD");
+tmdApi += "&hour="+moment().startOf('hour').format("H");
+tmdApi += "&fields="+"tc,rain,cond,psfc,slp,rh,ws10m,wd10m,cloudlow,cloudmed,cloudhigh"; //"tc,rain,cond,psfc,slp,rh,ws10m,wd10m,ws925,wd925,ws850,wd850,ws700,wd700,ws500,wd500,ws200,wd200";
+tmdApi += "&duration=+"+hour;
+tmdSet = {"url":tmdApi,"async":true,"crossDomain":true, "method":"GET","headers":{"accept":"application/json","authorization":"Bearer "+tmdKey}}
+tmdTxt = "แผนภูมิอุตุนิยมวิทยา พิกัด ("+lat.toFixed(3)+","+lon.toFixed(3)+")"
+$.ajax(tmdSet).fail(function(){alert("Too Many Requests")}).done(function(tmdData){
+a=tmdData.WeatherForecasts[0].forecasts, //console.log(a) //a=[{"time":"2021-07-31T07:00:00+07:00","data":{"cond":3,"psfc":100803.93,"rain":0,"slp":1008.83,"tc":28.17,"wd10m":224.96,"wd200":79.81,"wd500":71.5,"wd700":253.55,"wd850":267.93,"wd925":259.96,"ws10m":2.06,"ws200":16.29,"ws500":2.79,"ws700":6.9,"ws850":13.78,"ws925":8.26}},{"time":"2021-07-31T08:00:00+07:00","data":{"cond":3,"psfc":100820.64,"rain":0,"slp":1008.97,"tc":29.12,"wd10m":235.6,"wd200":79.69,"wd500":76.44,"wd700":250.67,"wd850":272.76,"wd925":264.34,"ws10m":3.3,"ws200":16.44,"ws500":2.37,"ws700":6.79,"ws850":14.83,"ws925":7.16}},{"time":"2021-07-31T09:00:00+07:00","data":{"cond":3,"psfc":100859.46,"rain":0,"slp":1009.41,"tc":30.07,"wd10m":244.84,"wd200":80.45,"wd500":88.14,"wd700":264.22,"wd850":271.08,"wd925":259.24,"ws10m":3.18,"ws200":17.43,"ws500":1.65,"ws700":6.21,"ws850":15.46,"ws925":6.54}},]
+condData=[],tempData=[],rainData=[],presData=[],prezData=[],rhumData=[],windData=[],windL925=[],windL850=[],windL700=[],windL500=[],windL200=[],cloudLow=[],cloudMed=[],cloudHigh=[];
+for(i=0;i<a.length;i++){b=a[i],c=b.data,d=c.cond,c.zlp=+(c.psfc*0.01).toFixed(2);
+  //symbUrl="http://www.nwp.tmd.go.th/storage/images/i"; 1==d?s="1":2==d?s="2":3==d?s="3":4==d?s="4":5==d?s="5":6==d?s="6":7==d?s="7":8==d?s="8":9==d?s="9":10==d?s="10":11==d?s="11":12==d?s="12":s="03";
+  //symbUrl="https://unpkg.com/@yr/weather-symbols@7.0.0/dist/png/30/"; 1==d?s="02d":2==d?s="03d":3==d?s="04":4==d?s="04":5==d?s="46":6==d?s="09":7==d?s="10":8==d?s="22":9==d?s="50":10==d?s="13":11==d?s="49":12==d?s="01d":s="04";
+  //symbUrl="https://basmilius.github.io/weather-icons/production/fill/all/"; 1==d?s="clear-day":2==d?s="partly-cloudy-day":3==d?s="cloudy":4==d?s="overcast":5==d?s="drizzle":6==d?s="rain":7==d?s="umbrella":8==d?s="thunderstorms-rain":9==d?s="snowflake":10==d?s="snow":11==d?s="thermometer-colder":12==d?s="thermometer-warmer":s="unknown";
+  symbUrl="https://unpkg.com/weather-underground-icons@1.0.0/dist/icons/black/svg/"; 1==d?s="clear":2==d?s="partlycloudy":3==d?s="cloudy":4==d?s="mostlycloudy":5==d?s="flurries":6==d?s="chancerain":7==d?s="rain":8==d?s="tstorms":9==d?s="snow":10==d?s="chancesnow":11==d?s="chancesleet":12==d?s="sunny":s="unknown";
+  1==d?e="ท้องฟ้าแจ่มใส (Clear)":2==d?e="มีเมฆบางส่วน (Partly cloudy)":3==d?e="เมฆเป็นส่วนมาก (Cloudy)":4==d?e="มีเมฆมาก (Overcast)":5==d?e="ฝนตกเล็กน้อย (Light rain)":6==d?e="ฝนปานกลาง (Moderate rain)":7==d?e="ฝนตกหนัก (Heavy rain)":8==d?e="ฝนฟ้าคะนอง (Thunderstorm)":9==d?e="อากาศหนาวจัด (Very cold)":10==d?e="อากาศหนาว (Cold)":11==d?e="อากาศเย็น (Cool)":12==d?e="อากาศร้อนจัด (Very hot)":s="อื่นๆ (Others)";
+  //condData.push({x:+moment(b.time),y:c.tc+3,cond:d,detail:e,marker:{symbol:"url("+symbUrl+s+".png)",width:32,height:32}})
+  condData.push({x:+moment(b.time),y:c.tc+3.0,cond:d,detail:e,marker:{symbol:"url("+symbUrl+s+".svg)",width:32,height:32}})
+  tempData.push({x:+moment(b.time),y:c.tc})
+  rainData.push({x:+moment(b.time),y:c.rain})
+  presData.push({x:+moment(b.time),y:c.slp})
+  prezData.push({x:+moment(b.time),y:c.zlp}) 
+  rhumData.push({x:+moment(b.time),y:c.zlp+10.0,z:c.rh}) 
+  windData.push({x:+moment(b.time),value:c.ws10m,direction:c.wd10m})
+  cloudHigh.push({x:+moment(b.time),y:c.slp+15.0,z:c.cloudhigh}) 
+  cloudMed.push({x:+moment(b.time),y:c.slp+10.0,z:c.cloudmed}) 
+  cloudLow.push({x:+moment(b.time),y:c.slp+5.0,z:c.cloudlow}) 
+  //windL925.push({x:+moment(b.time),value:c.ws925,direction:c.wd925})
+  //windL850.push({x:+moment(b.time),value:c.ws850,direction:c.wd850})
+  //windL700.push({x:+moment(b.time),value:c.ws700,direction:c.wd700})
+  //windL500.push({x:+moment(b.time),value:c.ws500,direction:c.wd500})
+  //windL200.push({x:+moment(b.time),value:c.ws200,direction:c.wd200})
+} 
+
+Highcharts.chart(chart,{ 
+  chart: {marginBottom:25, marginRight:25, marginTop:40, plotBorderWidth:1, alignTicks:false, scrollablePlotArea:{minWidth:1440}},
+  title: {text:tmdTxt, useHTML:true, align:'center', style:{color:"black", fontWeight:"bold", fontSize:10}},
+  credits: {enabled:true, text:'TMD | Highcharts | WU Icons', href:"https://peter.build/weather-underground-icons/", position:{x:-40}},
+  tooltip: {shared:true, useHTML:true, outside: false, headerFormat:'<b>{point.x:%A %e %B %Y %H:%M} (FST)</b><br>' +'<b>{point.point.detail}</b><br>'},
+  plotOptions: {series:{pointPlacement:'between', pointWidth:20},bubble:{minSize:5,maxSize:50}},
+  legend: {enabled: false},
+  xAxis: [
+    {type: 'datetime', tickInterval:2*36e5, minorTickInterval:36e5, tickLength:0, gridLineWidth:1, gridLineColor:(Highcharts.theme && Highcharts.theme.background2) || '#F0F0F0', startOnTick:false, endOnTick:false, minPadding:0, maxPadding:0, offset:0, showLastLabel:true, labels:{ format:'{value:%H}'}, crosshair:true}, 
+    {linkedTo:0, type: 'datetime', tickInterval:24*36e5, labels:{format:'{value:<span style="font-size:12px; font-weight:bold">%a</span> %b %e}', align:'left', x:3, y:-5},opposite: true,tickLength: 20,gridLineWidth: 1}],
+  yAxis: [
+    {title: {text:null}, labels:{format:'{value}°',style:{fontSize:'10px'}, x:-3},plotLines: [{value:0, color:'grey', width:1, zIndex:2}], maxPadding:0.3, minRange:8, tickInterval:1, gridLineColor:(Highcharts.theme && Highcharts.theme.background2) || 'lightgrey'}, 
+    {title: {text:null}, labels:{enabled:false}, gridLineWidth:0, tickLength:0, minRange:10, min:0}, 
+    {title: {text:'hPa', offset:0, align:'high', rotation:0, style:{fontSize:'10px', color:'brown'}, textAlign:'left', x:3}, labels:{style:{fontSize:'8px', color:'brown'}, y:2, x:3}, gridLineWidth:0, opposite:true, showLastLabel:false, allowDecimals:false}],
+  series: [
+    //{data:windL200, name:'ลมที่ 200 hPa' , type:'windbarb', color:'lightgrey', lineWidth:1.5, vectorLength:15, yOffset:-150, tooltip:{valueSuffix:' m/s'}}, 
+    //{data:windL500, name:'ลมที่ 500 hPa' , type:'windbarb', color:'lightgrey', lineWidth:1.5, vectorLength:15, yOffset:-120, tooltip:{valueSuffix:' m/s'}}, 
+    //{data:windL700, name:'ลมที่ 700 hPa' , type:'windbarb', color:'lightgrey', lineWidth:1.5, vectorLength:15, yOffset:-90, tooltip:{valueSuffix:' m/s'}}, 
+    //{data:windL850, name:'ลมที่ 850 hPa' , type:'windbarb', color:'lightgrey', lineWidth:1.5, vectorLength:15, yOffset: -60, tooltip:{valueSuffix:' m/s'}}, 
+    //{data:windL925, name:'ลมที่ 925 hPa' , type:'windbarb', color:'lightgrey', lineWidth:1.5, vectorLength:15, yOffset: -30, tooltip:{valueSuffix:' m/s'}}, 
+    {data:cloudHigh, name:'ปริมาณเมฆระดับสูง' , type:'bubble', color:'darkgrey', yAxis:2, tooltip:{useHTML:true,pointFormat:'ปริมาณเมฆระดับชั้นสูง: {point.z}%'}}, 
+    {data:cloudMed, name:'ปริมาณเมฆระดับกลาง' , type:'bubble', color:'silver', yAxis:2, tooltip:{useHTML:true,pointFormat:'ปริมาณเมฆระดับชั้นกลาง: {point.z}%'}}, 
+    {data:cloudLow, name:'ปริมาณเมฆระดับต่ำ' , type:'bubble', color:'lightgrey', yAxis:2, tooltip:{useHTML:true,pointFormat:'ปริมาณเมฆระดับชั้นต่ำ: {point.z}%'}}, 
+    {data:rhumData, name:'ความชื้นสัมพัทธ์' , type:'bubble', color:'aqua', yAxis:2, tooltip:{useHTML:true,pointFormat:'ความชื้นสัมพัทธ์: {point.z}%'}}, 
+    {data:windData, name:'ลมที่ 10 เมตร' , type:'windbarb', color:'tomato'   , lineWidth:1.5, vectorLength:15, yOffset: -10, tooltip:{valueSuffix:' m/s'}},
+    {data:presData, name:'ความกดอากาศ(พื้นน้ำ)', type:'line', color:'blue'  , marker:{enabled:false}, shadow:false, dashStyle:'shortdot', yAxis: 2,tooltip: {valueSuffix:' hPa'}}, 
+    {data:prezData, name:'ความกดอากาศ(พื้นดิน)', type:'line', color:'brown', marker:{enabled:false}, shadow:false, dashStyle:'shortdot', yAxis: 2,tooltip: {valueSuffix:' hPa'}}, 
+    {data:rainData, name:'ปริมาณฝน' , type:'column', color:'rgba(0,0,255,0.8)',yAxis:1, groupPadding:0, pointPadding:0, grouping:false, dataLabels:{enabled: true, formatter:function() {if(this.y>0){return this.y;}}, style:{fontSize: '8px', color:'grey'}}, tooltip:{valueSuffix:' mm'}}, 
+    {data:tempData, name:'อุณหภูมิ', type:'spline', color:'rgba(255,0,0,0.8)', marker:{enabled:false, states:{hover:{enabled:true}}}, tooltip:{valueSuffix:' °C'}}, 
+    {data:condData, name:'สภาพอากาศ', type:'', color:'rgba(0,0,0,0)', marker:{enabled:true,states:{hover:{enabled:true}}}, enableMouseTracking:true, tooltip:{pointFormat:''}}, 
+  ],
+})
+})
+}
+
+//chartSkewTLogP()
+function chartSkewTLogP(){ 
+//https://weather.uwyo.edu/upperair/sounding.html -> press,hght,temp,dwpt,rhum,mixr,wdir,wspd,thta,thte,thtv
+//WMO=[48303,'ChiangRai',19.96,99.88,393],[48327,'ChiangMai',18.77,98.97,314],[48354,'UdonThani',17.38,102.81,178],[48378,'Phitsanulok',16.80,100.28,46],[48381,'KhonKaen',16.46,102.79,194],[48400,'NakhonSawan',15.67,100.13,35],[48407,'UbonRatchathani',15.25,104.87,124],[48431,'NakhonRatchasima',14.97,102.08,187],[48453,'Bangna',13.67,100.61,3],[48455,'Bangkok',13.73,100.56,4],[48462,'Aranyaprathet',13.69,102.50,49],[48480,'Chanthaburi',12.61,102.10,4],[48500,'PrachuapKhirikhan',11.84,99.81,6],[48517,'Chumphon',10.50,99.19,6],[48565,'PhuketAirp.',08.11,98.31,9],[48568,'Songkhla',07.18,100.61,7],
+data=[[1009.0,10,26.6,23.9,85,18.92,285,2,299.0,354.4,302.4],[1000.0,78,26.8,23.3,81,18.39,295,8,299.9,354.0,303.2],[982.0,238,26.0,22.7,82,18.07,290,14,300.7,354.0,303.9],[925.0,766,23.2,20.8,86,17.03,330,17,303.0,353.7,306.1],[908.0,928,22.7,19.2,80,15.65,340,17,304.2,351.0,307.0],[873.0,1271,21.8,15.7,68,13.03,345,27,306.6,346.0,309.0],[860.0,1402,21.4,14.4,64,12.13,339,26,307.5,344.4,309.8],[850.0,1503,20.4,14.4,68,12.28,335,25,307.5,344.9,309.8],[847.0,1533,20.2,14.3,69,12.23,335,25,307.6,344.9,309.9],[760.0,2455,14.5,10.8,78,10.83,0,25,311.1,344.7,313.2],[735.0,2739,12.8,9.8,82,10.42,350,23,312.2,344.6,314.2],[700.0,3154,10.2,8.2,87,9.84,0,21,313.8,344.6,315.6],[694.0,3226,9.6,8.0,90,9.79,1,21,313.9,344.6,315.7],[650.0,3770,8.0,1.0,61,6.37,11,16,318.0,338.6,319.2],[642.0,3872,7.0,3.9,81,7.95,13,16,318.0,343.4,319.5],[589.0,4571,3.2,-2.4,67,5.49,25,10,321.5,339.6,322.6],[532.0,5396,-1.2,-9.8,52,3.43,70,12,325.6,337.4,326.3],[524.0,5519,-1.9,-10.9,50,3.19,71,11,326.3,337.3,326.9],[500.0,5890,-4.9,-7.8,80,4.28,75,8,327.0,341.6,327.9],[499.0,5906,-4.9,-7.6,81,4.35,76,8,327.2,342.0,328.1],[495.0,5969,-4.7,-11.7,58,3.17,78,7,328.2,339.2,328.8],[483.0,6162,-5.7,-11.5,63,3.29,85,6,329.2,340.7,329.9],[458.0,6578,-7.9,-11.2,77,3.57,81,7,331.6,344.0,332.3],[446.0,6784,-8.9,-19.9,41,1.78,79,8,332.8,339.3,333.2],[432.0,7031,-10.3,-16.3,61,2.49,77,9,334.1,343.0,334.6],[425.0,7157,-11.3,-14.7,76,2.89,76,9,334.4,344.7,335.0],[421.0,7229,-11.8,-15.3,75,2.77,75,10,334.7,344.6,335.2],[410.0,7432,-13.1,-17.1,72,2.46,75,10,335.5,344.4,336.0],[407.0,7488,-13.3,-21.3,51,1.73,75,10,335.9,342.3,336.3],[400.0,7620,-14.3,-17.7,75,2.39,75,10,336.3,345.0,336.8],[390.0,7811,-15.7,-18.5,79,2.29,64,10,336.9,345.3,337.4],[386.0,7889,-16.2,-20.2,71,1.99,60,10,337.3,344.6,337.7],[356.0,8493,-19.9,-33.9,28,0.61,72,11,340.2,342.6,340.3],[348.0,8661,-21.1,-31.1,40,0.82,75,12,340.8,344.0,340.9],[344.0,8747,-21.7,-29.7,48,0.95,68,12,341.1,344.8,341.3],[338.0,8876,-22.3,-35.3,30,0.56,56,13,342.0,344.2,342.1],[332.0,9006,-23.3,-33.8,38,0.67,45,14,342.3,345.0,342.5],[313.0,9435,-26.7,-28.7,83,1.15,61,15,343.4,347.9,343.7],[308.0,9551,-27.4,-36.2,43,0.56,65,16,344.1,346.4,344.2],[300.0,9740,-28.5,-48.5,13,0.16,55,16,345.1,345.8,345.1],[299.0,9764,-28.5,-49.5,11,0.14,55,15,345.4,346.0,345.4],[290.0,9981,-30.2,-47.0,18,0.19,50,14,346.0,346.8,346.0],[275.0,10358,-33.3,-42.8,38,0.32,70,17,346.9,348.2,346.9],[274.0,10383,-33.5,-42.5,40,0.33,70,17,346.9,348.3,347.0],[253.0,10937,-38.0,-51.4,23,0.13,65,16,348.2,348.8,348.2],[250.0,11020,-38.7,-52.7,21,0.12,70,16,348.4,348.9,348.4],[247.0,11103,-38.9,-55.9,15,0.08,82,17,349.3,349.7,349.3],[244.0,11185,-39.6,-56.1,16,0.08,95,19,349.5,349.9,349.5],[229.0,11615,-43.1,-57.1,20,0.07,90,22,350.5,350.9,350.6],[227.0,11674,-43.5,-52.5,36,0.13,90,22,350.8,351.4,350.8],[218.0,11944,-45.7,-57.7,25,0.07,87,24,351.5,351.8,351.5],[214.0,12067,-46.7,-50.1,68,0.18,85,25,351.8,352.6,351.8],[203.0,12413,-49.7,-51.8,78,0.16,81,27,352.4,353.1,352.4],[200.0,12510,-50.7,-53.7,70,0.13,80,27,352.3,352.9,352.4],[191.0,12808,-53.6,-56.3,72,0.10,75,25,352.3,352.7,352.3],[189.0,12876,-54.3,-56.9,73,0.09,78,26,352.3,352.7,352.3],[180.0,13182,-56.8,-60.4,63,0.06,90,27,353.2,353.5,353.2],[172.0,13466,-59.0,-63.6,55,0.04,95,27,354.1,354.3,354.1],[156.0,14078,-63.9,-70.5,40,0.02,80,21,355.8,355.8,355.8],[153.0,14199,-64.9,-71.9,37,0.02,87,22,356.1,356.1,356.1],[150.0,14320,-65.9,-71.9,43,0.02,95,23,356.4,356.4,356.4],[147.0,14440,-66.8,-72.8,42,0.01,105,23,356.8,356.9,356.8],[135.0,14945,-70.7,-76.7,41,0.01,95,27,358.7,358.8,358.7],[124.0,15449,-74.6,-80.6,39,0.00,110,37,360.5,360.6,360.5],[121.0,15594,-75.7,-81.7,39,0.00,116,31,361.0,361.0,361.0],[117.0,15787,-76.8,-82.8,38,0.00,125,23,362.4,362.4,362.4],[107.0,16298,-79.9,-85.9,37,0.00,107,19,366.0,366.0,366.0],[101.0,16624,-81.1,-87.1,36,0.00,95,16,369.7,369.8,369.7],[100.0,16680,-80.9,-86.9,36,0.00,85,14,371.2,371.2,371.2]]
+series=[],data.map(a=>series.push({press:a[0],hght:a[1],temp:a[2],dwpt:a[3],wdir:a[6],wspd:a[7]}))
+SkewT=function(a){function D(){c=parseInt(b.style("width"),10)-10,d=c,p=c-e.left-e.right,q=c-e.top-e.bottom,r=d3.scaleLinear().range([0,p]).domain([-45,50]),s=d3.scaleLog().range([0,q]).domain([i,h]),t=d3.axisBottom(r).tickSize(0,0).ticks(10),u=d3.axisLeft(s).tickSize(0,0).tickValues(j).tickFormat(d3.format(".0d")),v=d3.axisRight(s).tickSize(0,0).tickValues(k)}function E(a,b){switch(b){case"kt":return 1.943844492*a;case"kmh":return 3.6*a;default:return a}}function F(){A.selectAll("*").remove(),D(),y.attr("width",p+e.right+e.left).attr("height",q+e.top+e.bottom),z.attr("transform","translate("+e.left+","+e.top+")"),G(),H(),J(w)}var p,q,r,s,t,u,v,b=d3.select(a),c=parseInt(b.style("width"),10),d=c,e={top:30,right:40,bottom:20,left:35},f=Math.PI/180,g=Math.tan(55*f),h=1050,i=100,j=[1000,850,700,500,300,200,100],k=[950,900,800,750,650,600,550,450,400,350,250,150],l=25,o=(d3.scaleLinear().range([0,300]).domain([0,150]),d3.scaleLinear(),d3.bisector(function(a){return a.press}).left),w=[],x="kt",y=b.append("svg").attr("id","svg"),z=y.append("g").attr("id","container"),A=z.append("g").attr("id","skewtbg").attr("class","skewtbg"),B=z.append("g").attr("class","skewt"),C=z.append("g").attr("class","windbarb");d3.select(window).on("resize",F);var G=function(){A.append("clipPath").attr("id","clipper").append("rect").attr("x",0).attr("y",0).attr("width",p).attr("height",q),A.selectAll("templine").data(d3.range(-100,45,10)).enter().append("line").attr("x1",function(a){return r(a)-.5+(s(h)-s(100))/g}).attr("x2",function(a){return r(a)-.5}).attr("y1",0).attr("y2",q).attr("class",function(a){return 0==a?"tempzero":"gridline"}).attr("clip-path","url(#clipper)"),A.selectAll("pressureline").data(j).enter().append("line").attr("x1",0).attr("x2",p).attr("y1",function(a){return s(a)}).attr("y2",function(a){return s(a)}).attr("class","gridline");for(var a=d3.range(i,h+1,10),b=d3.range(-30,240,20),c=[],d=0;d<b.length;d++){for(var e=[],f=0;f<a.length;f++)e.push(b[d]);c.push(e)}var k=d3.line().curve(d3.curveLinear).x(function(b,c){return r((273.15+b)/Math.pow(1e3/a[c],.286)-273.15)+(s(h)-s(a[c]))/g}).y(function(b,c){return s(a[c])});A.selectAll("dryadiabatline").data(c).enter().append("path").attr("class","gridline").attr("clip-path","url(#clipper)").attr("d",k),A.append("line").attr("x1",p-.5).attr("x2",p-.5).attr("y1",0).attr("y2",q).attr("class","gridline"),A.append("g").attr("class","x axis").attr("transform","translate(0,"+(q-.5)+")").call(t),A.append("g").attr("class","y axis").attr("transform","translate(-0.5,0)").call(u),A.append("g").attr("class","y axis ticks").attr("transform","translate(-0.5,0)").call(v)},H=function(){var a=d3.range(5,105,5),b=z.append("defs");a.forEach(function(a){var c=b.append("g").attr("id","barb"+a),d=Math.floor(a/50),e=Math.floor((a-50*d)/10),f=Math.floor((a-50*d-10*e)/5),g=l;c.append("line").attr("x1",0).attr("x2",0).attr("y1",0).attr("y2",l);for(var h=0;h<d;h++)c.append("polyline").attr("points","0,"+g+" -10,"+g+" 0,"+(g-4)).attr("class","flag"),g-=7;for(h=0;h<e;h++)c.append("line").attr("x1",0).attr("x2",-10).attr("y1",g).attr("y2",g+4),g-=3;for(h=0;h<f;h++)c.append("line").attr("x1",0).attr("x2",-5).attr("y1",g).attr("y2",g+2),g-=3})},I=function(a){var b=a.reverse(),c=B.append("g").attr("class","focus tmpc").style("display","none");c.append("circle").attr("r",4),c.append("text").attr("x",9).attr("dy",".35em");var d=B.append("g").attr("class","focus dwpc").style("display","none");d.append("circle").attr("r",4),d.append("text").attr("x",-9).attr("text-anchor","end").attr("dy",".35em");var e=B.append("g").attr("class","focus").style("display","none");e.append("text").attr("x",0).attr("text-anchor","start").attr("dy",".35em");var f=B.append("g").attr("class","focus windspeed").style("display","none");f.append("text").attr("x",0).attr("text-anchor","start").attr("dy",".35em"),z.append("rect").attr("class","overlay").attr("width",p).attr("height",q).on("mouseover",function(){c.style("display",null),d.style("display",null),e.style("display",null),f.style("display",null)}).on("mouseout",function(){c.style("display","none"),d.style("display","none"),e.style("display","none"),f.style("display","none")}).on("mousemove",function(){var a=s.invert(d3.mouse(this)[1]),i=o(b,a,1,b.length-1),j=b[i-1],k=b[i],l=a-j.press>k.press-a?k:j;c.attr("transform","translate("+(r(l.temp)+(s(h)-s(l.press))/g)+","+s(l.press)+")"),d.attr("transform","translate("+(r(l.dwpt)+(s(h)-s(l.press))/g)+","+s(l.press)+")"),e.attr("transform","translate(0,"+s(l.press)+")"),c.select("text").text(Math.round(l.temp)+"°C"),d.select("text").text(Math.round(l.dwpt)+"°C"),e.select("text").text("-- "+Math.round(l.hght)+" m"),f.attr("transform","translate("+(p-65)+","+s(l.press)+")"),f.select("text").text(Math.round(10*E(l.wspd,x))/10+" "+x)})},J=function(a){if(w=a,B.selectAll("path").remove(),C.selectAll("use").remove(),0!=w.length){var b=w.filter(function(a){return a.temp>-1e3&&a.dwpt>-1e3}),c=[];c.push(b);var d=d3.line().curve(d3.curveLinear).x(function(a,b){return r(a.temp)+(s(h)-s(a.press))/g}).y(function(a,b){return s(a.press)}),f=(B.selectAll("templines").data(c).enter().append("path").attr("class",function(a,b){return b<10?"temp skline":"temp mean"}).attr("clip-path","url(#clipper)").attr("d",d),d3.line().curve(d3.curveLinear).x(function(a,b){return r(a.dwpt)+(s(h)-s(a.press))/g}).y(function(a,b){return s(a.press)})),k=(B.selectAll("tempdewlines").data(c).enter().append("path").attr("class",function(a,b){return b<10?"dwpt skline":"dwpt mean"}).attr("clip-path","url(#clipper)").attr("d",f),b.filter(function(a){return a.wdir>=0&&a.wspd>=0&&a.press>=i}));C.selectAll("barbs").data(k).enter().append("use").attr("xlink:href",function(a){return"#barb"+5*Math.round(E(a.wspd,"kt")/5)}).attr("transform",function(a,b){return"translate("+p+","+s(a.press)+") rotate("+(a.wdir+180)+")"});I(c[0])}},K=function(a){B.selectAll("path").remove(),C.selectAll("use").remove(),z.append("rect").attr("class","overlay").attr("width",p).attr("height",q).on("mouseover",function(){return!1}).on("mouseout",function(){return!1}).on("mousemove",function(){return!1})};this.drawBackground=G,this.plot=J,this.clear=K,D(),F()};
+skewt=new SkewT('#chart');
+skewt.plot(series)  
+/*
+  series=[{name:"temp",color:"red",data:[]},{name:"dwpt",color:"blue",data:[]}]
+  data.map(a=>series[0].data.push([(a.press),a.temp]))
+  data.map(a=>series[1].data.push([(a.press),a.dwpt]))
+Highcharts.chart('chart', {
+chart: {type:'spline',inverted:true},title: {text:'Skew-T Log-P Diagram',},subtitle:{text:null},
+  xAxis: {reversed:true, title: {text:'Altitude (km)'},type:'logarithmic'},
+  yAxis: {reversed:false,title:{text:'Temperature'},labels:{format:'{value}°'},lineWidth:1},
+  tooltip: {headerFormat:'<b>{series.name}</b><br/>',pointFormat:'{point.x} km: {point.y}°C'},
+  legend: {enabled:false},
+  //series: [{name:'Temperature',data:[[0,15],[10,-50],[20,-56.5],[30,-46.5],[40,-22.1],[50,-2.5],[60,-27.7],[70,-55.7],[80,-76.5]]}]
+  series: series,
+})
+*/
+}
+
+//chartWeatherRadials()
+function chartWeatherRadials(){
+//http://www.aws-observation.tmd.go.th/main/main
+//BangNa (2018)
+tavg=[25.6,27,26.6,28.1,28.7,28.1,27.3,28.3,28.9,23.8,23.9,23.2,23.1,24.4,24.6,26,27.5,27.4,27.8,27.6,27.8,28.7,29,26.8,27.7,28.3,27.7,28.3,28.5,28.3,26.1,26.7,26.4,24,24.6,24.4,23.3,24.6,26,26.9,27.2,27.1,26.9,25.6,27.2,28.2,28.2,28.4,28.1,27.8,28.5,28.7,27.9,26.4,30,,28,26.5,28.5,29,28.9,29.3,29.1,29.9,29.7,29.4,29.5,23.9,26,27.5,28.7,29.5,29.4,29.2,28.9,29.4,29.7,30,30.2,29.3,28.3,29.4,30.1,29.6,30.1,27.9,29.6,29.1,29.9,28.6,27.1,26.8,29.3,29.2,28.6,29.2,23.9,26,28.4,30.4,30.2,30.3,30.5,30.6,30.5,30.8,25.5,28.7,30.3,30.3,30.5,30.7,31.3,31,30.5,28.8,28.1,24,27.4,25.6,27.3,28.6,28.4,29.2,30,29.6,29.4,29.9,30.5,30.2,27.9,30,29.8,27.9,29.5,31.2,30.8,29.6,30.4,30.5,29.4,26.8,29.1,27.2,29.1,27.9,29.1,30.1,29.4,29.1,29.4,29.8,30.1,30.7,30.2,30.4,28.8,29.2,28.4,28.2,29.2,29.8,30.1,30.1,30.1,28.8,28.6,29.7,28.7,30,30.1,29.8,30.3,30.5,30,28.7,28,26.3,28.5,29.4,28.7,28.7,28.5,28.2,28.7,29.6,28.2,29.6,29.6,27.7,28.8,28.7,29,29.5,28.7,28.9,28.2,27.5,28.5,28.8,29.8,30.2,28.6,28.8,29.3,29.1,29.5,29.6,29.7,28,27.3,28.6,29,29.3,29.3,29.5,28.4,27.1,27.6,28.8,28.7,28.6,28.2,28.9,28.9,29.1,27.7,28.6,28.9,28,28.4,28.5,29.2,28.4,28.1,27.8,26.8,26.7,26.3,27,28.4,28.2,27.8,29,29.6,27.4,27.3,26.4,28.6,30.2,28.1,27.5,28,29.7,27.1,27.2,26.8,27.7,28.5,29.4,27.9,27.2,27.6,29.1,29.2,27.5,26.3,28.7,29.8,30.2,30,28.5,28.5,27.7,26.5,29,28.4,27.1,27.3,28.4,27.3,28.2,28.6,29.8,29.3,26.6,28.9,29.2,29.9,29.6,28.9,29,26.3,26.3,27.8,26.9,28.1,27.9,28.5,29.3,29,29.8,28.9,27.6,26,26.8,28.4,28.9,30.1,29.9,29.5,29,26.1,27.8,28.8,29.5,27.6,29.2,29.7,29.8,28.3,28.5,28.1,29,30,29.6,28.5,28.2,27.8,28.5,26.5,26.3,28.6,28.4,29.6,29.7,30.1,30.3,30,29.6,30,25.7,27.1,28.2,28.8,27.3,26.8,27,28,28.4,27.3,27.4,28.1,28.2,28.9,30.3,29.9,28.5,27.8,27.4,28.6,28.3,26.4,26.6,26.3]
+tmax=[30,31.2,31.2,33.3,35,33.8,32.2,33.6,34.2,27.5,27.9,27.9,27.6,29.5,30.4,32.8,33.7,33.2,33.8,33,33.7,34.3,34.4,32,32.3,32.4,31.7,32.2,32.8,32.8,31.2,31,28.9,26.3,28.5,28.4,27.9,31.2,31.4,31.3,32.1,31.6,32.1,31.3,33.6,33.9,33.5,33.2,32.1,32.5,33.2,33.2,32.3,30.5,33.4,,33.4,32.3,33.9,33.5,33.4,33.8,34,34.5,34.9,33.9,34.7,26.5,31.3,33,33.8,34.1,32.8,33.5,33,33.7,33.4,34,34.6,34.3,33.3,33.1,34.8,33.4,33.8,32.1,32.9,33,33.8,32.9,31.3,32.3,34,33.5,33.3,34.6,26.8,30,33.8,35.3,33.8,34.2,34.8,34.7,34.4,35.6,32.9,34.1,34,34,34.2,34.9,35,34.5,34,32.4,35,26.4,32.4,28.8,32.3,33.5,33.9,34.7,34.2,33.4,34.1,34.6,35.1,35.2,34.5,35.1,34.6,34.9,33.1,34.9,34.8,34.2,34.9,35.5,34.4,32.1,34.7,31.5,33.2,33.7,34.4,35.1,33.8,33.8,34,34.3,35.1,35.6,35.2,34.1,34.4,32.3,30.8,29.5,33.4,32.4,33.6,34,33.7,33.9,32.6,34,33.5,33.9,33.3,33.7,34,34.4,34.3,33,33.2,30.3,33.2,33.6,33.7,34.3,34.7,33.5,32.7,32.7,33.7,33,34.3,33.7,32.3,31.8,32.4,33.7,32.8,33.2,31.7,28.8,31.9,31.7,33.4,33.1,33.5,33.2,32.5,32.5,33.3,33.7,33.2,33.2,32.4,32.8,33.3,33.3,32.6,33,32.1,30.2,31.7,32.8,32.2,31.7,31.5,31.2,31.5,32.2,32.8,31.9,32,32.3,31.2,31.8,32,33.1,32.7,32.1,31.1,30.4,31.3,32.4,31.8,31.5,32,32.6,34,32.7,31.4,32.1,33.9,35,32.3,31.7,33.4,35.1,32.2,34.4,31.6,33.1,33.3,32.3,32.3,29.9,34.2,34.5,35.1,34.4,31.3,33.8,33.5,35.8,35.1,34.1,34.1,34.4,32.5,33.2,33.7,32.1,32.6,33.8,33.2,33.7,33.8,34,33.6,32.6,34.8,33.5,33.6,34,35.4,34.1,32.5,29.9,33.3,33.9,32.7,33,35,34.7,33.4,33.9,32.9,31.7,31.4,32.6,33.7,34.6,35.2,34.1,33.9,32.3,28.6,31.3,33.5,34.9,32.4,34.1,34.6,34.3,33.2,33.8,34.5,35,35.5,34.7,33.4,33.8,34,33.4,31.2,29.9,34,33.5,34.7,35.4,35.5,35.3,35.6,35.1,35.2,27.4,30.7,31.5,32.8,29.7,30.9,30.7,31.7,33.2,31.4,31.6,33.3,34.2,34,35.4,34.2,33.5,34.2,33.5,34.1,33.2,32.1,30.6,30.9]
+tmin=[21,22.2,21.9,22.1,24,25,24.4,24.5,23,21.8,20.3,18.6,19.1,19.9,19.9,20.2,21.7,22.6,22.4,23,23.1,24.2,24.5,23.2,24.8,25.2,25,25.1,25.4,23.8,23.6,23.1,23.2,20.9,21,20.5,18.9,19.9,21.3,22.7,23.1,23.7,21.3,20.6,20.9,22.7,24.4,24.6,24.9,24.9,25.7,25.4,23.1,23.5,25.3,,22.1,22.6,23.2,25.2,26,26.1,25,25.4,26.9,25.3,25.4,21.5,21.9,23,24.7,25.1,27.5,26.4,24.5,25.1,27,27.4,27.6,25.5,25.8,26.7,26.1,26.3,23.6,23.4,26.5,24.9,26.9,24.4,24.8,22.7,24,26.1,24.6,22.5,21.5,22.1,23.4,24.9,26.9,27.6,28.1,28,27.2,27.2,22.8,23.9,27.4,28,28.5,28.4,28.3,28.9,28.9,25.4,23.1,22.1,24.5,23.8,24.5,24.3,25,25.6,26.6,24,24.2,26.5,27,26.1,25.3,26,25.8,24.1,25.5,29,25.5,26,26.6,26.4,26,24.7,24.3,24.4,26.1,24.6,26,26.1,26.5,26.2,25.7,26.6,27,26.9,26.3,27.3,25.2,26.6,26.1,24.2,27,28.2,28.1,27.3,27.9,25.4,25.9,25.5,23,27.9,27.8,26.9,26.4,27.4,26.8,25.3,23.4,23.6,24.9,26.5,23.2,24.4,24.6,23,24.5,26.4,25.3,27.2,26.6,23.9,25.9,26,26.4,27,24.7,26.5,25.7,26.1,25.7,25.7,28.2,28,26.1,26.2,26.7,26,26.9,27.1,27.3,25.1,24.4,25,26.6,25.9,27,27.5,23.7,24.2,24.9,25.7,25.8,26.4,25.4,27.3,27,27.4,24.4,26.7,27,25.4,27,26.2,27,24,23.7,24.3,24.4,24.2,24.2,23,26,24.5,24.6,25.3,26.5,24.1,24.3,22.3,24.8,26.4,25.6,25.2,23.6,25,24.5,24,24.4,24.2,25.5,27,23.9,25.5,24.1,25.2,25.7,24.1,23.6,24.9,26.5,27,23.5,24.2,24.9,25,24.4,25.6,23.6,24.2,24.6,25.6,22.6,25,24.4,26.3,25,23.9,23.7,25.7,26.7,26,25.1,25.7,23.6,24.8,23.8,23.6,25.1,25.3,24.4,24.7,25.5,26.2,23.9,23,21.2,21.9,22.8,24.3,24.8,26.5,26.7,26.7,22.8,24.7,24.3,25.7,25,25.4,26.2,26.2,24.5,24.6,24.7,25.1,25.7,25.3,24.1,23.3,23.5,24,23.3,23.1,24.4,24.4,25.6,24.4,26,25.4,25.3,26,24.8,22.8,23.6,24.7,25.4,23.8,23.3,23.6,23.8,24.3,23.8,23,23.5,23.9,24.4,24.7,25.6,23.4,23.8,22.5,22.6,24.5,23.2,22.7,21.5]
+rain=[0,0,0,0,0,0.4,0,0,91,24,0,0,0,0,0,0,0,0,0,0,0,0,0,23.4,0,0,0,0,0,46,131.6,0,0.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16.2,3.2,1,,82.8,0.2,0,0,0,0,0,0,0.8,0,1,35.8,1.4,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,19.8,2.6,2.6,5.8,0,3.8,2,17.4,0,0,4.2,69,1.4,0,0,0,0,0,0,0,0,0,29.6,0,0,0.4,0,0,0,0,0,2.8,14.4,75.8,11.6,92.2,1,11.6,0.8,0,0,15.2,0.4,0,0,0,0.6,0,0.2,13.8,2.8,0,0.8,0.2,0,0,0.8,42.6,1,7.6,0,21.8,0,0,0,0.2,0.4,0.2,0,0,0,0,10,1,2,11.6,4.4,0,0,6,0.6,14.8,2.2,0,35.8,0,0,0,0,0,0,0.4,7.6,24.8,0,0,29.4,69.8,9.2,13.6,3,0,2.6,0.2,0,34.6,0.2,0,0.2,0,11.8,0.2,2.8,2.2,0.8,0.2,0.2,0,13,6.2,0,0.2,0.2,0,0,12,5.6,0.4,0.6,0.2,0,0,36,0.4,5.4,0,0,0,2.6,0.2,0.2,0,58,0,0,4.4,0,0,0,20.2,13.6,31.6,15.4,3.6,13,11.4,0.2,3.4,4,0,0,27,6,29,10,0,0,9,31.8,5,29.2,24,11.2,2,0,0,21.8,0.2,23.4,0,0,25.6,54.2,0,0,1.4,15.2,16.2,16.4,4,20.6,0,35.6,21.4,17.4,3.2,52.8,0,0.6,0,0,50.2,7.2,0,0,0,3.6,1.6,61.6,10.6,7.8,41.8,0.2,1.4,1.8,0.8,0,0,0,0,0,0,0,0,0,0,0,0,24.8,0.2,0,0,13.4,0,0,0,6.4,0.6,0,0.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9.6,8.6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.2,86.2,0,0]
+//ChiangMai (2018)
+tavg=[23.1,22.7,23.5,24,24.1,24,25.6,26,26.5,27,23.9,17.4,18.6,21.7,20.6,21.5,21.3,22.5,22.1,22.2,22.2,22,21.9,21.2,22.5,24.1,25.3,24.8,23.7,22.8,21.2,22,22.9,23.6,23.2,23.2,22.9,23.3,23.8,23,23.8,24.1,26,25.4,25.7,25.7,24.2,24.1,24.5,25.4,26.6,27.1,28.7,27.3,27.4,27.3,27.1,26.7,26,26,26.2,26,26.1,26.7,26.6,27.4,27.7,26.5,27.1,26.2,26,26.1,27.3,26.9,27.7,29.1,28,28.5,28.2,28.2,28.9,28.3,28.7,29.4,29.8,29.4,28.7,29.2,30,28,28.6,27.5,29,29.1,27.8,28.9,24.1,24.9,27.8,30.3,29.2,31.3,31.9,31.7,30.9,28.6,26.5,26,28,28,30.4,30.1,31.9,29.4,29.3,28.3,27.9,26.3,28.3,29.7,27.5,23.8,27.9,27.2,29.9,30.8,30.9,29.5,29.1,28.2,27.5,27.5,28.6,29.1,29.6,30.4,27.9,28.2,29.9,30.1,29.5,27.8,29.4,26.5,27.8,29,28.9,24.7,25.3,26.2,27.6,27.7,29.3,30,29.9,30.1,30,29.1,28.5,26.3,25.4,25.8,25.6,26.6,26.2,27.4,28.8,27.5,28.9,27.9,29,27.7,27.9,27.5,27.3,25.6,24.9,25.2,26.2,26.8,28.9,28.1,29.3,28.4,27.9,29.3,29.1,28,26.6,25.9,27.6,28,28.2,27.3,28.2,27.9,28.2,27.1,25.8,26.6,25.7,26.2,25.4,26.6,26.4,24.8,25.6,25.8,24.7,26.3,26.8,26.6,27.5,27.6,28.2,27,26,26.6,28.1,29,26.3,27.8,28.3,27.1,27.7,28,26.4,28.2,25,25.2,27.5,28.3,26.8,27,26.5,27.4,26.1,27,26.1,26.7,27.1,26.9,26.9,27.5,27.8,25.5,26,25.9,26.3,28.7,27.4,26.7,28.1,28.5,28.1,27.6,27.7,29.2,29.9,29.7,26,25.4,27.2,28.3,27.3,28.6,28.9,28.3,29.4,29.4,29.2,25.2,27.1,27.7,25.4,25.2,26.7,27.8,27.5,27.8,28.3,27.9,26.6,25,26.6,26.7,27.7,28.7,28.2,28.1,28.6,29,28.3,24.5,25.2,24.1,26.2,26.9,27.3,27.8,27,27.3,26.7,25.2,24,23.7,24,24.3,24.9,25.1,25.3,25.8,25.5,24.5,26,25.3,25.6,26.3,27,27.3,27.6,27.4,26.8,26.3,25.7,26,25.9,26.3,26.4,24.6,23,23.1,23.8,24.5,25.5,25.7,25.9,26,25.9,25.9,24.9,24.9,25.7,24.1,25.1,23.8,22,23.3,23.6,24.2,24.3,24.1,25.1,23.5,23.1,23.7,22.9,22.4,21.8,21.2,21.3,23.7,23.2,22.6,22.1]
+tmax=[28.5,29.5,28.1,27.8,27.3,27.7,31.9,32.2,34.4,34,29.4,19.7,21.1,27,27.8,29.9,31.3,31.3,30.9,31.7,32,32.3,32.8,32.5,32.7,31.9,33.9,34.4,33.8,33,32.7,32.6,31.3,30.5,30.6,30.7,30,31.1,32.5,31.7,33.9,34.3,32.7,32.7,34.1,35.7,35.9,35.5,34.8,35,35.4,35.8,36.7,34.6,35.7,37,34.9,35.7,35.4,35.7,36.2,36.8,37,37.5,37.3,38.1,36.5,32.7,33,34.8,34.5,35.3,35.6,35.9,35.9,36.1,35.9,37.3,37.4,37.4,36,35.1,35.9,37.1,37.8,37.8,36.7,36.5,36.5,36.4,34.5,36.6,36.9,37.7,38.1,38.1,28.7,31.9,35.3,37.8,38.4,39.7,40.8,40.7,39.5,38.5,35.9,33.2,35.4,37,37.9,37.4,39.6,39.5,37.5,37,36,32,35.7,36.1,36.5,27.5,34.7,34.8,36.5,37.3,37.3,36.2,37.7,37.3,33.9,35.6,35.4,36.5,37.5,37.7,35.4,36.1,37.4,37.9,38.6,33.7,36.6,34.1,34.3,36.5,34.9,27.5,32,31.6,34.9,35.3,35.3,36.2,35.4,35.6,35.3,34.3,33.3,31,29.7,29,29,30,30.8,33.6,33.7,32.2,34.7,33.5,35.4,33.2,33.5,34.5,32.4,30.3,28.6,31.6,32.7,32.8,35.1,34.4,34.4,32.6,35,34.4,34.7,33.1,31.1,31.2,33.8,33.5,34.8,34.2,34.3,32.9,32.2,35.6,31.3,32.8,28.6,29.7,29.6,31.5,31.3,26.1,29.1,28.8,29.3,29.5,31.4,30.1,33.7,32.8,34,31.5,33.2,32.5,33.4,34.3,33.9,32.7,33,32.1,32.2,33.9,31.3,33.5,27.1,29.2,33.9,33.6,34,33.2,31.1,33,31,32.2,33.4,31.7,30.9,30.2,33.3,32.9,33.7,27.1,28.9,32.5,31.5,35.5,34,33.8,34.6,35.2,34.9,34.6,35.7,35,37.1,37,30.6,30.8,33.6,35,34.5,35.7,35.6,34.2,36.2,37.4,36.4,31.1,33.2,33.6,31.6,30.9,32.8,34.9,33.8,34.3,34.7,34.2,32.3,28.6,33.3,33.5,35.1,35.7,34.6,36.5,35.8,35.6,35.2,30.5,29.7,28.8,32.6,33.5,34.1,35,33.8,34.9,33.8,30.2,30.6,31.4,32.4,33.1,33.8,33.4,33.3,34.1,32,29.4,31.5,31,31.4,32.9,34.3,34.9,34.8,34.8,34.5,34.4,34.3,33.9,33.4,33.1,33.5,32.4,32.1,30.9,31.2,32.8,32.7,33.8,32.9,34.5,34.3,34,30.6,29,32.4,29.1,30.4,27.6,23.4,30.2,31.3,30.9,31.8,30.8,31.9,29.7,30.5,32.9,32,31.4,31.5,30.8,30.8,30.5,27.8,25.7,26.3]
+tmin=[20,19.2,19.1,20.6,21.8,21.6,21.7,21.1,20.9,20.9,18.6,15,15.4,17.1,15.3,15.4,16.5,16.4,15.8,15.8,15.5,15.1,14,13.3,13.4,16.6,18.7,17.8,15.5,12.4,12.4,13,14.1,18.7,17.6,17.3,17.1,17,17.2,16.9,16.5,16.7,17.3,19.2,19.3,17,15.5,15.7,16.3,17.4,18.6,20.7,20.7,22.2,20.9,20.6,20.1,19.4,19,19.2,18.4,17.4,17.5,18.7,18.8,18.8,19.4,22.3,22.9,20.1,19,18.7,19,19.8,20.3,21.5,21.6,21,19.8,19.9,22,22.7,22.6,22.8,23.1,22.6,22.9,23.2,24,22.6,22.6,21.1,21.4,24,21.9,22.2,21.3,19.5,20.3,23,24.5,24.5,24.9,25.2,25.6,21.8,21.5,21.6,22.8,22.7,23.5,24.5,25.4,23.8,23.4,23.7,22,23.7,23.8,24.9,21.8,22.6,23,24.5,24.4,25.4,25.8,24.6,23.5,22.5,23.1,21,21.8,24.3,24.2,24.8,23.1,24,24.2,25.1,23.2,24.4,22.4,22.2,24.1,24.4,25.1,23.4,22.1,23.3,23.5,23.4,24.3,25,25.8,25.6,25.7,25.5,25.4,23.9,23.6,23.9,23.8,24.4,23.6,24.5,25.3,25.1,25.8,25.4,25.5,24.6,25,23.4,24.2,22.9,22.4,22.6,23,23.5,24,24.2,25.4,24.8,23.7,25,25.1,25.6,23.9,23.4,24.3,24.1,24.2,24.2,25.4,24.6,25.5,23.6,24.2,24,23.5,23.7,22.8,23.2,23.8,23.7,23.9,23.5,23.2,23.5,24.2,23.7,24.3,24.5,24.2,23.9,22.7,23.3,23.6,24.7,24,24.7,24.6,24.3,24.4,24.9,23.5,24.2,23.6,23.6,24.1,24.9,24.5,24.9,23.8,24,24.3,23.8,22.9,23.7,24.2,24.5,24.6,24.2,24.3,23.9,23.5,22.3,22.8,23.6,23.9,24.1,24.4,24,24.3,24.7,23.7,24.5,25.1,25,23.3,22.9,23,23.7,23.4,23.5,23.9,23.8,24.4,24.7,24,22.5,22.8,23.1,21.7,22.8,22.1,23,23.2,23.5,23.9,23.9,22.6,22.4,22.8,22.5,22.7,23.6,23.2,23.4,23.7,24,24.6,22.6,22.6,22.1,22.6,23.1,22.9,22.7,22.6,22.3,22,21.6,17.9,18.2,18.5,18.8,19,19.7,19.7,20,21.5,22.7,23.1,22.8,22.8,22.2,22.4,22.8,22.8,22,21.9,21,20,20.4,20.9,21.3,21.7,17.5,16.8,16.8,18.8,19.2,19.9,20.7,20.7,20.5,20.2,20.3,21,22.4,21.2,19.8,19.9,21.7,20.9,19.3,18.8,19.1,19.1,19.4,20.5,20.8,17.8,17.5,16.7,16.4,15.4,14.9,14.9,15.6,20.7,20,19.1]
+rain=[0,0,0.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,7.2,0,0,0,0,0,0,0,0,0,0,0,0,0.8,0,0,0,0,0,0,1,0,0.6,0.2,0.6,0.2,0,1,0,0,0,0.2,0,0,0,0,0.8,10.6,4.8,0,0.6,0,0,0,0.6,1,0,17.2,0.4,0.2,0,44.4,23.2,10.2,0.6,0,0,0,0,4.2,6.2,0,9.2,0,0.6,0,0,0,0.2,0,0,4,0,58.6,0.8,0.2,0,0,5.2,29.2,1.2,2.8,16,0.8,0,0,0,0,2.8,0,4.2,6.8,6,4,0.8,1.4,1.2,0,0,0,4.4,0,10.2,0,15.2,0,8.6,12,17.6,44.4,1.8,0,0,0,0,1.2,0,0,1.6,5.2,2.6,7.8,0.2,3.8,5.2,0,2,1.4,19.8,7.8,25,13.4,2.8,9.4,22.6,1.8,10.4,8.4,1.6,21.4,0,0.2,0.4,0,0,0,0,8.4,0.8,0,2.2,18.6,0.2,0,4,0.2,0,1,0.6,29,26.4,0.2,0,5.6,0.2,3.2,0.4,2.4,2,37.4,0,0.2,0,1.6,0.2,3.2,1.6,0,1.2,1.4,0.8,0.6,1.2,1.2,0.8,0.4,0.4,0.2,0,0,0,23.2,18.4,1,0.4,0.2,0,0,0,0,0,0,3.6,1.2,1,1,1.2,1.2,1,0.8,1,0.6,0.8,0.6,0.8,0.6,0.4,0.6,0.4,0.4,0.6,0.2,0.4,0.4,0.4,0.6,0.8,0.6,0.8,0.6,0.6,0.6,0.6,0.6,0.4,0.6,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.4,0.2,0,3,11.2,0.4,0.2,0,0,0,0,0,3.8,0,0,0,0,0,0,0,2,0.4,0.2,0]
+//Ayuthaya (2024)
+tavg=[28.4,27.8,28.4,28,27.6,27.6,27.1,27.6,28.2,28.7,28.3,28.5,28.2,27.7,26.5,26.8,26.2,26.7,27.2,27.4,26.7,26.6,27,24.4,23.3,25.1,26.4,27.3,26.4,26.2,26.7,27.8,28.1,28.8,28.1,28,28.6,28,28.1,29,28.1,26.3,25,25.9,27.3,28.7,29.2,28.9,27.9,28.3,29.1,29.6,29,29.9,29.7,29.9,30,29.5,30,30,30.1,29.5,30.1,30.3,29.5,29.9,30.2,30.5,29.2,30.4,29.4,27.2,29.3,29.7,30.9,29.3,29.7,30.5,28.4,26,27.9,30.3,30.2,30.5,31.4,29.4,30.2,30.8,31.1,31.6,31.8,31.8,31.3,30.6,31.2,31.3,31.9,32.1,32.3,32.9,29.8,33,30.6,29.5,31.5,31.9,31.9,32,32.7,32.5,32.6,32.4,32.1,31.7,32.1,32.3,32.7,33.5,32.7,32.8,33.4,33,32.5,32.8,32.4,32.9,31.4,25.8,30.6,29.1,30.8,27.6,31.4,27.9,30.2,31.9,29.2,29.7,28.9,29.2,30.5,26.9,28.4,27.4,28.9,28.5,29,30.4,30.2,30.8,29.5,29.3,29.1,30.1,29.4,30.3,29.8,30.1,29.8,30.2,29.8,29.1,29.4,29.4,30.8,31.3,31.7,30.2,29.7,30.1,29.9,30.5,31,30.5,29.3,29.6,27.7,26.6,29.2,29.2,27.4,28.5,28.8,29.1,28.5,27.1,27.6,29.6,29.6,29.5,29.5,26.6,27.9,28,28.5,28.3,27.9,27.1,28.1,28,28.5,28.9,28.3,28.9,28.4,28,27.4,27.8,28.4,27.6,27.2,28.6,28.7,27,28.3,26.8,27.4,28.4,28.9,27.6,29.1,30.2,29.5,30.2,27.7,28.3,29.7,29.9,29.7,29.3,29,29.2,27.3,27.9,29.8,29.2,27.2,27.9,28.7,29,28,27.8,28.3,28.6,28.4,27.9,27.1,28.2,29,28.9,29.1,28.2,28.8,28.4,27.6,27.1,27.5,28.3,28.4,29.1,27.1,26.1,28.6,27.2,28.1,27.2,28.2,26.1,27.8,29.2,28.1,29.8,30,28.7,28.2,27.2,27.6,26.6,28.1,28.6,29.2,29.2,26.9,27.5,28.5,29.1,27.4,29.7,29,27.6,28.8,26.5,26.8,27,27.5,29.2,28.5,28.3,28.9,29.3,29.2,28.5,28.6,27,28.3,28,27.9,27.2,27.9,27.1,26.5,27.8,27.5,26.7,27.2,27.4,27.4,28.9,28.4,27.2,28.9,26.4,27.4,28.1,27.6,27,27.7,27.7,27.6,28.3,28.2,27.3,26.1,24,23.6,24.5,25.6,26.7,26.8,26.3,26.7,28,27.5,25.9,25.9,27.9,28.1,25.6,25.9,24.7,24.5,24,25.3,23.8,22.7,23.8,21.9,22.7,24.8,24.4,26.2,27.9,25.7,24,24.6,24.5]
+tmax=[35.5,35,35.3,33.8,34,34.1,34.8,34.8,34.7,34.9,36.6,33.8,33.1,33.6,33.3,33.5,33.3,34.1,34.6,34.1,34.5,33.9,31.7,29,27.3,30.8,32.4,32.1,32.7,32,33.4,34,33.9,34.4,35.9,35.7,36,36,34.3,34.7,34.3,32.4,32.2,34.8,35.9,36.2,35.7,34.2,33,34.8,35.3,34.5,35.3,36.1,35.9,36,36,35.8,35.9,36.3,36.2,34.9,36.4,37.1,37.7,37.9,36.8,35.9,33,36.2,36.2,34.2,35.3,36.6,36.5,34.3,36.1,37,35.3,28.8,34.5,36.8,36.2,38.7,37.4,36.3,35.7,37.2,37.3,39.5,39.7,39.9,39,37.2,38.3,37.6,38.4,38.2,39.7,39.2,34.3,39.8,38.5,39.1,37.4,38.6,38.9,39.7,40.3,39.6,39.7,39.5,38.8,38,38.8,39.1,40.7,41.8,39.2,39.2,39.9,39.3,38.6,39.9,37.5,39.7,38.9,31.7,36.7,38,37.9,37.3,37.5,37.3,35.3,39,36.6,36.7,36.4,35.6,37.4,32.9,33,32.6,31.9,33.9,34.2,35.8,35.2,35.3,34.9,33.9,31.6,34.2,33.7,34.8,33.7,34,34.3,35.3,34.1,33.2,34.8,36.1,37.4,37.7,37.1,36.8,35.5,35.7,36,36,35.6,35.4,33.5,34.4,34.3,29.8,33.5,35.5,32.2,33.5,33.3,34.6,33.9,31.4,32.8,35.1,34.3,34.2,34.6,32.8,33.5,34.3,32.3,34.1,32.2,30.1,34.9,32.1,32.1,33.6,34.6,33.5,33.8,32.4,30.7,31,33.3,30.4,32.4,32.9,32.3,31.4,32.5,33.1,32.8,34.3,35,33.4,34.3,34.9,35.9,35.4,33.4,34.4,34.8,35.6,35.2,34.3,33.8,34.3,32.4,31.9,34.6,34,34.7,32.8,33.6,34.3,33,33.1,34.2,33.9,34.6,32.8,32.6,32.4,34.3,34.1,34.5,33,33.3,33.9,34.7,32.5,32.6,34.5,34.1,34.1,33.6,31.5,33.5,33.6,33.5,33.5,33.7,29.5,32,34.8,33.7,35,35,35.4,33.3,33.5,33.1,32.5,33.4,34.1,35.1,34.2,33.9,34.6,33.9,35.4,34.9,35.9,35.3,35.2,34.3,32.6,31.9,31.6,33.3,35.5,35.3,34.6,33.7,33.8,34.3,33.2,34.2,33,33.9,34.1,32.8,32.4,32.7,31.3,29.2,33.5,31.3,32.2,34.3,34.4,33.8,35.7,35.1,33.4,34.5,30.4,33.7,33.9,33.6,32.4,33.2,33.3,32.8,34.2,33.1,32.2,31.5,29.8,29.8,32,33.3,33.9,33.4,33.4,34.4,34.3,33.5,31.9,31.9,33.7,32.3,28.7,30.1,29.7,29.4,29.9,31,30.9,29.8,31.2,27.9,29.3,30.8,30.1,30.7,32.6,30.8,30.9,32.5,30.4]
+tmin=[22.9,21.7,22.1,24.1,22.2,22.6,21.5,21.6,22.6,23.3,23.6,23.8,24,23.8,22.2,22.9,20.8,21,21.9,22,21.8,21.7,21.7,20.8,19.6,19.7,21.2,23.1,22.3,21.2,21.6,23.2,24,25.1,23.4,23.2,23.4,23.1,23.7,24.6,22.1,21.7,19.2,19.5,19.7,22,24.1,25,23.3,24,25.1,24.7,25.1,25.4,25.2,25.3,25.6,24.9,25.1,25.9,26.1,26,26.2,25.7,24.9,25,25.6,26.4,26.4,26.5,25.4,24.3,25.3,25.4,26.4,25.8,24.5,25,24.3,24.2,23.8,24.5,25.3,25.6,26.4,25.3,26,26.1,26.3,26.1,26.7,27.1,26.7,26.2,26.9,27.1,27.4,27.1,26.3,27.5,25.9,2.9,26.8,22.4,27.2,27.3,27.2,27.5,27.9,28,28.4,27.6,27.2,26.5,26.8,26.7,27.7,28.5,28.1,28.3,29,28.7,26.8,28.4,28.6,28.1,23.5,23.8,24.7,24.7,25.4,23.2,25.7,24.6,25.8,27.2,25.1,26.4,25.4,24.3,26.5,24.6,24.5,25.6,26.1,25.3,25.5,25.8,27,27.2,25.4,26.1,26.8,27,26.9,27.8,25.8,26.4,26.7,27.2,27.2,26.6,26.2,26.1,26.2,26,26.2,23.8,24.5,24.6,23.9,26.1,26.5,27.1,25.9,26.6,24.4,25.1,26.5,25.3,25.7,25.2,26,25.7,24.9,23.9,24,25.3,25.8,26.4,27.1,22.3,25.2,24.4,25.7,24.6,25.3,25.2,25,25.9,26.1,26.7,23.9,26,25.1,25.9,25.9,26,25.9,26,25.3,25.7,26.5,22.4,24.6,22.8,23.7,24.8,25,23.7,25.5,27,24.7,26.3,23.6,24.9,26.3,27,26.6,26.9,24.9,25.3,23.2,24.2,25.2,25.5,23,24.3,25.2,24.3,25,24.9,25.1,24.3,24.7,24.6,24.7,25.2,25.7,25.5,26.3,25,26.3,25,23.1,24.6,23.3,25.1,25.1,25.6,24.7,24.6,24.9,25.1,25.3,24.4,25.1,23.5,24.4,24.9,25,26.3,26.9,24.2,25.4,24.8,23.9,22.8,23.9,24.5,25.4,26.1,24,25.2,24.6,26.1,24.5,25.6,25.5,23.2,25.3,23.9,24.7,24.7,24.5,25,24.9,24.2,25.4,25.7,25.3,25.5,24.5,23.8,24.8,24.9,24.6,23.4,24.8,24.3,25,25,24.3,22.4,22.6,22.4,23,23.9,25.5,24.8,24.9,24.2,23.8,24.7,24.5,23.9,24.4,24.7,24.8,25,25.2,23.7,21.4,20.3,18.7,19.5,19.9,21.5,22.2,21.2,21.3,22,22.9,22.5,21.4,22.8,25.8,22.6,20.9,20.8,20.5,19.8,21,18.6,17.6,18.9,18,18.3,20.8,19.7,22.6,23.7,21.7,19.8,17.8,19.6]
+rain=[0,0,0,0,0,0,0,0,0,0,5.4,0,0,0,0,0,0,0,0,0,0,0,0,0,0.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18.4,0,0,0,0,0,0,0.6,0.4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9.6,0,0,0,0,88,0,6.2,0,0,7.4,0,13.8,4.2,0,23.2,24.8,9.8,0,25.8,0,0,0,0,17.6,0.2,0,0,0,0,0,0,0.2,0,0,0,0,0,0,0,0,18,0,0,5.4,0.2,0,0,0,0,3.8,1.8,0,0,60.6,2.6,0.2,0,0.2,0.2,31.2,0.6,0,0,0,64,0.4,22,0,3,0.8,0.2,9.8,0.2,0.2,1,9.8,0,9,0,0.6,1.4,1.8,1.6,0.2,0,0,59.8,0,24.4,0,0,0,19.2,0,0,24.8,0,33.4,25.8,0.8,0,0.2,0,5.2,0.2,28.2,0,0,0,13.6,0.6,13,21.6,1.6,0,0,0,18.6,0,72.2,0.4,0,0,0,9.2,0,3,17.2,5.4,20.4,3.8,2.6,0.2,19.4,24,0,0.2,1.2,8.8,0.4,5.8,0,0,0,0,0,3.8,0,1.4,19,31,0,0,0,0,34,0.4,0,0,17.4,0,0.6,37.8,0.4,22.4,5,2.8,7.4,0,0,0,0,0,3.8,0,0,18.2,0,1.2,0,0,0,1.2,0,0,0,0,0,0,0,0,0.2,24.2,0,0.8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3.6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+for(wdata=[],i=0;i<365;i++){wdata.push([moment('2018-01-01').add(i,'day').valueOf(),tmin[i],tmax[i],tavg[i],rain[i]])}
+temp=[],rain=[],tmax=[],tmin=[],tavg=[],min=(wdata[0][1]),max=(wdata[0][2])
+for(i=0;i<wdata.length;i++){a=wdata[i],min>a[1]&&(min=a[1]),max<a[2]&&(max=a[2])}
+  min=Math.floor(min),max=Math.floor(max) 
+  min=20,max=40
+for(i=0;i<wdata.length;i++){a=wdata[i]
+  temp.push({x:a[0],low:a[1],high:a[2],name:moment(a[0]).format('YYYY-MM-DD'),color:chroma.scale(kolor.VIRIDIS.Turbo).domain([min*1.1,max*0.9])(a[3]).hex(), }) 
+  tmin.push({x:a[0],y:a[1]}), tmax.push({x:a[0],y:a[2]}),tavg.push({x:a[0],y:a[3]}),rain.push({x:a[0],y:a[3],z:a[4]}) //min*2.5,max*0.8
+}
+tlink='<a href="http://www.weather-radials.com/" target="_blank">Weather Radials</a>'
+slink='<a href="http://www.aws-observation.tmd.go.th/main/main" target="_blank">Ayuthaya<br>2024</a>'
+Highcharts.chart('chart',{
+chart:{polar:true},title:{text:slink,verticalAlign:'middle'},subtitle:{text:null},credits:{enabled:false},//exporting:{enabled:false}, 
+xAxis:{type:"datetime",tickInterval:30*24*3600*1000,gridLineWidth:1.5,labels:{format:"{value:%b}"},}, 
+yAxis:{min:min,max:max,showFirstLabel:false,labels:{format:"{value}°C"}},
+tooltip:{useHTML:true,shared:true,followPointer:true,headerFormat:'<p>{point.x:%d %B, %Y}</p>',pointFormat:'{series.name}:{point.low}~{point.high} {point.z} <br>',},
+plotOptions:{
+  series:{turboThreshold:0,stacking:'normal',showInLegend:false,pointPlacement:'on'},
+  bubble:{minSize:0,maxSize:50,color:'rgba(180,210,235,0.5)',opacity:0.25,color:'blue',marker:{fillColor:'blue'}}
+}, 
+//series: [{type:"line",name:'min',data:tmin},{type:"line",name:'max',data:tmax},{type:"line",name:'max',data:tavg},{type:"bubble",data:rain}],
+series:[{type:"columnrange",name:"temperature",data:temp},{type:'bubble',name:'precipitation',data:rain},] //{type:"line",name:'tavg',data:tavg,color:"lightgrey"}
+})
+}
+
+//chartSoundLevel()
+
+function chartSoundLevel(){ 
+//Date,Time,Timer,LASmax_dt,LASmin_dt,LAFmax_dt,LAFmin_dt,LAImax_dt,LAImin_dt,LAeq_dt,LAeq,Prev_LAeq,LAeq5",LAeq5"max,LAeq10',LAeq10'max,LAeq15',LAeq15'max,LAeq60',LAeq60'max,LAIeq_dt,LAE_dt,LAPKmax_dt,LAFT3eq,LAFT5eq,LCSmax_dt,LCSmin_dt,LCFmax_dt,LCFmin_dt,LCImax_dt,LCImin_dt,LCeq_dt,LCeq,Prev_LCeq,LCeq5",LCeq5"max,LCeq10',LCeq10'max,LCeq15',LCeq15'max,LCeq60',LCeq60'max,LCIeq_dt,LCE_dt,LCPKmax_dt,LZSmax_dt,LZSmin_dt,LZFmax_dt,LZFmin_dt,LZImax_dt,LZImin_dt,LZeq_dt,LZeq,Prev_LZeq,LZIeq_dt,LZE_dt,LZPKmax_dt,LAF1.0%,LAF5.0%,LAF10.0%,LAF50.0%,LAF90.0%,LAF95.0%,LAF99.0%,LAFT5eq-LAeq,LAIeq-LAeq,LCeq-LAeq,ImpPen_max_dt,ImpOnset,ImpLvlDif,LAFmax20-200_dt,LAeq20-200_dt,Low(eq/peak),Overload,Pause,
+list=['Date','Time','Timer','LASmax_dt','LASmin_dt','LAFmax_dt','LAFmin_dt','LAImax_dt','LAImin_dt','LAeq_dt','LAeq','Prev_LAeq','LAeq5','LAeq5max','LAeq10','LAeq10max','LAeq15','LAeq15max','LAeq60','LAeq60max','LAIeq_dt','LAE_dt','LAPKmax_dt','LAFT3eq','LAFT5eq','LCSmax_dt','LCSmin_dt','LCFmax_dt','LCFmin_dt','LCImax_dt','LCImin_dt','LCeq_dt','LCeq','Prev_LCeq','LCeq5','LCeq5max','LCeq10','LCeq10max','LCeq15','LCeq15max','LCeq60','LCeq60max','LCIeq_dt','LCE_dt','LCPKmax_dt','LZSmax_dt','LZSmin_dt','LZFmax_dt','LZFmin_dt','LZImax_dt','LZImin_dt','LZeq_dt','LZeq','Prev_LZeq','LZIeq_dt','LZE_dt','LZPKmax_dt','LAF1.0%','LAF5.0%','LAF10.0%','LAF50.0%','LAF90.0%','LAF95.0%','LAF99.0%','LAFT5eq-LAeq','LAIeq-LAeq','LCeq-LAeq','ImpPen_max_dt','ImpOnset','ImpLvlDif','LAFmax20-200_dt','LAeq20-200_dt','Low(eq/peak)','Overload','Pause']
+data=[['2023-10-10','11:50:10','00:01:00',79.2,49.5,87.4,47.2,92.0,52.8,65.9,65.9,null,64.7,73.1,65.9,null,65.9,null,65.9,null,77.0,83.7,103.5,75.9,77.6,100.4,61.2,108.7,59.5,113.4,63.2,83.1,83.1,null,71.2,93.7,83.1,null,83.1,null,83.1,null,97.6,100.8,121.2,108.7,66.9,116.1,64.0,120.2,69.1,91.6,91.6,null,104.4,109.3,124.2,74.7,70.7,68.9,59.6,49.7,48.7,47.8,11.7,11.1,17.1,11.5,849.4,20.4,79.1,56.1,null,,],['2023-10-10','11:51:10','00:02:00',71.5,52.6,75.3,48.9,77.2,57.8,63.6,64.9,null,59.3,73.1,64.9,null,64.9,null,64.9,null,70.1,81.4,89.4,74.0,75.5,75.7,63.0,79.3,60.3,82.2,66.3,69.0,80.2,null,66.2,93.7,80.2,null,80.2,null,80.2,null,75.1,86.8,90.5,76.2,66.6,79.5,62.7,82.5,68.4,71.0,88.6,null,75.9,88.8,90.7,73.8,70.3,68.3,59.2,50.8,49.6,48.1,10.5,9.9,15.3,8.4,280.8,14.5,63.9,50.1,null,,],['2023-10-10','11:52:10','00:03:00',68.3,50.9,73.1,48.2,75.2,56.2,61.8,64.1,null,65.5,73.1,64.1,null,64.1,null,64.1,null,67.7,79.6,90.3,72.7,74.1,70.7,62.6,74.5,60.7,77.3,65.6,66.9,78.6,null,69.4,93.7,78.6,null,78.6,null,78.6,null,71.2,84.7,89.1,74.6,66.4,79.8,64.3,82.9,68.8,69.9,86.8,null,74.4,87.7,89.7,73.1,69.6,67.5,58.8,51.2,50.0,48.3,10.0,9.3,14.4,8.5,268.7,16.3,56.7,46.9,null,,],['2023-10-10','11:53:10','00:04:00',75.1,53.3,80.1,48.7,84.7,58.9,67.1,65.1,null,57.1,73.8,65.1,null,65.1,null,65.1,null,73.9,84.8,100.7,72.9,74.2,79.0,62.9,83.7,60.2,87.6,64.7,71.4,77.6,null,64.3,93.7,77.6,null,77.6,null,77.6,null,77.0,89.1,101.5,79.7,65.7,84.3,63.7,88.3,68.0,72.3,85.6,null,77.6,90.1,101.5,74.7,70.9,68.6,59.5,51.4,50.2,48.5,9.1,8.5,12.5,8.5,252.9,17.7,67.2,52.1,null,,],['2023-10-10','11:54:10','00:05:00',66.8,51.5,71.3,48.7,73.2,54.8,61.0,64.5,null,63.9,73.8,64.5,null,64.5,null,64.5,null,66.6,78.7,87.5,72.2,73.4,72.4,62.0,78.3,60.2,81.5,63.3,66.5,76.7,null,67.5,93.7,76.7,null,76.7,null,76.7,null,71.3,84.3,89.7,72.9,65.5,78.4,62.3,81.6,67.8,68.3,84.7,null,72.4,86.1,89.5,74.3,70.2,67.9,59.3,51.5,50.2,48.7,8.9,8.3,12.2,7.1,214.7,9.3,64.0,47.2,null,,],['2023-10-10','11:55:10','00:06:00',68.1,49.4,74.5,48.8,78.0,50.2,60.2,64.0,null,50.4,73.8,64.0,null,64.0,null,64.0,null,67.6,78.0,94.6,71.7,72.9,71.6,61.6,75.4,60.0,78.3,63.2,65.8,76.0,null,62.3,93.7,76.0,null,76.0,null,76.0,null,70.8,83.6,94.6,72.1,65.1,75.7,62.7,78.6,67.1,68.2,83.9,null,72.4,85.9,94.8,73.8,69.8,67.4,58.6,50.7,49.8,48.8,8.9,8.3,12.0,9.0,323.7,16.9,59.7,45.5,null,,],['2023-10-10','11:56:10','00:07:00',67.6,49.2,74.7,48.2,77.6,50.0,54.0,63.4,null,61.5,73.8,63.4,null,63.4,null,63.4,null,60.2,71.8,82.9,71.1,72.3,72.3,61.0,79.1,59.0,81.9,62.6,63.4,75.3,null,67.3,93.7,75.3,null,75.3,null,75.3,null,67.9,81.2,87.3,72.8,64.6,79.2,62.4,81.9,66.6,66.6,83.3,null,70.5,84.4,87.6,73.6,69.4,66.8,57.2,49.7,49.3,48.7,8.9,8.2,11.9,7.4,133.2,22.6,56.2,43.5,null,,],['2023-10-10','11:57:10','00:08:00',66.9,49.3,71.8,48.4,75.6,50.1,53.2,62.9,null,49.9,73.8,62.9,null,62.9,null,62.9,null,61.5,71.0,86.0,70.6,71.8,74.3,61.5,80.1,60.0,82.4,62.9,63.6,74.8,null,62.8,93.7,74.8,null,74.8,null,74.8,null,69.6,81.4,92.4,74.5,64.8,80.2,62.3,82.5,67.1,67.2,82.7,null,72.3,85.0,92.3,73.3,69.0,66.3,56.0,49.5,49.2,48.7,8.9,8.2,11.9,5.9,97.3,14.4,65.9,45.6,null,,],['2023-10-10','11:58:10','00:09:00',66.8,49.2,73.1,48.5,76.7,50.1,55.2,62.5,null,50.8,73.8,62.5,null,62.5,null,62.5,null,63.2,73.0,84.9,70.2,71.4,75.5,61.3,82.2,59.5,85.7,62.7,64.5,74.3,null,62.2,93.7,74.3,null,74.3,null,74.3,null,71.6,82.3,93.3,75.9,64.0,82.4,61.6,85.8,67.1,66.9,82.2,null,72.8,84.7,93.5,73.0,68.6,65.9,55.0,49.3,49.1,48.7,8.9,8.2,11.9,8.0,208.0,17.5,61.7,45.3,null,,],['2023-10-10','11:59:10','00:10:00',61.4,49.6,64.9,48.4,67.1,51.1,54.7,62.1,null,49.9,73.8,62.1,62.1,62.1,null,62.1,null,59.8,72.5,79.0,69.8,71.0,67.0,61.5,71.4,59.8,72.7,62.8,63.7,73.9,null,62.2,93.7,73.9,73.9,73.9,null,73.9,null,67.0,81.5,83.0,68.6,64.8,72.0,62.5,74.0,66.9,66.4,81.8,null,69.7,84.2,83.6,72.8,68.2,65.5,54.5,49.4,49.1,48.7,8.9,8.2,11.8,5.8,114.8,10.6,53.4,44.2,null,,],['2023-10-10','12:00:10','00:11:00',54.3,49.0,57.9,48.1,59.2,49.8,50.8,61.7,null,50.3,73.8,60.9,62.1,61.7,null,61.7,null,53.9,68.5,73.7,69.4,70.6,64.0,61.3,66.4,59.4,68.1,63.1,62.5,73.5,null,62.1,93.7,66.7,73.9,73.5,null,73.5,null,64.9,80.2,76.4,68.3,64.5,70.8,62.3,72.0,66.7,66.2,81.4,null,69.4,83.9,78.7,72.6,67.9,65.0,53.4,49.3,49.0,48.6,8.9,8.2,11.8,4.8,105.1,6.4,48.2,42.3,null,,],['2023-10-10','12:01:10','00:12:00',60.0,49.1,65.2,48.3,68.1,50.2,52.4,61.4,null,49.8,73.8,60.1,62.1,61.4,null,61.4,null,57.6,70.2,80.1,69.0,70.3,67.5,61.6,72.4,59.9,75.2,63.3,63.1,73.2,null,62.2,93.7,66.1,73.9,73.2,null,73.2,null,66.5,80.9,81.9,69.4,64.5,73.1,62.4,75.5,66.2,66.4,81.0,null,70.0,84.2,82.6,72.4,67.5,64.6,52.8,49.2,49.0,48.6,8.9,8.2,11.8,6.2,135.5,10.8,52.6,43.2,null,,],['2023-10-10','12:02:10','00:13:00',68.7,49.1,75.4,48.1,78.4,50.2,56.1,61.1,null,53.0,73.8,59.6,62.1,61.1,null,61.1,null,65.1,73.9,91.2,68.8,70.0,72.6,61.2,78.1,59.7,80.8,63.0,63.9,72.9,null,63.3,93.7,65.8,73.9,72.9,null,72.9,null,69.3,81.7,92.2,73.0,64.6,78.2,62.3,80.8,66.5,66.6,80.7,null,71.2,84.4,93.2,72.3,67.3,64.3,52.5,49.2,49.0,48.6,8.9,8.2,11.7,8.0,221.5,15.5,59.9,44.1,null,,],['2023-10-10','12:03:10','00:14:00',58.2,49.2,62.8,48.1,65.1,50.6,52.8,60.9,null,55.5,73.8,56.3,62.1,60.9,null,60.9,null,58.6,70.6,77.3,68.5,69.7,66.5,61.5,70.7,58.6,73.0,63.0,63.0,72.6,null,63.9,93.7,64.2,73.9,72.6,null,72.6,null,66.3,80.7,79.9,72.9,64.4,78.7,61.6,81.3,66.4,66.8,80.4,null,71.3,84.6,84.7,72.1,67.0,64.0,52.1,49.1,48.9,48.6,8.9,8.2,11.7,6.3,158.0,9.0,52.5,42.6,null,,],['2023-10-10','12:04:10','00:15:00',61.2,49.0,67.5,47.9,69.7,49.8,51.8,60.6,null,49.9,73.8,55.0,62.1,60.6,60.6,60.6,null,58.0,69.5,80.9,68.3,69.5,69.0,61.3,74.7,59.6,77.6,62.9,62.9,72.3,null,62.6,93.7,63.7,73.9,72.3,72.3,72.3,null,67.0,80.6,86.6,70.3,64.7,75.0,61.9,77.8,66.6,66.4,80.1,null,70.3,84.2,86.9,71.9,66.7,63.7,51.7,49.1,48.9,48.5,8.9,8.1,11.7,6.8,138.8,15.4,58.2,43.2,null,,],['2023-10-10','12:05:10','00:16:00',74.6,49.0,77.9,48.2,80.9,49.8,65.6,61.2,null,67.3,73.8,57.6,62.1,60.5,60.7,61.2,null,71.0,83.4,90.4,68.6,69.7,77.6,60.9,82.7,59.8,84.7,62.7,69.2,72.2,null,73.7,93.7,64.5,73.9,66.2,72.3,72.2,null,74.5,87.0,95.0,77.9,64.5,82.7,62.6,84.8,66.2,70.4,79.8,null,75.0,88.2,95.4,72.5,67.4,64.4,52.0,49.1,48.9,48.5,8.6,7.8,11.0,6.7,175.3,9.6,69.5,49.2,null,,],['2023-10-10','12:06:10','00:17:00',69.6,48.7,75.7,48.0,78.5,49.9,56.8,61.0,null,49.6,73.8,57.8,62.1,60.0,60.7,61.0,null,65.2,74.6,88.1,68.4,69.6,71.7,61.4,78.1,59.5,80.6,63.2,64.2,72.0,null,62.5,93.7,64.6,73.9,65.9,72.3,72.0,null,69.8,82.0,89.6,74.0,64.7,78.3,62.1,80.7,66.9,67.8,79.6,null,72.9,85.6,89.8,72.4,67.3,64.2,51.8,49.1,48.9,48.5,8.6,7.8,11.0,6.7,106.0,21.4,64.6,45.3,null,,],['2023-10-10','12:07:10','00:18:00',60.3,48.7,67.5,47.7,71.0,49.7,50.5,60.8,null,50.0,73.8,57.7,62.1,59.6,60.7,60.8,null,57.2,68.3,83.5,68.2,69.4,65.5,61.2,70.9,59.4,74.2,62.9,62.4,71.8,null,62.6,93.7,64.5,73.9,65.6,72.3,71.8,null,65.5,80.2,84.9,68.5,64.7,71.4,61.8,74.5,67.2,66.5,79.3,null,70.2,84.2,85.6,72.3,67.0,63.9,51.4,49.0,48.8,48.5,8.6,7.8,11.0,8.8,275.0,18.8,51.4,42.2,null,,],['2023-10-10','12:08:10','00:19:00',55.6,48.8,59.3,48.0,62.6,49.9,50.9,60.6,null,49.1,73.8,57.5,62.1,57.7,60.7,60.6,null,55.4,68.7,82.4,68.0,69.2,64.2,61.2,66.1,59.2,67.8,62.8,62.4,71.5,null,61.8,93.7,64.3,73.9,64.5,72.3,71.5,null,65.1,80.2,80.6,67.9,63.9,70.9,61.7,73.1,66.2,66.2,79.1,null,69.5,84.0,81.5,72.1,66.8,63.7,51.2,49.0,48.8,48.5,8.6,7.8,11.0,7.2,213.2,10.3,50.1,42.5,null,,],['2023-10-10','12:09:10','00:20:00',70.3,48.8,74.2,48.0,75.6,49.6,59.3,60.5,null,49.2,73.8,57.9,62.1,57.5,60.7,60.5,null,64.4,77.1,83.9,67.9,69.1,75.2,61.0,79.0,59.2,80.8,63.1,65.4,71.4,null,62.3,93.7,64.5,73.9,64.4,72.3,71.4,null,69.9,83.2,88.4,75.6,64.6,79.3,62.4,81.0,66.9,67.7,78.9,null,71.8,85.5,89.5,72.1,66.8,63.6,51.0,49.0,48.8,48.4,8.6,7.7,10.9,6.4,94.1,21.3,55.4,43.9,null,,],['2023-10-10','12:10:10','00:21:00',71.0,48.8,74.0,47.9,75.0,49.6,60.2,60.5,null,62.9,73.8,58.5,62.1,57.5,60.7,60.5,null,64.9,77.9,86.1,67.8,69.0,73.0,61.0,76.6,59.5,78.8,62.9,65.3,71.2,null,68.6,93.7,64.7,73.9,64.4,72.3,71.2,null,69.0,83.1,87.8,73.5,64.8,77.5,62.1,79.8,67.3,68.1,78.7,null,71.8,85.9,87.5,72.1,66.9,63.7,50.9,49.0,48.8,48.4,8.5,7.6,10.7,6.5,170.4,8.9,55.4,43.1,null,,],['2023-10-10','12:11:10','00:22:00',67.2,49.0,71.3,48.0,72.4,50.0,55.5,60.3,null,50.4,73.8,58.6,62.1,57.5,60.7,60.3,null,60.9,73.2,79.3,67.7,68.8,72.6,61.3,76.5,59.1,77.5,63.0,63.9,71.1,null,62.4,93.7,64.8,73.9,64.4,72.3,71.1,null,67.9,81.7,84.2,74.1,64.5,77.1,62.0,78.7,66.4,67.3,78.5,null,71.2,85.1,85.3,71.9,66.7,63.5,50.8,48.9,48.8,48.4,8.5,7.6,10.7,5.3,105.3,8.9,53.1,42.9,null,,],['2023-10-10','12:12:10','00:23:00',54.8,49.1,57.5,48.1,58.3,50.0,50.7,60.2,null,52.4,73.8,58.5,62.1,57.5,60.7,60.2,null,53.1,68.4,68.8,67.5,68.7,63.9,61.7,65.5,60.1,67.6,63.4,62.7,70.9,null,63.2,93.7,64.7,73.9,64.4,72.3,70.9,null,65.1,80.5,76.7,71.6,65.0,75.8,62.2,78.0,67.8,67.7,78.3,null,71.7,85.5,82.9,71.8,66.5,63.3,50.6,48.9,48.8,48.4,8.5,7.6,10.7,2.6,45.6,5.5,47.7,42.7,null,,],['2023-10-10','12:13:10','00:24:00',66.4,49.0,70.0,47.9,71.6,50.2,56.3,60.1,null,50.0,73.8,58.6,62.1,57.5,60.7,60.1,null,61.4,74.1,82.1,67.3,68.5,71.8,61.2,76.1,59.6,77.8,63.0,64.0,70.7,null,61.8,93.7,64.8,73.9,64.3,72.3,70.7,null,68.1,81.8,85.9,72.9,65.0,76.5,61.7,77.9,66.9,67.2,78.2,null,70.8,85.0,86.8,71.7,66.4,63.1,50.6,48.9,48.8,48.4,8.5,7.5,10.7,5.7,92.7,13.8,52.4,43.1,null,,],['2023-10-10','12:14:10','00:25:00',58.2,48.8,63.2,47.9,65.9,49.7,51.2,59.9,null,49.1,73.8,58.6,62.1,57.4,60.7,59.9,null,56.4,69.0,73.9,67.2,68.4,66.1,61.2,69.9,59.3,72.1,63.2,62.7,70.6,null,62.3,93.7,64.8,73.9,64.3,72.3,70.6,null,65.7,80.4,79.9,70.3,64.6,75.2,62.4,77.1,66.5,66.6,78.0,null,70.3,84.3,82.6,71.6,66.2,62.9,50.5,48.9,48.7,48.4,8.4,7.5,10.7,5.7,117.2,9.3,48.0,42.4,null,,],['2023-10-10','12:15:10','00:26:00',55.1,48.7,60.3,47.7,63.3,49.4,50.8,59.8,null,50.8,73.8,55.7,62.1,57.4,60.7,59.8,null,54.5,68.6,76.6,67.0,68.2,64.0,61.3,65.9,59.3,67.9,62.9,62.4,70.5,null,62.7,93.7,63.7,73.9,64.3,72.3,70.5,null,65.1,80.2,77.6,68.3,64.6,70.9,61.4,73.0,66.7,66.5,77.9,null,70.0,84.3,79.5,71.5,66.0,62.6,50.4,48.9,48.7,48.4,8.4,7.5,10.7,6.5,144.2,11.4,48.4,42.4,null,,],['2023-10-10','12:16:10','00:27:00',59.0,48.7,64.5,47.9,67.6,49.5,51.3,59.6,null,50.1,73.8,55.3,62.1,57.4,60.7,59.6,null,57.2,69.1,81.0,66.9,68.0,64.4,61.4,68.1,59.6,70.7,62.5,62.5,70.3,null,62.3,93.7,63.5,73.9,64.3,72.3,70.3,null,65.3,80.3,81.5,69.0,64.1,72.8,61.6,74.8,66.4,66.1,77.7,null,69.5,83.9,81.2,71.4,65.9,62.4,50.3,48.9,48.7,48.4,8.4,7.5,10.7,7.6,263.6,9.4,49.2,42.1,null,,],['2023-10-10','12:17:10','00:28:00',54.9,48.6,58.8,47.9,60.8,49.5,50.2,59.5,null,53.1,73.8,55.3,62.1,57.2,60.7,59.5,null,52.6,68.0,71.3,66.7,67.9,64.1,61.1,66.2,59.4,68.6,62.9,62.5,70.2,null,63.4,93.7,63.5,73.9,64.2,72.3,70.2,null,65.1,80.3,77.4,67.6,64.5,70.3,62.1,72.0,66.4,66.0,77.6,null,69.2,83.8,79.8,71.3,65.7,62.1,50.2,48.9,48.7,48.4,8.4,7.5,10.7,3.6,73.2,4.9,50.1,42.2,null,,],['2023-10-10','12:18:10','00:29:00',56.6,48.7,60.1,47.9,61.9,49.5,51.1,59.4,null,50.1,73.8,55.3,62.1,57.2,60.7,59.4,null,54.8,68.8,70.9,66.6,67.8,64.9,61.4,68.6,59.7,70.6,62.8,62.7,70.1,null,62.2,93.7,63.6,73.9,64.2,72.3,70.1,null,65.4,80.5,78.2,68.5,64.8,72.0,62.3,74.2,66.9,66.3,77.4,null,69.8,84.1,81.6,71.3,65.6,61.9,50.2,48.9,48.7,48.3,8.4,7.5,10.7,5.4,122.0,7.3,48.3,42.4,null,,],['2023-10-10','12:19:10','00:30:00',56.0,48.6,61.9,47.7,64.5,49.4,51.1,59.2,null,53.4,73.8,54.3,62.1,57.2,60.7,59.2,null,55.2,68.9,73.3,66.5,67.6,64.8,61.5,68.9,59.3,71.0,63.0,62.7,69.9,null,63.0,93.7,63.3,73.9,64.2,72.3,69.9,null,65.4,80.5,80.3,69.4,64.8,73.1,62.0,75.2,66.8,66.5,77.3,null,70.2,84.3,81.6,71.2,65.4,61.6,50.1,48.8,48.7,48.3,8.4,7.5,10.7,5.9,112.5,11.9,52.8,42.8,null,,],['2023-10-10','12:20:10','00:31:00',56.6,48.9,60.6,48.0,62.1,50.1,51.7,59.1,null,51.3,73.8,52.5,62.1,54.7,60.7,59.1,null,55.6,69.5,73.1,66.3,67.5,64.1,61.5,66.3,59.7,68.2,63.1,62.7,69.8,null,62.9,93.7,62.9,73.9,63.4,72.3,69.8,null,65.2,80.5,77.4,68.4,64.5,71.5,62.2,74.0,66.9,66.2,77.1,null,69.6,84.0,80.5,71.1,65.3,61.4,50.2,48.8,48.7,48.3,8.4,7.4,10.7,3.9,64.0,7.6,46.9,42.7,null,,],['2023-10-10','12:21:10','00:32:00',58.6,48.6,62.5,48.0,65.1,49.5,51.0,59.0,null,49.0,73.8,52.0,62.1,54.3,60.7,59.0,null,54.9,68.8,74.2,66.2,67.4,65.4,61.0,69.0,59.4,70.8,62.5,62.6,69.7,null,62.2,93.7,62.8,73.9,63.3,72.3,69.7,null,65.5,80.4,80.4,68.0,64.6,71.8,62.5,74.3,67.1,66.0,77.0,null,69.4,83.8,81.1,71.0,65.2,61.2,50.1,48.8,48.6,48.3,8.4,7.4,10.7,3.4,40.2,11.0,53.8,42.6,null,,],['2023-10-10','12:22:10','00:33:00',65.5,48.7,73.3,48.0,76.6,49.5,54.2,58.9,null,56.2,73.8,52.3,62.1,54.5,60.7,58.9,null,62.2,72.0,82.4,66.1,67.3,70.6,61.2,77.8,59.8,81.0,62.9,63.5,69.6,null,64.6,93.7,62.9,73.9,63.3,72.3,69.6,null,68.3,81.2,86.7,71.4,64.4,78.0,62.1,81.0,66.2,66.6,76.9,null,70.7,84.4,87.1,70.9,65.0,61.0,50.1,48.8,48.6,48.3,8.4,7.4,10.7,7.1,114.1,24.4,53.5,43.0,null,,],['2023-10-10','12:23:10','00:34:00',58.6,48.6,61.9,47.9,65.1,49.5,50.0,58.8,null,48.9,73.8,51.4,62.1,54.4,60.7,58.8,null,53.4,67.8,73.8,66.0,67.2,65.8,61.0,68.1,59.4,71.0,62.8,62.3,69.5,null,61.7,93.7,62.7,73.9,63.3,72.3,69.5,null,65.1,80.1,76.3,71.9,64.4,75.9,62.1,78.8,66.6,66.5,76.8,null,70.4,84.3,82.5,70.8,64.9,60.9,50.0,48.8,48.6,48.3,8.4,7.4,10.7,2.9,72.7,3.3,46.2,42.0,null,,],['2023-10-10','12:24:10','00:35:00',49.5,48.7,50.7,47.9,51.8,49.5,49.0,58.7,null,49.0,73.8,51.2,62.1,53.6,60.7,58.7,null,50.2,66.8,62.9,65.9,67.1,63.1,61.2,65.2,59.6,67.2,62.7,62.1,69.4,null,62.4,93.7,62.6,73.9,63.1,72.3,69.4,null,64.7,79.9,75.2,67.6,64.5,70.5,62.2,72.2,66.4,65.9,76.7,null,69.3,83.7,78.5,70.8,64.7,60.7,49.9,48.8,48.6,48.3,8.4,7.4,10.7,0.0,0.0,0.0,44.4,41.7,null,,],['2023-10-10','12:25:10','00:36:00',49.4,48.6,50.6,47.8,51.9,49.4,49.0,58.6,null,49.1,73.8,51.1,62.1,52.1,60.7,58.6,null,50.3,66.8,62.6,65.7,66.9,63.4,61.1,65.1,59.2,67.0,62.8,62.1,69.3,null,62.3,93.7,62.6,73.9,62.8,72.3,69.3,null,64.7,79.9,76.2,69.2,64.5,71.8,62.4,73.9,66.2,66.1,76.6,null,69.4,83.9,78.8,70.7,64.6,60.5,49.8,48.8,48.6,48.3,8.4,7.4,10.7,0.0,13.5,1.7,44.5,41.8,null,,],['2023-10-10','12:26:10','00:37:00',49.7,48.6,51.6,47.8,53.3,49.3,49.0,58.5,null,49.0,73.8,50.9,62.1,51.6,60.7,58.5,null,50.3,66.8,66.4,65.6,66.8,63.3,60.8,65.2,59.1,67.7,62.1,62.0,69.2,null,61.9,93.7,62.5,73.9,62.7,72.3,69.2,null,64.5,79.7,74.2,69.7,64.1,73.5,62.0,75.3,66.5,66.1,76.4,null,69.7,83.8,79.4,70.6,64.4,60.3,49.8,48.7,48.6,48.3,8.4,7.4,10.7,0.0,18.3,2.2,46.0,41.8,null,,],['2023-10-10','12:27:10','00:38:00',49.8,48.7,51.7,47.5,53.9,49.5,49.1,58.4,null,49.1,73.8,50.8,62.1,51.5,60.7,58.4,null,50.4,66.8,70.1,65.5,66.7,63.2,61.1,65.6,59.5,67.4,62.3,62.0,69.1,null,62.1,93.7,62.5,73.9,62.6,72.3,69.1,null,64.6,79.8,75.3,68.1,64.5,70.2,62.3,72.3,66.9,66.0,76.3,null,69.4,83.8,78.3,70.5,64.3,60.1,49.7,48.7,48.6,48.3,8.3,7.4,10.8,1.9,61.5,2.2,44.6,41.7,null,,],['2023-10-10','12:28:10','00:39:00',49.4,48.6,50.3,47.9,51.4,49.5,49.1,58.3,null,49.0,73.8,50.7,62.1,50.8,60.7,58.3,null,50.4,66.9,63.3,65.4,66.6,63.0,61.0,64.8,58.9,66.6,62.2,62.1,69.0,null,61.9,93.7,62.4,73.9,62.5,72.3,69.0,null,64.6,79.8,76.4,67.6,64.3,70.3,61.9,72.6,66.5,65.9,76.2,null,69.3,83.7,78.5,70.4,64.2,59.9,49.7,48.7,48.5,48.3,8.3,7.4,10.8,0.0,0.0,0.0,44.5,41.9,null,,],['2023-10-10','12:29:10','00:40:00',56.9,48.7,63.5,48.0,66.9,49.4,49.5,58.2,null,49.1,73.8,50.5,62.1,50.7,60.7,58.2,null,53.7,67.3,79.4,65.3,66.5,64.8,61.1,69.7,59.1,72.8,62.8,62.1,68.9,null,62.1,93.7,62.4,73.9,62.4,72.3,68.9,null,65.1,79.9,84.2,68.9,64.8,73.0,62.1,74.9,67.1,66.0,76.1,null,69.4,83.8,85.1,70.3,64.0,59.8,49.6,48.7,48.5,48.3,8.3,7.4,10.8,7.6,214.7,13.0,52.0,42.0,null,,],['2023-10-10','12:30:10','00:41:00',66.6,48.5,70.6,47.9,73.5,49.3,59.4,58.2,null,58.2,73.8,52.7,62.1,52.2,60.7,58.2,null,65.1,77.2,82.6,65.3,66.5,72.4,61.3,77.8,59.8,79.9,63.1,65.4,68.9,null,67.5,93.7,62.8,73.9,62.7,72.3,68.9,null,69.3,83.2,89.2,73.7,64.8,79.0,62.1,81.1,66.7,68.6,76.1,null,72.5,86.4,89.7,70.3,64.2,60.0,49.6,48.7,48.5,48.3,8.3,7.3,10.7,6.4,124.0,13.4,58.4,44.4,null,,],['2023-10-10','12:31:10','00:42:00',66.3,49.1,73.5,48.1,76.8,50.0,54.3,58.1,null,60.4,73.8,53.0,62.1,52.4,60.7,58.1,null,60.2,72.1,87.1,65.3,66.5,74.7,61.2,82.0,59.2,85.5,63.0,64.1,68.8,null,69.2,93.7,62.9,73.9,62.8,72.3,68.8,null,68.4,81.9,95.1,78.0,65.1,84.5,62.0,88.0,67.3,67.9,76.0,null,71.9,85.7,98.3,70.2,64.0,59.9,49.6,48.7,48.5,48.3,8.3,7.3,10.7,8.9,270.7,20.7,62.3,44.0,null,,],['2023-10-10','12:32:10','00:43:00',66.2,49.9,71.3,48.4,76.6,51.1,54.7,58.1,null,57.1,73.8,53.1,62.1,52.7,60.7,58.1,null,63.3,72.5,85.1,65.2,66.4,74.7,61.6,79.8,59.9,85.3,63.5,64.2,68.7,null,66.0,93.7,63.0,73.9,63.0,72.3,68.7,null,72.2,82.0,89.3,78.2,65.5,83.4,62.5,87.9,68.2,68.4,75.9,null,75.3,86.2,89.1,70.2,64.0,59.8,49.7,48.7,48.5,48.3,8.3,7.3,10.7,5.9,145.0,8.0,62.1,44.7,null,,],['2023-10-10','12:33:10','00:44:00',58.5,50.1,63.7,48.7,66.4,52.6,54.3,58.0,null,52.1,73.8,53.4,62.1,52.9,60.7,58.0,null,59.8,72.1,80.8,65.1,66.3,67.1,61.8,71.2,59.9,73.3,63.9,63.9,68.7,null,63.1,93.7,63.2,73.9,63.0,72.3,68.7,null,67.6,81.7,82.3,72.9,65.4,78.4,62.7,80.8,68.2,68.8,75.8,null,73.4,86.6,87.9,70.1,63.9,59.7,49.7,48.7,48.6,48.3,8.3,7.3,10.6,6.7,159.6,11.1,55.5,44.3,null,,],['2023-10-10','12:34:10','00:45:00',60.0,49.6,66.5,48.6,70.1,50.8,53.7,58.0,null,51.9,73.8,53.7,62.1,53.1,60.7,58.0,null,60.7,71.5,85.2,65.1,66.3,66.0,61.1,70.1,59.8,72.6,62.8,63.3,68.6,null,63.2,93.7,63.3,73.9,63.1,72.3,68.6,null,67.1,81.1,85.3,73.1,65.6,76.3,62.6,78.2,67.4,68.3,75.7,null,72.4,86.1,85.7,70.0,63.8,59.6,49.7,48.7,48.6,48.3,8.3,7.3,10.6,8.4,282.4,14.7,53.2,43.3,null,,],['2023-10-10','12:35:10','00:46:00',61.8,49.6,68.4,48.4,71.8,51.0,54.0,57.9,null,56.5,73.8,54.0,62.1,53.2,60.7,57.9,null,60.6,71.8,84.6,65.0,66.2,67.4,61.4,72.6,59.5,75.4,62.7,63.5,68.5,null,64.2,93.7,63.4,73.9,63.1,72.3,68.5,null,67.2,81.3,88.6,71.2,65.5,74.0,63.3,75.7,68.3,68.5,75.6,null,72.4,86.2,89.2,70.0,63.7,59.5,49.8,48.7,48.6,48.3,8.3,7.3,10.6,7.3,195.7,12.5,56.4,43.6,null,,],['2023-10-10','12:36:10','00:47:00',58.8,49.1,62.9,48.2,66.8,50.0,52.1,57.8,null,53.4,73.8,54.2,62.1,53.3,60.7,57.8,null,57.0,69.9,75.5,64.9,66.1,67.6,61.2,73.9,59.1,76.5,63.2,63.2,68.5,null,63.5,93.7,63.5,73.9,63.2,72.3,68.5,null,66.9,81.0,85.8,71.4,65.1,75.1,62.8,77.6,67.0,67.3,75.6,null,71.1,85.1,85.3,69.9,63.6,59.4,49.8,48.7,48.6,48.3,8.3,7.3,10.6,5.4,125.8,7.0,54.4,43.3,null,,],['2023-10-10','12:37:10','00:48:00',56.1,49.2,60.9,48.2,64.4,50.2,51.7,57.8,null,50.2,73.8,54.3,62.1,53.1,60.7,57.8,null,56.1,69.5,76.3,64.8,66.1,64.8,61.4,68.4,59.6,71.4,63.2,62.7,68.4,null,62.1,93.7,63.6,73.9,63.1,72.3,68.4,null,65.5,80.5,80.0,69.2,65.3,71.9,62.4,74.3,67.2,66.9,75.5,null,70.7,84.7,80.9,69.8,63.5,59.3,49.8,48.7,48.6,48.3,8.3,7.3,10.6,5.8,107.9,11.3,54.5,43.0,null,,],['2023-10-10','12:38:10','00:49:00',68.4,49.4,75.5,48.3,78.9,50.4,56.3,57.7,null,51.5,73.8,54.8,62.1,53.6,60.7,57.7,null,66.5,74.0,92.5,64.9,66.1,72.6,61.5,79.3,59.9,82.6,63.1,64.0,68.3,null,62.4,93.7,63.7,73.9,63.2,72.3,68.3,null,70.5,81.8,94.7,73.1,65.1,79.3,62.0,82.7,67.5,67.2,75.4,null,72.2,84.9,94.6,69.8,63.4,59.2,49.8,48.8,48.6,48.3,8.4,7.3,10.6,7.8,190.0,17.2,55.7,43.7,null,,],['2023-10-10','12:39:10','00:50:00',57.6,49.3,62.8,48.1,65.4,50.5,51.6,57.7,null,50.1,73.8,54.9,62.1,53.6,60.7,57.7,null,56.4,69.4,76.0,64.8,66.0,65.5,61.5,68.8,59.1,70.8,62.9,62.8,68.3,null,62.6,93.7,63.8,73.9,63.3,72.3,68.3,null,65.8,80.6,80.6,71.2,64.6,75.8,62.7,77.9,66.8,66.9,75.3,null,71.0,84.6,83.5,69.8,63.3,59.1,49.8,48.8,48.6,48.3,8.4,7.3,10.6,5.7,111.8,10.6,53.8,43.0,null,,],['2023-10-10','12:40:10','00:51:00',55.1,49.4,60.4,48.4,63.6,50.5,51.7,57.6,null,50.3,73.8,53.7,62.1,53.7,60.7,57.6,null,56.5,69.5,75.6,64.7,66.0,64.9,61.3,67.5,58.5,69.5,63.2,62.8,68.2,null,62.1,93.7,63.5,73.9,63.3,72.3,68.2,null,65.6,80.6,79.8,70.8,64.9,74.4,61.2,77.0,67.4,67.6,75.3,null,71.4,85.4,81.0,69.7,63.2,59.0,49.8,48.8,48.6,48.3,8.4,7.3,10.6,6.1,139.0,9.8,51.6,42.8,null,,],['2023-10-10','12:41:10','00:52:00',61.6,49.3,66.7,48.3,69.4,50.4,53.4,57.6,null,52.0,73.8,53.6,62.1,53.9,60.7,57.6,null,59.7,71.1,82.8,64.7,65.9,68.2,62.0,73.7,59.9,76.2,63.7,63.3,68.2,null,63.1,93.7,63.4,73.9,63.4,72.3,68.2,null,67.1,81.1,85.1,70.1,65.4,74.7,62.9,77.0,68.0,67.8,75.2,null,72.2,85.6,84.9,69.6,63.2,58.9,49.8,48.8,48.6,48.3,8.3,7.3,10.6,7.0,198.8,9.9,55.2,43.5,null,,],['2023-10-10','12:42:10','00:53:00',57.1,49.0,60.7,48.1,62.6,49.8,51.3,57.5,null,49.4,73.8,53.3,62.1,54.0,60.7,57.5,null,54.5,69.1,73.9,64.6,65.8,64.3,61.6,65.9,59.6,68.4,63.3,62.7,68.1,null,62.7,93.7,63.2,73.9,63.4,72.3,68.1,null,65.2,80.5,77.1,71.3,65.0,75.4,62.8,77.8,66.9,67.4,75.1,null,71.3,85.2,82.6,69.6,63.1,58.8,49.8,48.8,48.6,48.3,8.3,7.3,10.6,4.8,85.7,8.3,45.6,42.6,null,,],['2023-10-10','12:43:10','00:54:00',50.0,48.9,51.3,47.8,52.7,49.8,49.5,57.4,null,49.6,73.8,52.9,62.1,54.0,60.7,57.4,null,50.8,67.3,71.2,64.5,65.8,63.6,61.3,65.9,59.6,68.0,63.1,62.4,68.0,null,62.3,93.7,63.1,73.9,63.4,72.3,68.0,null,65.0,80.1,75.4,69.3,64.9,72.3,62.5,74.7,66.8,66.6,75.1,null,70.2,84.4,79.5,69.5,62.9,58.7,49.8,48.8,48.6,48.3,8.3,7.3,10.6,0.0,19.9,1.6,46.2,42.3,null,,],['2023-10-10','12:44:10','00:55:00',53.7,49.1,57.2,48.3,60.5,50.0,49.8,57.4,null,52.0,73.8,52.6,62.1,54.0,60.7,57.4,null,52.2,67.6,77.2,64.4,65.7,64.2,61.2,66.2,59.7,68.2,62.8,62.5,68.0,null,63.6,93.7,63.0,73.9,63.5,72.3,68.0,null,65.1,80.3,76.4,69.6,64.7,74.1,62.2,76.6,67.0,66.8,75.0,null,70.6,84.6,80.7,69.5,62.8,58.5,49.8,48.8,48.6,48.3,8.3,7.3,10.6,5.4,124.2,7.3,50.6,42.5,null,,],['2023-10-10','12:45:10','00:56:00',62.2,49.2,66.9,48.6,69.3,50.1,53.7,57.3,null,49.7,73.8,52.5,62.1,53.2,60.7,57.3,null,58.4,71.5,79.7,64.4,65.6,66.6,61.3,68.6,59.7,70.6,62.9,63.1,67.9,null,62.2,93.7,63.0,73.9,63.3,72.3,67.9,null,65.7,80.8,80.7,71.4,64.7,73.8,62.6,75.8,67.0,67.8,74.9,null,71.5,85.6,82.6,69.4,62.8,58.5,49.8,48.8,48.6,48.3,8.3,7.3,10.6,5.8,144.2,7.4,53.0,43.0,null,,],['2023-10-10','12:46:10','00:57:00',66.2,49.2,71.7,48.4,74.5,50.0,58.9,57.4,null,63.0,73.8,53.8,62.1,53.8,60.7,57.4,null,64.0,76.7,85.2,64.4,65.6,70.2,61.8,75.1,60.2,78.5,63.5,65.4,67.9,null,67.8,93.7,63.3,73.9,63.4,72.3,67.9,null,69.7,83.2,86.6,72.5,65.1,76.8,62.9,79.0,67.4,68.3,74.9,null,72.3,86.1,88.4,69.4,62.9,58.7,49.8,48.8,48.6,48.3,8.3,7.2,10.6,7.5,174.3,17.0,57.1,44.4,null,,],['2023-10-10','12:47:10','00:58:00',64.8,50.9,69.2,48.7,71.2,53.7,59.1,57.4,null,58.1,73.8,54.9,62.1,54.4,60.7,57.4,null,65.0,76.8,81.5,64.4,65.7,71.2,62.4,75.4,59.5,77.9,64.0,65.6,67.9,null,65.7,93.7,63.6,73.9,63.5,72.3,67.9,null,70.1,83.4,87.0,72.2,65.6,75.6,62.5,78.2,67.7,68.5,74.8,null,72.4,86.3,87.1,69.3,63.0,58.9,49.8,48.8,48.6,48.3,8.3,7.2,10.5,7.0,187.5,10.9,57.7,45.6,null,,],['2023-10-10','12:48:10','00:59:00',67.5,49.5,73.7,48.1,76.3,51.1,56.9,57.4,null,54.4,73.8,55.0,62.1,54.6,60.7,57.4,null,64.6,74.7,90.6,64.4,65.7,68.1,61.5,72.6,59.9,75.1,63.0,63.7,67.8,null,63.4,93.7,63.6,73.9,63.5,72.3,67.8,null,67.6,81.5,89.8,71.1,65.1,75.5,63.1,77.6,67.0,67.8,74.7,null,71.7,85.6,90.5,69.3,63.0,58.9,49.9,48.8,48.6,48.3,8.3,7.2,10.4,8.4,258.2,16.0,52.1,43.1,null,,],['2023-10-10','12:49:10','01:00:00',65.2,49.0,70.0,48.3,71.7,49.8,55.7,57.4,null,49.4,73.8,55.3,62.1,54.8,60.7,57.4,57.4,60.6,73.4,84.0,64.4,65.6,68.2,61.4,72.0,59.3,73.4,62.9,63.3,67.8,null,62.4,93.7,63.6,73.9,63.5,72.3,67.8,67.8,66.4,81.1,84.3,71.6,64.7,75.3,62.1,77.0,66.9,67.1,74.7,null,70.8,84.9,84.3,69.3,63.0,59.0,49.9,48.8,48.6,48.3,8.3,7.2,10.4,7.1,150.0,16.5,49.4,42.7,null,,],['2023-10-10','12:50:10','01:01:00',62.3,49.2,66.9,48.4,69.1,50.2,53.6,57.3,null,49.4,73.8,55.4,62.1,54.7,60.7,56.8,57.4,57.7,71.4,78.0,64.3,65.6,66.7,61.7,69.2,60.0,70.7,63.3,63.1,67.7,null,62.2,93.7,63.6,73.9,63.5,72.3,64.3,67.8,65.6,80.8,80.4,69.5,65.0,72.1,62.6,73.8,67.5,67.2,74.6,null,70.7,85.0,82.1,69.2,62.9,58.9,49.9,48.8,48.6,48.3,8.3,7.2,10.4,3.9,65.8,7.3,48.2,42.9,null,,],['2023-10-10','12:51:10','01:02:00',57.7,49.1,64.1,48.3,67.2,49.9,51.0,57.3,null,49.4,73.8,55.3,62.1,54.7,60.7,56.5,57.4,55.3,68.8,77.8,64.3,65.5,65.3,61.1,68.5,59.4,70.9,62.8,62.5,67.7,null,61.9,93.7,63.6,73.9,63.4,72.3,64.1,67.8,65.3,80.3,79.8,68.0,64.4,71.8,62.0,74.1,66.9,66.2,74.6,null,69.8,84.0,80.8,69.2,62.8,58.8,49.9,48.8,48.6,48.3,8.3,7.2,10.4,4.1,43.8,14.6,54.3,42.8,null,,],['2023-10-10','12:52:10','01:03:00',65.5,49.1,71.5,48.2,74.6,49.9,55.8,57.2,null,61.8,73.8,55.6,62.1,54.9,60.7,56.3,57.4,61.8,73.6,84.2,64.2,65.5,70.1,61.1,74.7,59.7,77.0,62.9,63.8,67.6,null,67.2,93.7,63.7,73.9,63.5,72.3,64.0,67.8,67.5,81.6,87.9,71.4,64.7,74.9,62.3,77.1,67.1,67.5,74.5,null,71.4,85.3,88.2,69.1,62.8,58.8,49.8,48.8,48.6,48.3,8.2,7.2,10.4,5.5,125.1,7.4,55.9,43.4,null,,],['2023-10-10','12:53:10','01:04:00',62.2,49.2,65.1,48.3,68.3,50.1,52.1,57.2,null,51.8,73.8,55.7,62.1,54.7,60.7,55.4,57.4,58.1,69.9,81.4,64.2,65.4,69.2,61.2,75.6,59.0,79.4,63.0,63.1,67.6,null,62.8,93.7,63.7,73.9,63.4,72.3,63.7,67.8,67.7,80.9,88.7,71.1,65.1,76.4,62.6,80.0,67.2,66.9,74.5,null,71.2,84.6,88.5,69.1,62.8,58.8,49.8,48.8,48.6,48.3,8.2,7.1,10.4,5.6,108.3,10.3,58.3,43.2,null,,],['2023-10-10','12:54:10','01:05:00',59.9,49.2,64.9,48.5,68.3,50.1,52.5,57.2,null,52.6,73.8,55.7,62.1,54.7,60.7,55.2,57.4,58.1,70.3,77.7,64.1,65.4,66.5,61.7,69.6,60.1,72.3,63.5,62.9,67.6,null,63.3,93.7,63.8,73.9,63.5,72.3,63.6,67.8,66.2,80.7,82.0,69.7,64.5,73.6,62.6,76.3,66.6,66.7,74.4,null,70.3,84.5,83.3,69.0,62.7,58.7,49.8,48.8,48.6,48.3,8.2,7.1,10.4,6.0,132.7,9.7,51.8,43.1,null,,],['2023-10-10','12:55:10','01:06:00',62.0,49.1,66.6,48.4,69.0,49.9,56.6,57.1,null,56.8,73.8,56.0,62.1,55.0,60.7,55.0,57.4,61.8,74.4,79.9,64.1,65.4,67.9,61.7,70.6,60.0,73.0,63.6,64.4,67.5,null,64.7,93.7,63.9,73.9,63.6,72.3,63.6,67.8,67.6,82.2,81.6,69.5,65.2,72.5,63.0,75.9,67.3,67.1,74.3,null,70.4,84.9,83.4,69.0,62.6,58.8,49.9,48.8,48.6,48.3,8.2,7.1,10.4,6.1,117.2,12.0,53.1,44.5,null,,],['2023-10-10','12:56:10','01:07:00',63.8,49.6,69.2,49.0,71.5,50.5,58.0,57.2,null,59.4,73.8,55.8,62.1,55.4,60.7,55.1,57.4,63.4,75.7,80.9,64.1,65.4,68.9,61.5,73.2,59.5,75.5,63.4,64.8,67.5,null,65.7,93.7,63.8,73.9,63.7,72.3,63.6,67.8,68.3,82.6,84.2,69.8,65.1,73.5,62.9,75.7,67.4,67.5,74.3,null,70.7,85.2,85.3,68.9,62.6,58.9,49.9,48.8,48.6,48.3,8.2,7.1,10.3,5.3,86.1,11.9,54.6,45.3,null,,],['2023-10-10','12:57:10','01:08:00',64.3,49.6,66.9,48.7,69.6,50.5,58.6,57.2,null,57.2,73.8,55.7,62.1,55.8,60.7,55.2,57.4,63.4,76.4,80.8,64.1,65.3,68.9,61.7,71.2,59.9,72.7,63.4,65.0,67.5,null,63.8,93.7,63.7,73.9,63.8,72.3,63.6,67.8,68.0,82.8,83.0,69.7,65.1,71.9,62.1,73.1,66.5,67.3,74.2,null,70.2,85.1,83.1,68.9,62.7,59.1,49.9,48.8,48.6,48.3,8.2,7.1,10.3,6.7,131.9,14.8,54.3,45.2,null,,],['2023-10-10','12:58:10','01:09:00',63.7,50.5,67.5,49.0,69.6,52.7,58.3,57.2,null,57.8,73.8,55.9,62.1,56.3,60.7,55.3,57.4,63.4,76.1,81.3,64.1,65.3,68.3,62.2,73.9,60.3,77.3,64.0,65.2,67.4,null,65.2,93.7,63.9,73.9,64.0,72.3,63.6,67.8,68.8,83.0,88.1,70.0,65.2,74.5,63.1,77.9,67.7,67.6,74.2,null,71.1,85.4,87.9,68.8,62.7,59.2,49.9,48.8,48.6,48.3,8.1,7.0,10.2,6.0,129.7,9.8,56.5,46.1,null,,],['2023-10-10','12:59:10','01:10:00',62.5,49.8,66.1,48.7,69.1,50.7,57.6,57.2,null,54.4,73.8,56.2,62.1,56.6,60.7,55.4,57.4,62.4,75.3,79.6,64.1,65.3,67.4,61.6,69.7,59.5,71.6,63.5,64.6,67.4,null,64.0,93.7,64.0,73.9,64.1,72.3,63.6,67.8,67.3,82.4,82.1,69.4,64.6,71.6,62.7,73.8,66.5,67.3,74.1,null,70.2,85.0,84.3,68.8,62.7,59.3,50.0,48.8,48.6,48.3,8.1,7.0,10.2,5.2,97.0,9.3,53.2,45.4,null,,],['2023-10-10','13:00:10','01:11:00',62.2,49.6,66.5,49.0,68.4,50.5,55.4,57.2,null,51.3,73.8,56.3,62.1,56.6,60.7,55.4,57.4,60.1,73.2,78.0,64.0,65.3,67.0,61.4,69.7,59.4,71.5,63.2,63.7,67.4,null,62.4,93.7,64.1,73.9,64.2,72.3,63.7,67.8,66.4,81.4,81.7,69.3,64.7,72.0,62.2,73.9,66.6,66.8,74.1,null,70.0,84.6,81.8,68.7,62.7,59.3,50.0,48.8,48.7,48.3,8.1,7.0,10.2,6.4,168.7,8.9,53.1,44.1,null,,],['2023-10-10','13:01:10','01:12:00',53.4,49.5,56.3,48.8,58.6,50.4,50.3,57.1,null,49.9,73.8,56.3,62.1,56.2,60.7,55.4,57.4,52.6,68.1,74.0,64.0,65.2,63.9,61.5,65.5,60.0,67.7,63.0,62.5,67.3,null,62.4,93.7,64.1,73.9,64.0,72.3,63.7,67.8,65.1,80.3,77.3,67.9,64.6,71.1,63.1,73.5,67.0,66.2,74.0,null,69.5,84.0,78.9,68.7,62.6,59.3,50.0,48.8,48.7,48.3,8.1,7.0,10.2,4.2,97.4,4.9,48.7,42.4,null,,],['2023-10-10','13:02:10','01:13:00',60.8,49.4,65.2,48.7,67.2,50.4,52.3,57.1,null,55.8,73.8,56.0,62.1,55.7,60.7,55.3,57.4,56.4,70.1,79.4,63.9,65.2,66.1,61.3,68.4,59.5,69.8,63.2,62.9,67.3,null,64.5,93.7,64.0,73.9,63.8,72.3,63.6,67.8,65.6,80.6,80.1,69.0,64.3,71.7,61.3,73.4,67.0,66.3,74.0,null,69.6,84.1,80.2,68.7,62.5,59.2,50.0,48.8,48.7,48.3,8.1,7.0,10.2,3.9,41.5,14.5,53.7,43.4,null,,],['2023-10-10','13:03:10','01:14:00',61.8,49.8,68.8,48.7,72.0,50.9,52.1,57.1,null,50.3,73.8,56.0,62.1,55.5,60.7,55.3,57.4,58.7,69.9,82.8,63.9,65.1,71.1,61.7,77.7,59.8,81.0,63.3,63.3,67.3,null,62.4,93.7,64.0,73.9,63.8,72.3,63.6,67.8,68.5,81.1,90.5,72.1,65.4,78.0,62.8,81.1,67.5,67.3,73.9,null,71.7,85.1,91.2,68.6,62.5,59.1,50.0,48.9,48.7,48.3,8.1,7.0,10.2,8.2,222.6,17.6,65.2,45.1,null,,],['2023-10-10','13:04:10','01:15:00',65.8,49.5,70.3,49.0,74.8,50.5,54.4,57.0,null,50.1,73.8,56.1,62.1,55.4,60.7,55.4,57.4,61.3,72.1,89.5,63.9,65.1,72.6,61.6,76.9,60.1,81.0,63.4,64.2,67.2,null,62.4,93.7,64.1,73.9,63.8,72.3,63.7,67.8,69.8,82.0,92.3,74.0,64.9,77.8,62.9,81.8,67.0,68.2,73.9,null,73.2,86.0,92.7,68.6,62.5,59.1,50.0,48.9,48.7,48.3,8.1,7.0,10.2,9.8,542.4,13.0,57.4,44.3,null,,],['2023-10-10','13:05:10','01:16:00',63.0,49.6,69.1,48.6,71.5,50.7,52.3,57.0,null,57.8,73.8,55.8,62.1,55.3,60.7,54.6,57.4,59.1,70.1,87.0,63.8,65.1,69.0,61.5,74.5,59.3,76.7,63.5,63.0,67.2,null,65.3,93.7,64.0,73.9,63.8,72.3,63.5,67.8,66.7,80.7,88.9,70.3,64.9,74.7,62.3,76.8,67.3,67.3,73.9,null,71.1,85.0,88.5,68.6,62.4,59.1,50.0,48.9,48.7,48.3,8.1,7.0,10.2,8.4,274.7,14.7,51.4,42.9,null,,],['2023-10-10','13:06:10','01:17:00',63.0,50.1,70.4,49.0,75.2,51.4,54.6,57.0,null,51.0,73.8,55.4,62.1,55.5,60.7,54.5,57.4,62.6,72.4,94.2,63.8,65.0,66.9,61.9,70.9,59.1,74.7,63.6,63.6,67.2,null,63.4,93.7,63.9,73.9,63.9,72.3,63.4,67.8,67.0,81.4,91.7,72.4,65.6,77.2,62.4,80.0,68.0,68.1,73.8,null,72.2,85.9,92.7,68.5,62.4,59.0,50.0,48.9,48.7,48.3,8.1,7.0,10.2,8.4,229.8,20.1,51.3,43.8,null,,],['2023-10-10','13:07:10','01:18:00',57.3,50.0,60.6,48.6,62.0,50.9,52.9,56.9,null,51.0,73.8,54.7,62.1,55.3,60.7,54.5,57.4,56.4,70.7,74.1,63.8,65.0,64.8,62.1,67.1,59.9,69.3,63.4,63.2,67.1,null,62.8,93.7,63.7,73.9,63.8,72.3,63.5,67.8,65.7,81.0,77.7,70.2,65.7,74.4,63.3,76.9,67.6,67.5,73.8,null,71.5,85.3,81.7,68.5,62.3,59.0,50.1,48.9,48.7,48.3,8.1,7.0,10.2,3.8,69.2,6.3,50.0,43.4,null,,],['2023-10-10','13:08:10','01:19:00',59.2,49.9,62.2,48.6,64.2,50.9,53.9,56.9,null,51.3,73.8,54.0,62.1,55.4,60.7,54.6,57.4,57.8,71.7,74.1,63.7,64.9,65.4,61.8,69.1,59.8,71.7,63.2,63.4,67.1,null,62.9,93.7,63.5,73.9,63.9,72.3,63.5,67.8,66.1,81.2,79.6,69.1,65.5,72.6,62.4,74.6,67.7,67.0,73.7,null,70.6,84.8,80.8,68.4,62.3,58.9,50.1,48.9,48.7,48.3,8.0,6.9,10.2,5.3,91.2,10.7,54.2,44.0,null,,],['2023-10-10','13:09:10','01:20:00',60.9,49.7,64.9,48.9,66.4,50.6,53.4,56.9,null,51.0,73.8,53.4,62.1,55.4,60.7,54.4,57.4,57.5,71.1,76.8,63.7,64.9,66.2,61.8,70.2,60.1,72.5,63.6,63.3,67.1,null,63.0,93.7,63.3,73.9,63.9,72.3,63.4,67.8,66.4,81.1,80.6,68.8,65.4,71.4,62.6,73.9,67.3,67.1,73.7,null,70.5,84.9,82.3,68.4,62.2,58.9,50.1,48.9,48.7,48.4,8.0,6.9,10.2,4.2,93.5,5.1,56.7,44.0,null,,],['2023-10-10','13:10:10','01:21:00',67.5,49.8,71.2,48.8,73.9,50.6,55.8,56.9,null,55.2,73.8,53.4,62.1,55.4,60.7,54.2,57.4,61.3,73.5,83.6,63.7,64.9,71.3,61.7,75.7,59.9,76.8,63.3,64.1,67.0,null,63.8,93.7,63.4,73.9,63.9,72.3,63.4,67.8,67.4,81.8,85.5,72.1,65.3,75.9,62.7,76.9,67.5,67.9,73.6,null,71.5,85.7,86.2,68.4,62.2,58.8,50.1,48.9,48.7,48.4,8.0,6.9,10.2,5.1,111.7,7.1,56.5,44.4,null,,],['2023-10-10','13:11:10','01:22:00',60.7,50.0,67.2,48.7,69.9,51.1,54.2,56.8,null,56.3,73.8,53.7,62.1,55.0,60.7,54.2,57.4,59.2,72.0,78.3,63.6,64.9,68.3,61.8,73.7,60.3,76.1,63.4,63.7,67.0,null,65.3,93.7,63.5,73.9,63.8,72.3,63.4,67.8,67.1,81.5,83.5,71.1,65.9,75.6,63.1,78.2,67.6,67.8,73.6,null,71.5,85.6,84.9,68.4,62.1,58.8,50.1,48.9,48.7,48.4,8.0,6.9,10.2,5.7,79.4,17.5,55.8,43.8,null,,],['2023-10-10','13:12:10','01:23:00',69.2,50.2,76.1,48.9,79.5,52.4,57.7,56.9,null,54.3,73.8,54.4,62.1,54.9,60.7,54.3,57.4,66.2,75.5,89.9,63.7,64.9,72.7,61.5,79.0,60.0,82.4,63.6,65.0,67.0,null,64.1,93.7,63.7,73.9,63.8,72.3,63.4,67.8,70.9,82.8,91.9,73.6,66.0,79.2,63.0,82.5,68.6,68.7,73.6,null,73.4,86.5,92.0,68.4,62.1,58.8,50.1,48.9,48.7,48.4,8.1,6.9,10.1,7.5,148.2,20.7,52.8,43.7,null,,],['2023-10-10','13:13:10','01:24:00',70.1,51.8,75.5,49.1,78.0,55.4,62.5,57.0,null,56.7,73.8,56.4,62.1,55.8,60.7,54.7,57.4,69.0,80.2,90.5,63.8,65.0,73.3,62.4,77.4,60.4,79.7,64.2,68.0,67.0,null,64.9,93.7,64.4,73.9,64.1,72.3,63.6,67.8,73.0,85.8,91.2,75.2,65.8,78.8,62.8,80.7,67.9,70.2,73.5,null,74.6,88.0,91.4,68.5,62.4,59.0,50.2,48.9,48.7,48.4,8.1,6.9,10.0,9.1,395.2,13.4,61.9,49.6,null,,],['2023-10-10','13:14:10','01:25:00',70.3,50.3,75.1,49.3,78.2,52.0,60.4,57.0,null,53.7,73.8,57.2,62.1,56.2,60.7,54.9,57.4,67.4,78.1,90.8,63.9,65.1,74.5,62.3,79.0,60.6,81.0,63.9,66.3,67.0,null,62.9,93.7,64.7,73.9,64.3,72.3,63.6,67.8,71.4,84.1,93.2,75.0,66.3,79.1,64.1,81.1,68.5,69.3,73.5,null,73.4,87.1,93.1,68.6,62.4,59.1,50.2,48.9,48.7,48.4,8.1,6.9,9.9,7.2,141.8,18.9,59.8,46.0,null,,],['2023-10-10','13:15:10','01:26:00',55.4,50.1,60.9,49.1,64.4,51.0,52.3,57.0,null,53.6,73.8,57.2,62.1,56.1,60.7,54.9,57.4,56.5,70.1,79.3,63.9,65.1,65.5,62.0,67.6,60.3,70.5,63.7,63.3,67.0,null,63.4,93.7,64.7,73.9,64.3,72.3,63.7,67.8,66.0,81.1,83.5,76.1,65.6,79.2,63.3,81.5,68.2,69.7,73.5,null,74.3,87.5,86.5,68.5,62.4,59.1,50.2,48.9,48.7,48.4,8.1,6.9,10.0,7.4,218.1,11.1,50.2,43.3,null,,],['2023-10-10','13:16:10','01:27:00',80.8,49.7,88.0,48.8,90.2,50.4,64.0,57.2,null,55.3,74.4,58.7,62.1,57.5,60.7,55.4,57.4,74.7,81.8,94.5,64.4,65.8,84.8,62.2,91.9,59.9,94.1,63.8,69.0,67.0,null,63.8,93.7,65.4,73.9,64.9,72.3,63.8,67.8,78.7,86.7,98.4,84.8,65.5,91.9,61.9,94.1,68.4,71.2,73.5,null,79.5,89.0,98.1,68.5,62.4,59.1,50.2,48.9,48.7,48.4,8.6,7.2,9.8,8.2,163.7,28.7,51.3,43.5,null,,],['2023-10-10','13:17:10','01:28:00',68.2,50.5,76.5,48.9,81.6,53.1,58.8,57.2,null,52.0,74.4,59.0,62.1,57.8,60.7,55.6,57.4,68.3,76.6,97.9,64.5,65.9,73.0,61.7,77.8,60.1,80.9,62.9,65.6,67.0,null,62.8,93.7,65.6,73.9,65.0,72.3,63.9,67.8,72.0,83.4,97.3,73.9,65.1,78.4,63.0,81.2,67.3,69.4,73.4,null,74.7,87.2,97.4,68.6,62.4,59.1,50.2,48.9,48.7,48.4,8.6,7.3,9.8,8.3,202.0,21.7,62.7,46.4,null,,],['2023-10-10','13:18:10','01:29:00',66.3,49.8,70.7,48.8,72.6,50.8,55.2,57.2,null,52.2,74.4,59.1,62.1,57.9,60.7,55.6,57.4,60.9,73.0,79.9,64.5,65.9,74.6,61.7,79.1,60.2,81.6,63.3,64.6,67.0,null,62.8,93.7,65.7,73.9,65.1,72.3,63.9,67.8,69.4,82.3,89.4,75.3,64.7,79.3,62.9,81.8,66.7,67.6,73.4,null,72.1,85.3,90.0,68.5,62.4,59.1,50.3,48.9,48.7,48.4,8.6,7.3,9.7,6.3,132.0,11.8,65.6,47.4,null,,],['2023-10-10','13:19:10','01:30:00',64.6,49.4,69.0,48.7,71.9,50.3,54.4,57.2,null,49.9,74.4,59.1,62.1,57.9,60.7,55.6,57.4,59.7,72.2,83.5,64.4,65.8,69.1,60.8,73.1,59.2,75.8,62.4,63.1,66.9,null,61.9,93.7,65.7,73.9,65.0,72.3,63.9,67.8,66.4,80.9,84.7,70.3,63.7,73.7,61.8,76.1,66.1,66.4,73.4,null,69.8,84.2,85.2,68.5,62.4,59.0,50.3,48.9,48.7,48.4,8.6,7.3,9.7,4.7,77.6,9.2,51.0,43.1,null,,],['2023-10-10','13:20:10','01:31:00',69.5,49.7,72.4,48.9,74.8,50.8,59.1,57.2,null,60.1,74.4,59.3,62.1,58.2,60.7,55.8,57.4,64.5,76.9,83.1,64.4,65.8,74.1,61.5,77.1,59.9,79.2,63.1,65.4,66.9,null,66.0,93.7,65.8,73.9,65.2,72.3,64.0,67.8,69.4,83.2,86.5,74.7,64.9,77.2,62.3,79.2,67.3,67.9,73.3,null,71.6,85.7,86.8,68.6,62.4,59.1,50.3,48.9,48.7,48.4,8.6,7.2,9.7,7.2,187.8,12.3,54.1,44.3,null,,],['2023-10-10','13:21:10','01:32:00',66.3,49.9,70.4,49.0,71.9,53.0,56.9,57.2,null,50.4,74.4,59.4,62.1,58.3,60.7,55.8,57.4,63.1,74.7,89.6,64.4,65.8,71.6,61.7,74.8,60.1,78.9,63.6,65.0,66.9,null,62.5,93.7,65.9,73.9,65.3,72.3,64.0,67.8,69.4,82.8,90.0,72.2,65.6,78.1,63.1,81.5,67.6,68.2,73.3,null,72.4,86.0,91.4,68.6,62.4,59.1,50.3,48.9,48.7,48.4,8.6,7.2,9.7,8.1,356.4,8.6,55.5,45.3,null,,],['2023-10-10','13:22:10','01:33:00',77.4,49.5,83.1,48.7,84.8,50.5,61.0,57.3,null,51.0,74.4,59.8,62.1,58.7,60.7,56.0,57.4,69.7,78.8,90.6,64.6,66.0,81.2,61.6,86.9,59.6,88.7,63.4,66.8,66.9,null,63.5,93.7,66.1,73.9,65.5,72.3,64.1,67.8,74.1,84.6,94.2,81.3,64.4,86.9,62.2,88.7,67.1,69.2,73.3,null,75.6,87.0,94.4,68.6,62.4,59.1,50.3,48.9,48.7,48.4,8.7,7.3,9.6,7.1,97.2,31.5,57.2,44.3,null,,],['2023-10-10','13:22:20','01:33:10',62.8,52.2,67.7,49.6,69.5,55.6,58.8,57.3,null,58.1,74.4,59.8,62.1,58.8,60.7,56.0,57.4,65.0,68.8,79.1,64.6,66.0,68.3,63.6,71.7,60.6,73.0,65.9,65.9,66.9,null,65.7,93.7,66.1,73.9,65.5,72.3,64.1,67.8,69.8,75.9,82.0,69.7,66.1,72.1,63.5,73.3,67.9,68.0,73.3,null,71.5,78.0,82.8,68.6,62.4,59.1,50.3,48.9,48.7,48.4,8.7,7.3,9.6,6.6,156.3,10.8,52.7,47.1,null,,]]
+  LAeq=[],data.map(a=>  LAeq.push([moment(a[0]+' '+a[1]).valueOf(),a[10]]))
+ LAeq5=[],data.map(a=> LAeq5.push([moment(a[0]+' '+a[1]).valueOf(),a[12]]))
+LAeq10=[],data.map(a=>LAeq10.push([moment(a[0]+' '+a[1]).valueOf(),a[14]]))
+LAeq15=[],data.map(a=>LAeq15.push([moment(a[0]+' '+a[1]).valueOf(),a[16]]))
+series=[{name:'LAeq',data:LAeq},{name:'LAeq5',data:LAeq5},{name:'LAeq10',data:LAeq10},{name:'LAeq15',data:LAeq15}]
+
+Highcharts.chart('chart',{
+chart:{type:'line'},title:{text:null},subtitle:{text:null},credits:{enabled:false},//exporting:{enabled:false}, 
+xAxis:{type:"datetime",}, 
+tooltip:{useHTML:true,shared:true},
+//yAxis:{min:min,max:max,showFirstLabel:false,labels:{format:"{value}°C"}},
+//tooltip:{useHTML:true,shared:true,followPointer:true,headerFormat:'<p>{point.x:%d %B, %Y}</p>',pointFormat:'{series.name}:{point.low}~{point.high} {point.z} <br>',},
+//series: [{name:'test',data:[79.2,71.5,68.3,75.1,66.8,68.1,67.6,66.9,66.8,61.4,54.3,60.0,68.7,58.2,61.2,74.6,69.6,60.3,55.6,70.3,71.0,67.2,54.8,66.4,58.2,55.1,59.0,54.9,56.6,56.0,56.6,58.6,65.5,58.6,49.5,49.4,49.7,49.8,49.4,56.9,66.6,66.3,66.2,58.5,60.0,61.8,58.8,56.1,68.4,57.6,55.1,61.6,57.1,50.0,53.7,62.2,66.2,64.8,67.5,65.2,62.3,57.7,65.5,62.2,59.9,62.0,63.8,64.3,63.7,62.5,62.2,53.4,60.8,61.8,65.8,63.0,63.0,57.3,59.2,60.9,67.5,60.7,69.2,70.1,70.3,55.4,80.8,68.2,66.3,64.6,69.5,66.3,77.4,62.8],}],
+series
+})
+
+}
+
+
+///*** PLUME ***///
+
+function Plumer(){ //plume=[]
+rsdm=new RSDM(),rsdm.runModel(1),rsdm.updateImage()
+pt=L.marker(),Plumes=L.imageOverlay()
+params={"emission":1,"elevation":50,"diameter":0.5,"velocity":10,"temp":30,"wspd":5,"wdir":0,"grid":10,"runhr":1,"pgcat":"C","roughness":"urban"}
+}
+
+//setTimeout(function(){clearMap(),plumeModel(18.291596,99.752768)},500)
+function plumeModel(p1,p2){
+p0=[p1,p2]
+//plumes={ncols:1001,nrows:1001,cellsize:0.045,xllcorner:p2-0.05,yllcorner:p1-0.05,zs:plume}
+//Plumes = L.canvasLayer.scalarField(plumes,{type:"colormap", interpolate:false, color:chroma.scale(kolor.BREWER.Reds).domain([0,10]), opacity:opacityVal })
+plumes={"type":"Feature","geometry":{"type":"Point","coordinates":[p2,p1]},"properties":params}
+  plumeToLayer=function(p,ll){return L.marker(ll,{rotationAngle:params.wdir})}
+pt.remove(),pt=L.geoJSON(plumes,{pointToLayer:plumeToLayer}).bindPopup(plumeTable).addTo(map)
+p1=p0.map(a=>a-0.045),p2=p0.map(a=>a+0.045) // 5km/111km/deg
+Plumes.remove(),Plumes=L.imageOverlay(rImg.src,L.latLngBounds([p1,p2])).addTo(map) 
+map.fitBounds(L.latLngBounds([p1,p2]))  //L.rectangle(L.latLngBounds([p1,p2])).addTo(map);
+chartImage("chart",'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gaussian_Plume_%28SVG%29.svg/333px-Gaussian_Plume_%28SVG%29.svg.png')
+//chartImage("chart",rImg.src)
+map.closePopup()
+}
+
+function plumeUpdate(){
+data={},t=document.getElementById("plumetable"),r=t.rows,l=t.rows.length
+for(i=0;i<l;i++) {head=t.rows[i].cells[0].innerHTML,info=r[i].cells[1].innerHTML,i<=8&&(info=parseFloat(info)),eval("data."+head+"=info") }
+params=data //,plume.properties=params
+plumeToLayer=function(p,ll){return L.marker(ll,{rotationAngle:params.wdir})}
+pt.remove(),pt=L.geoJSON(plumes,{pointToLayer:plumeToLayer}).bindPopup(bindTable)//.addTo(map)
+rsdm.updateModel(data)
+plumeModel(p0[0],p0[1])
+}
+
+function plumeOpacity(){
+slider = document.getElementById("plumeOpacity")
+slider.oninput = function(){o=slider.value*0.01;Plumes.setStyle({opacity:o,fillOpacity:o})}
+}
+
+function plumeTable(layer) {p=layer.feature.properties
+o0="<a href='https://en.wikipedia.org/wiki/Atmospheric_dispersion_modeling'><img width=200 src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Gaussian_Plume_%28SVG%29.svg/333px-Gaussian_Plume_%28SVG%29.svg.png'></a>"
+o0="<div align='center'><a href=https://en.wikipedia.org/wiki/Atmospheric_dispersion_modeling target=_blank><h4>Gaussian Plume Model</h4></a></div>"
+o1="<td contenteditable='true' style='background-color:lavender'>"
+o2={"emission":"unit","elevation":"meter","diameter":"meter","velocity":"mps","temp":"celcius","wspd":"mps","wdir":"degree","grid":"size","runhr":"hours","pgcat":"class A-F","roughness":"urban/rural"},
+o3="<input id=plumeOpacity type=range min=0 max=100 value=85 onchange=plumeOpacity()></input>"
+o4="<button onclick=plumeUpdate()>RUN</button>"
+o5="<img width=200 src="+hImg.src+">"
+out=o0+"<style>table {font-family: arial, sans-serif; border-collapse: collapse; width: 100%;}td,th {border: 1px solid #a0a0a0; text-align: center; padding: 2px; } thead {text-align: center;}</style>"
+out+="<font size='1'><table id='plumetable'>"
+if(p){for(i in p){out+="<tr><th>"+i+"</th>"+o1+p[i]+"</td><td>"+o2[i]+"</td></tr>"}}
+out+="</table></font><div align='center'><br>"+o3+o4+o5+"</div>"
+return out 
+}
+
+//setTimeout(function(){sactiModel(18.291547,99.754576,'PlmLenFrq')},500)
+function sactiModel(p1,p2,param){
+sactiBuffer.remove(),sactiBuffer=L.layerGroup()
+function sactiWork(d,a,i){if(a[0]<=5000){ // limit to 5 from 10km
+  if(a[0]%1000==0){sactiBuffer.addLayer(L.geoJSON(turf.buffer(turf.point([p2,p1]),a[0]*.001),{style:{fillOpacity:0}}))}
+  for(j=0;j<16;j++){ll=[p1,p2],r=(j*22.5)*(Math.PI/180),k=111000,n=(i*16)+(j+1),x=p2-a[0]*Math.sin(r)/k,y=p1-a[0]*Math.cos(r)/k,d.push([n,x,y,a[j+1]])}
+}} //LMDCT,NDCT
+points=[],sactiTable["LMDCT"][param].map((a,i)=>sactiWork(points,a,i))
+clearMap(),Tabler(),map.closePopup()
+setTimeout(function(){Interpolation(),Markers.remove()},500)
+sactiBuffer.addTo(map)
+//L.geoJSON(turf.buffer(turf.point([p2,p1]),1),{style:{fillOpacity:0}}).addTo(map)
+}
+
+///*** HYSPLIT ***///
+
+function hysplitModel(p1,p2,param){
+['Traj','Conc','Sulf','DepoGas','DepoPar','DepoAll','Anim'].map(a=>eval("hysplit"+a+".remove()"))
+hysplitTraj = L.layerGroup()
+icons={icon:L.icon.pulse({color:'white',iconSize:[10,10]})},icons=""
+function linePop(w,h){return "<div id='container' style='width:"+w+"px;height:"+h+"px;margin:0 auto'>Loading...</div>"}
+function lineOpt(c,s){return {color:c,weight:2,fillOpacity:0.5,dashArray:'4',dashSpeed:s}}
+function mouse1(e){this.setStyle({weight:4,dashArray:'1'})}
+function mouse2(e){this.setStyle({weight:2,dashArray:'3'})}
+function popup3(e){color=this.options.color,"red"===color&&trajType(-1,"red"),"blue"===color&&trajType(1,"blue")}
+function trajMouse(weight,dash){this.setStyle({weight:weight,dashArray:dash})}
+function trajType(cat,col){ 
+  for(categories=[],i=0;i<=24;i++){categories.push(cat*i+'h')}
+  if(cat=-1){text='Backward Trajectory',series=hysp_track_back}
+  if(cat=+1){text='Forward Trajectory',series=hysp_track_fwd}
+return Highcharts.chart('container',{
+  title:{text:text},subtitle:{text:null},credits:{enabled: false},
+  xAxis:{crosshair:true,reversed:false,tickInterval:1,labels:{style:{fontSize:10}},categories:categories},
+  yAxis:{title:{text:null},tickInterval:200,labels:{style:{fontSize:10}}},tooltip:{shared:true,valueSuffix:'m'},legend:{enabled:false},
+  plotOptions:{series:{color:col,lineWidth:1,marker:{radius:2}}}, 
+  series:series})
+}
+for(i=0;i<hysp_traj.length;i++) {i<=26?(c='blue',s=-10):(c='red',s=10);
+  marker = L.marker(hysp_traj[0][0],icons)
+  points = L.marker(hysp_traj[i][24],icons)
+  liners = L.polyline(hysp_traj[i],lineOpt(c,s))
+  liners.on({mouseover:mouse1,mouseout:mouse2,popupopen:popup3}),liners.bindPopup(linePop(320,240))
+  hysplitTraj.addLayer(marker),hysplitTraj.addLayer(points),hysplitTraj.addLayer(liners)
+} //hysplitTraj.addTo(map)
+
+function getHex(brewer,range,value) {return chroma.scale(brewer).domain(range)(value).hex()}
+function getOpt(color){return {color:color,weight:1,opacity:1,fillColor:color,fillOpacity:0.5,opacity:0.5}}
+function mouse3(e){this.setStyle({fillOpacity:1.0})}
+function mouse4(e){this.setStyle({fillOpacity:0.5})}
+
+hysplitConc = L.layerGroup()
+for (i=0;i<hysp_conc_part.length;i++) {a=0.02*0.5,p=hysp_conc_part[i],y=p[0],x=p[1],conc=p[2]*1e12; 
+  color = getHex('Spectral',[1000,0],conc),rectangle = [[p[0]-a,p[1]-a],[p[0]+a,p[1]+a]]
+  grid = L.rectangle(rectangle,getOpt(color))
+  grid.on({mouseover:mouse3,mouseout:mouse4})
+  grid.bindTooltip('<b>1 kMass</b> &rarr; ' + conc.toFixed(2) + ' <span>&#181;</span>Mass/m<sup>3</sup>')
+  hysplitConc.addLayer(grid) 
+} //hysplitConc.addTo(map)
+
+hysplitSulf =  L.layerGroup()
+for (i=0;i<hysp_sulfur.length;i++) {a=0.02*0.5,s=hysp_sulfur[i],so2=s[2]*0.453E8,so4=s[3]*1E9;
+  color = getHex('YlOrRd',[0,1],so2),rectangle = [[s[0]-a,s[1]-a],[s[0]+a,s[1]+a]] 
+  sox = L.rectangle(rectangle,getOpt(color))
+  sox.on({mouseover:mouse3,mouseout:mouse4})
+  sox.bindTooltip('<b>SO<sub>2</sub></b> [' + so2.toFixed(4) + ' ppb] &rarr; <b>SO<sub>4</sub><sup>2-</sub></b> [' + so4.toFixed(4) + ' <span>&#181;</span>g/m<sup>3</sup>]')
+  hysplitSulf.addLayer(sox)
+} //hysplitSulf.addTo(map)
+
+hysplitDepoGas = L.geoJSON(hysp_dep_gas,{
+  pointToLayer: function (features,latlng) {return null}, 
+  style: function (features,layer) {return {color:features.properties.fill, weight:1}},
+  onEachFeature: function (features, layer) { 
+    layer.on({mouseover:function(){this.setStyle({weight:3})},mouseout:function(){this.setStyle({weight:1})} }),
+    layer.bindTooltip('<b>Gas Deposition : <br></b>' + features.properties.name ) }, })
+hysplitDepoPar = L.geoJSON(hysp_dep_par,{
+  pointToLayer: function (features,latlng) {return null}, 
+  style: function (features,layer) {return {color:'grey', weight:1}},
+  onEachFeature: function (features, layer) { 
+    layer.on({mouseover:function(){this.setStyle({weight:3})},mouseout:function(){this.setStyle({weight:1})} }),
+    layer.bindTooltip('<b>Particle Deposition : <br></b>' + features.properties.name ) }, })
+hysplitDepoAll = L.layerGroup([hysplitDepoGas,hysplitDepoPar])//.addTo(map)
+
+eval("hysplit"+param+".addTo(map)")
+map.closePopup()
+}
+
+hysplitAnim = L.canvasLayer().delegate(this);
+function onDrawLayer(info) { 
+ctx = info.canvas.getContext('2d');
+setInterval(function() {
+  ctx.clearRect(0,0,info.canvas.width,info.canvas.height); 
+  m=new Date().getMinutes();
+  s=new Date().getSeconds()*6;
+for (h=0; h<24; h++) { s=s-15; 
+if (m%2 == 0) { p=Math.floor(hysp_part.length/24)
+  for (i=(p*h); i<(p*h+p); i++) { 
+    d=hysp_part[i]
+    dot=info.layer._map.latLngToContainerPoint([d[0],d[1]])
+    ctx.beginPath() 
+    ctx.arc(dot.x, dot.y,1,0,2*Math.PI) 
+    ctx.closePath()
+    ctx.fillStyle = 'hsla('+s+',100%,50%,0.5)' 
+    ctx.fill() }}
+if (m%2 == 1) { p=Math.floor(hysp_puff.length/24)
+  for (i=(p*h); i<(p*h+p); i++) { 
+    d=hysp_puff[i]  
+    dot=info.layer._map.latLngToContainerPoint([d[0],d[1]])
+    ctx.beginPath()
+    ctx.arc(dot.x, dot.y,5*Math.random(),0,2*Math.PI)
+    ctx.closePath()
+    ctx.fillStyle = 'hsla('+s+',100%,50%,0.5)';
+    ctx.fill() }}
+} }, 5000) } //hysplitAnim.addTo(map);
+
+</script>
+
+<script>
+
+//*** TMD HPC ***//
+function colorMap(J,color,unit){
+J.cellsize===void 0?(sx=J.dx,sy=J.dy):(sx=J.cellsize,sy=J.cellsize)
+J=new L.ScalarField({ zs:J.zs, nCols:J.ncols, nRows:J.nrows, xllCorner:J.xllcorner, yllCorner:J.yllcorner, cellXSize:sx, cellYSize:sy})
+return L.canvasLayer.scalarField(J, {type:"colormap", interpolate:true, color:chroma.scale(color).domain(J.range)}).setOpacity(0.75).on('click',function (v) {if(v.value!=null) {L.popup().setLatLng(v.latlng).setContent(v.value.toFixed(1)+unit).openOn(map)}})
+}
+
+function contourMap(J,color){
+style={color:color, weight:2, fillOpacity:0.0, dashArray:'1'}
+function onEachFeature(feature,layer){ a=feature.properties; layer.setText((a.aval*0.01).toString()) }
+return L.geoJSON(J, {style:style, onEachFeature:onEachFeature})
+}
+
+function d1(arr,factor){
+  if(factor=="UV"){ uv=arr[0],uv.us=[],uv.vs=[]
+  for(i=0;i<uv.zs.length;i++){ mps=arr[0].zs[i]*0.0514444, zeta=arr[1].zs[i]*(Math.PI/180), uv.us.push(Math.cos(zeta)*mps), uv.vs.push(Math.sin(zeta)*mps)}
+    arr=new L.VectorField({ us:uv.us, vs:uv.vs, nCols:uv.ncols, nRows:uv.nrows, xllCorner:uv.xllcorner, yllCorner:uv.yllcorner, cellXSize:uv.cellsize, cellYSize:uv.cellsize }) 
+  }
+  else { eval("arr.zs=arr.zs.map(x=>x"+factor+")") }
+  return arr
+}
+
+function colorBar(Color, Domain, Range){
+Options={position:"bottomleft",width:150,height:10,margin:15,background:"white",textColor:"black",steps:99,decimals:0,units:"",title:"",labelFontSize:12,labelTextPosition:"middle",labels:[Range[0],0.5*(Range[0]+Range[1]),Range[1]]}
+return L.control.colorBar(chroma.scale(Color).domain(Domain), Range, Options)
+}
+
+function initTMD(){
+TMD={MAP:["DSWR","PSFC","PCIP","RAIN","RHUM","TEMP","VECT","WIND"], CBAR: ["DSWR","PCIP","RAIN","RHUM","TEMP"], URL:'https://data.tmd.go.th/api/Weather3Hours/V2/?uid=api&ukey=api12345'}
+TMD.MAP.map(a=>eval("TMD."+a+"=[]"));
+TMD.CBAR.map(a=>eval("TMD.cbar"+a+"=[]"));
+for(T=0;T<=48;T+=3){ TT="T"+T
+  //T%24!=0&&eval("RAIN_"+TT+".zs=[]")
+  //dswr=eval("DSWR_"+TT+".zs"), 0==dswr.reduce((a,b)=>a+ b,0)&&eval("(DSWR_"+TT+".zs=[])")
+  //pcip=eval("PCIP_"+TT+".zs"), 0==pcip.reduce((a,b)=>a+ b,0)&&eval("(PCIP_"+TT+".zs=[])")
+PSFC=contourMap(eval("PSFC_"+TT),"black") //PSFC=colorMap(d1(PSFC_T0,"*0.01"),kolor.BREWER.Purples,"mbar")
+PCIP=colorMap(d1(eval("PCIP_"+TT),""),kolor.BREWER.Blues," ㎜"), cbarPCIP=colorBar(kolor.BREWER.Blues,PCIP._field.range,PCIP._field.range)
+RAIN=colorMap(d1(eval("RAIN_"+TT),""),kolor.BREWER.Blues," ㎜"), cbarRAIN=colorBar(kolor.BREWER.Blues,RAIN._field.range,RAIN._field.range)
+DSWR=colorMap(d1(eval("DSWR_"+TT),""),kolor.VIRIDIS.Inferno," W/m<sup>2</sup>"), cbarDSWR=colorBar(kolor.VIRIDIS.Inferno,DSWR._field.range,DSWR._field.range)
+RHUM=colorMap(d1(eval("RHUM_"+TT),""),kolor.VIRIDIS.Viridis,"%"), cbarRHUM=colorBar(kolor.VIRIDIS.Viridis,RHUM._field.range,RHUM._field.range)
+TEMP=colorMap(d1(eval("TEMP_"+TT),"-273.15"),kolor.VIRIDIS.Turbo,"℃"), cbarTEMP=colorBar(kolor.VIRIDIS.Turbo,TEMP._field.range,TEMP._field.range)
+UV = d1([eval("WSPD_"+TT),eval("WDIR_"+TT)],"UV")
+VECT =  L.canvasLayer.scalarField(UV.getScalarField('directionFrom'), { type: "vector", color:"white", vectworSize: 25, arrowDirection: "from" }).on('click',function(v) { a=v.value; if(a!=null) { b=Number(a)+180, b>=360&&(b-=360), L.popup().setLatLng(v.latlng).setContent(b.toFixed(0) + '°').openOn(map) } }).setOpacity(0.75)//.addTo(map)
+WIND =  L.canvasLayer.vectorFieldAnim(UV,{color:"white", width: 2, velocityScale: 1/5000, paths: 1000, fade: 0.96, duration:20, maxAge: 200}).on('click',function(v) { a=v.value; if(a!=null) { L.popup().setLatLng(v.latlng).setContent(a.magnitude().toFixed(1) + ' m/s ' + a.directionTo().toFixed(0) + '°').openOn(map)}} ).setOpacity(0.75)//.addTo(map) //{color:"white", width:1, velocityScale: 1/5000, paths:800, fade: 0.96, duration:20, maxAge:200}
+TMD.MAP.map(a=>eval( "TMD."+a+".push("+a+")" ));
+TMD.CBAR.map(a=>eval( "TMD.cbar"+a+".push(cbar"+a+")" ))
+}
+
+controlSlider = L.control.slider(function(x) { x=parseInt(x)//TMD.cbar"+a+"[t].remove(),TMD.cbar"+a+"[x].addTo(map)
+for(t=0;t<TMD.PSFC.length;t++){TMD.MAP.map(a=>eval("map.hasLayer(TMD."+a+"[t])&&( TMD."+a+"[t].remove(),TMD."+a+"[x].addTo(map) )"))}
+for(t=0;t<TMD.PSFC.length;t++){TMD.CBAR.map(a=>eval("TMD.cbar"+a+"[t].remove(); if(map.hasLayer(TMD."+a+"[t]) && t==x){TMD.cbar"+a+"[x].addTo(map)}") )}
+},
+{title:'Slider', logo:"S", position:'bottomleft',orientation:'horizontal', increment:true, showValue:true, collapsed: true, value:0, step:1, min:0, max:16, width:'100px', size:'200px',
+getValue:function(t) {return moment().startOf("day").add(t*3+7,"hours").add(-1,"day").add(543,"years").format("DD/MM/YY HH:mm")},
+}).addTo(map) 
+}
+
+
+
+//*** AIR4THAI ***//
+//http://air4thai.com/forweb/getHistoryData.php?stationID=38t,40t&param=PM25,PM10,O3,SO2&type=hr&sdate=2023-09-30&edate=2023-10-01&stime=00&etime=23
+//http://air4thai.com/forweb/getHistoryData.php?stationID=38t,40t&param=PM25,PM10,O3,CO,NO2,SO2&type=hr&sdate=2023-09-30&edate=2023-10-01&stime=00&etime=23
+
+
+</script>
+</body>
+
+</html>
+
