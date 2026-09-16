@@ -34,3 +34,11 @@
 ## 🚀 วิธีการรันโมเดล
 1. ดาวน์โหลดไฟล์ Data มาวางไว้ในโฟลเดอร์งาน
 2. ดับเบิ้ลคลิกที่ `run.bat` เพื่อเริ่มรันประมวลผล
+
+# 🗝️ รูปสำคัญ (Key Figures)
+
+<img width="1262" height="953" alt="image" src="https://github.com/user-attachments/assets/d3848158-2999-4080-a46a-6bfca1c14737" />
+Fig.1 Overview of CALMET/CALPUFF Modeling System
+
+
+
