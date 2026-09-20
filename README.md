@@ -54,7 +54,8 @@
 ## Fig.4 CALPOST/PRTMET Post-processing System
 
 <img width="1439" height="996" alt="image" src="https://github.com/user-attachments/assets/ed292213-a1d5-4e25-887e-68a3ba6f859f" />
-Fig.5 TERRAIN/LANDUSE Geo-processing System
+
+## Fig.5 TERRAIN/LANDUSE Geo-processing System
 
 <img width="969" height="684" alt="image" src="https://github.com/user-attachments/assets/6bffd270-b042-44e1-ac61-11a3caa49382" />
 
@@ -68,7 +69,7 @@ Fig.5 TERRAIN/LANDUSE Geo-processing System
 
 ### C. Vertical Structure (Half/Full Sigma Pressure Levels)
 
-## Fig.5 Gridding Coordinate System 
+## Fig.6 Gridding Coordinate System 
 
 <img width="953" height="814" alt="image" src="https://github.com/user-attachments/assets/c6adf063-4656-4504-8375-5f42b2d0f57e" />
 
@@ -114,5 +115,5 @@ Fig.5 TERRAIN/LANDUSE Geo-processing System
 
 ### K. NOx Oxidation Pathways (Scire et al., 1984)
 
-## Fig.6 CALPUFF Features
+## Fig.7 CALPUFF Features
 
