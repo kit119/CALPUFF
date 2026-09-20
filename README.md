@@ -68,7 +68,7 @@ Fig.5 TERRAIN/LANDUSE Geo-processing System
 
 ### C. Vertical Structure (Half/Full Sigma Pressure Levels)
 
-## Fig.6 Gridding Coordinate System 
+## Fig.5 Gridding Coordinate System 
 
 <img width="953" height="814" alt="image" src="https://github.com/user-attachments/assets/c6adf063-4656-4504-8375-5f42b2d0f57e" />
 
@@ -114,5 +114,5 @@ Fig.5 TERRAIN/LANDUSE Geo-processing System
 
 ### K. NOx Oxidation Pathways (Scire et al., 1984)
 
-## Fig.5 CALPUFF Features
+## Fig.6 CALPUFF Features
 
