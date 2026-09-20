@@ -102,5 +102,17 @@ Fig.5 TERRAIN/LANDUSE Geo-processing System
 
 ### H. Terrain Impacts
 
-## Fig.5 Puffs
+<img width="773" height="822" alt="image" src="https://github.com/user-attachments/assets/cd955437-c6d7-49c0-a760-83657c16b801" />
+
+### I. Actual & Modeled Receptor Heights
+
+<img width="756" height="677" alt="image" src="https://github.com/user-attachments/assets/8211b68a-a63d-4065-abcf-2a008072f229" />
+
+### J. SO2 Oxidation Pathways (Scire et al., 1984)
+
+<img width="684" height="682" alt="image" src="https://github.com/user-attachments/assets/2c8cc60b-2e26-4cf5-86bd-c79e936a2ab0" />
+
+### K. NOx Oxidation Pathways (Scire et al., 1984)
+
+## Fig.5 CALPUFF Features
 
