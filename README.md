@@ -1,8 +1,8 @@
 # CALPUFF Modeling Workshop 
 
-@ Faculty of Environment and Resource Studies, Mahidol University
+@ Faculty of Environment and Resource Studies, Mahidol University on Sep 22, 2026
 
-## 📚 หลักสูตรการอบรม (Course Outline)
+## 📚 Course Outline (หลักสูตรการอบรม)
 
 ### 1. CALPUFF Modeling System [45 Min]
 * CALMET Meteorology Model
@@ -24,18 +24,18 @@
 * Interactive WWW
 
 
-# เอกสารและไฟล์ประกอบการอบรมเชิงปฏิบัติการ CALPUFF
+# Documents and Files or CALPUFF
 
-## 📁 ไฟล์ประกอบการอบรม
+## 📁 Files for Workshop (ไฟล์ประกอบการอบรม)
 * `exe/` - โปรแกรมประมวลผล CALPUFF
 * `inp/` - ไฟล์ Input parameters
 * `run.bat` - สคริปต์สำหรับสั่งรันโมเดล
 
-## 🚀 วิธีการรันโมเดล
-1. ดาวน์โหลดไฟล์ Data มาวางไว้ในโฟลเดอร์งาน
-2. ดับเบิ้ลคลิกที่ `run.bat` เพื่อเริ่มรันประมวลผล
+## 🚀 How to Run (วิธีการรันโมเดล)
+1. Download or Clone files and data in working folder
+2. Click at `run.bat` or step by one-liner 
 
-# 🗝️ รูปสำคัญ (Key Figures)
+# 🗝️ Key Figures (รูปภาพสำคัญ)
 
 <img width="1262" height="953" alt="image" src="https://github.com/user-attachments/assets/d3848158-2999-4080-a46a-6bfca1c14737" />
 
