@@ -69,3 +69,38 @@ Fig.5 TERRAIN/LANDUSE Geo-processing System
 ### C. Vertical Structure (Half/Full Sigma Pressure Levels)
 
 ## Fig.6 Gridding Coordinate System 
+
+<img width="953" height="814" alt="image" src="https://github.com/user-attachments/assets/c6adf063-4656-4504-8375-5f42b2d0f57e" />
+
+### A. Puff Generation (Zannetti, 1981)
+
+<img width="624" height="831" alt="image" src="https://github.com/user-attachments/assets/db7bb187-113a-49eb-bca8-eba48aac240c" />
+
+### B. Puff Movement
+
+<img width="695" height="749" alt="image" src="https://github.com/user-attachments/assets/f726fe20-cac9-46d6-802b-3e5f199950df" />
+
+### C. Puff Splitting
+
+<img width="964" height="841" alt="image" src="https://github.com/user-attachments/assets/6ab9fae6-401d-4851-a722-3f9d8e7734c5" />
+
+### D. Flow in Shard Edge Building (Hosker, 1984)
+
+<img width="884" height="530" alt="image" src="https://github.com/user-attachments/assets/7a1582a6-493a-4c4c-9315-1cc7da72a15d" />
+
+### E. Dilution Radius (R0) on Stack Height Building (Schulam and Scire, 1998)
+
+<img width="543" height="739" alt="image" src="https://github.com/user-attachments/assets/2fbfba18-261c-4b4e-87e1-eb6470155b5f" />
+
+### F. Plume Rise on Ground Flame
+
+<img width="785" height="736" alt="image" src="https://github.com/user-attachments/assets/54c75f5f-e59e-4cfa-87f9-7b18a0bb6198" />
+
+### G. Water/Land Coastal Impacts (Hanna et al., 1985)
+
+<img width="622" height="586" alt="image" src="https://github.com/user-attachments/assets/cbd437fd-0657-4891-ba01-1aa93fc1fcc7" />
+
+### H. Terrain Impacts
+
+## Fig.5 Puffs
+
